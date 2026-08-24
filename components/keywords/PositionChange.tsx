@@ -17,11 +17,11 @@ const PositionChange = ({ change, withPosition = false, arrow = false, className
    }
    if (change.change === 0 && change.position === 0) {
       // estaba fuera y sigue fuera → mismo símbolo que "sin cambio", solo cambia el detalle al pasar el mouse
-      return <span className={`text-gray-400 ${className}`} title='Sigue fuera de los resultados revisados'>{arrow ? '=' : '0'}</span>;
+      return <span className={`text-gray-400 ${className}`} title='Sigue fuera de los resultados revisados'>=</span>;
    }
    const value = change.change;
    let tone = 'text-gray-400';
-   let text = arrow ? '=' : '0';
+   let text = '=';
    if (value > 0) { tone = 'text-emerald-600'; text = arrow ? `▲ ${value}` : `+${value}`; }
    if (value < 0) { tone = 'text-rose-500'; text = arrow ? `▼ ${Math.abs(value)}` : `−${Math.abs(value)}`; }
    const past = change.position === 0 ? 'fuera' : change.position;
