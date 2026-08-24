@@ -69,20 +69,21 @@ describe('DataForSEO scraper (PoloRank)', () => {
       expect(body[0].os).toBe('windows');
    });
 
-   it('extractOrganic devuelve solo orgánicos, ordenados y con posición secuencial', () => {
+   it('extractOrganic devuelve solo orgánicos (respuesta real 2026-08-24), ordenados y con posición secuencial', () => {
       const organic = extractOrganic(fixture);
-      expect(organic.map((r) => r.position)).toEqual([1, 2, 3, 4]);
-      expect(organic[0].url).toBe('https://www.competidor.cl/vestidos');
+      expect(organic.length).toBe(18); // depth 20 = 20 bloques de la SERP, 18 son orgánicos
+      expect(organic.map((r) => r.position)).toEqual(Array.from({ length: 18 }, (_, i) => i + 1));
+      expect(organic[0].url).toContain('instagram.com');
       expect(organic[1].url).toBe('https://ammo.cl/');
       expect(organic.every((r) => r.title && r.url)).toBe(true);
    });
 
-   it('extractFeatures normaliza los tipos de bloque de la SERP sin repetir', () => {
-      expect(extractFeatures(fixture)).toEqual(['people_also_ask', 'local_pack', 'video']);
+   it('extractFeatures normaliza los tipos de bloque de la SERP sin repetir (popular_products → shopping)', () => {
+      expect(extractFeatures(fixture)).toEqual(['local_pack', 'shopping', 'images', 'people_also_ask']);
    });
 
-   it('extractCost lee el costo real de la respuesta', () => {
-      expect(extractCost(fixture)).toBeCloseTo(0.002, 6);
+   it('extractCost lee el costo real de la respuesta (depth 20 = USD 0,004)', () => {
+      expect(extractCost(fixture)).toBeCloseTo(0.004, 6);
       expect(extractCost({})).toBeUndefined();
    });
 

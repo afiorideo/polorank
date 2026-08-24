@@ -1,54 +1,1549 @@
 {
-  "version": "0.1.20250526",
-  "status_code": 20000,
-  "status_message": "Ok.",
-  "time": "0.9 sec.",
-  "cost": 0.002,
-  "tasks_count": 1,
-  "tasks_error": 0,
-  "tasks": [
+ "version": "0.1.20260806",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "11.7928 sec.",
+ "cost": 0.004,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "08241813-2362-0139-0000-5e780adb0406",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "11.6557 sec.",
+   "cost": 0.004,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "serp",
+    "google",
+    "organic",
+    "live",
+    "advanced"
+   ],
+   "data": {
+    "api": "serp",
+    "function": "live",
+    "se": "google",
+    "se_type": "organic",
+    "keyword": "vestidos de fiesta temuco",
+    "language_code": "es",
+    "device": "mobile",
+    "os": "android",
+    "depth": 20,
+    "location_code": 2152
+   },
+   "result": [
     {
-      "id": "00000000-0000-0000-0000-000000000000",
-      "status_code": 20000,
-      "status_message": "Ok.",
-      "time": "0.8 sec.",
-      "cost": 0.002,
-      "result_count": 1,
-      "path": ["v3", "serp", "google", "organic", "live", "advanced"],
-      "data": {
-        "api": "serp",
-        "function": "live",
-        "se": "google",
-        "se_type": "organic",
-        "keyword": "vestidos de fiesta temuco",
-        "language_code": "es",
-        "location_code": 2152,
-        "device": "mobile",
-        "os": "android",
-        "depth": 10
-      },
-      "result": [
-        {
-          "keyword": "vestidos de fiesta temuco",
-          "type": "organic",
-          "se_domain": "google.cl",
-          "location_code": 2152,
-          "language_code": "es",
-          "check_url": "https://www.google.cl/search?q=vestidos%20de%20fiesta%20temuco",
-          "datetime": "2026-08-24 20:00:00 +00:00",
-          "items_count": 8,
-          "items": [
-            { "type": "people_also_ask", "rank_group": 1, "rank_absolute": 1, "title": "Otras preguntas" },
-            { "type": "organic", "rank_group": 1, "rank_absolute": 2, "domain": "www.competidor.cl", "title": "Vestidos de fiesta en Temuco", "url": "https://www.competidor.cl/vestidos" },
-            { "type": "organic", "rank_group": 2, "rank_absolute": 3, "domain": "ammo.cl", "title": "Ammo | Vestidos de fiesta y gala en Temuco", "url": "https://ammo.cl/" },
-            { "type": "local_pack", "rank_group": 1, "rank_absolute": 4, "title": "Tienda local" },
-            { "type": "organic", "rank_group": 3, "rank_absolute": 5, "domain": "www.otro.cl", "title": "Arriendo de vestidos", "url": "https://www.otro.cl/arriendo" },
-            { "type": "video", "rank_group": 1, "rank_absolute": 6, "title": "Videos" },
-            { "type": "organic", "rank_group": 4, "rank_absolute": 7, "domain": "www.cuarto.cl", "title": "Vestidos elegantes", "url": "https://www.cuarto.cl/" },
-            { "type": "organic", "rank_group": 5, "rank_absolute": 8, "domain": "sin-url.cl", "title": "Sin URL (se descarta)" }
-          ]
-        }
+     "keyword": "vestidos de fiesta temuco",
+     "type": "organic",
+     "se_domain": "google.com",
+     "location_code": 2152,
+     "language_code": "es",
+     "check_url": "https://www.google.com/search?q=vestidos%20de%20fiesta%20temuco&hl=es&gl=CL&ie=UTF-8&uule=w+CAIQIFISCS-vJQRBxWKWER25AhET4QUF",
+     "datetime": "2026-08-24 18:13:37 +00:00",
+     "spell": null,
+     "refinement_chips": {
+      "type": "refinement_chips",
+      "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[4]/div[1]/div[1]/div[2]/span[1]/div[1]/div[1]/div[1]/div[1]",
+      "items": [
+       {
+        "type": "refinement_chips_element",
+        "title": "Menos de $200.000",
+        "url": "https://www.google.com/search?q=vestidos+de+fiesta+temuco+por+importes+inferiores+a+$200.000&hl=es&gl=CL&shoprs=CAESDRILEQAAAOB2SEdCGAEYBSoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIqCAUSEU1lbm9zIGRlICQyMDAuMDAwGAIiDRILEQAAAOB2SEdCGAEqAhgBWPWnIGAB&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoAXoECAsQBA",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Nuevo",
+        "url": "https://www.google.com/search?q=nueva+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYCioZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIJCAoSBU51ZXZvWPWnIGAB&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoAnoECAsQBQ",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Sí",
+        "url": "https://www.google.com/search?q=s%C3%AD+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYCioZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIHCAoSA1PDrVj1pyBgAQ&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoA3oECAsQBg",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "En venta",
+        "url": "https://www.google.com/search?q=Oferta+de+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAESBEoCCAEYBioZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIUCAYSCEVuIHZlbnRhGAIiBEoCCAFY9acgYAE&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoBXoECAsQEw",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Asimétrico",
+        "url": "https://www.google.com/search?q=asim%C3%A9trico+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYASoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIbCAESC0FzaW3DqXRyaWNvOgoIzLIsEM2yLDAAWPWnIGAB&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoBnoECAsQFA",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "De sirena",
+        "url": "https://www.google.com/search?q=de+sirena+vestidos+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYASoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIaCAESCURlIHNpcmVuYToLCMyyLBDwwZ8BMABY9acgYAE&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoB3oECAsQFg",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Ajustado",
+        "url": "https://www.google.com/search?q=ajustado+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYASoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIZCAESCEFqdXN0YWRvOgsIzLIsEPHBnwEwAFj1pyBgAQ&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoCHoECAsQGA",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Corte imperio",
+        "url": "https://www.google.com/search?q=corte+imperio+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYASoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIdCAESDUNvcnRlIGltcGVyaW86CgjMsiwQ0bIsMABY9acgYAE&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoCXoECAsQGg",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Envolvente",
+        "url": "https://www.google.com/search?q=envolvente+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYASoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIaCAESCkVudm9sdmVudGU6CgjMsiwQ5LIsMABY9acgYAE&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoCnoECAsQHA",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Formal",
+        "url": "https://www.google.com/search?q=formal+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYASoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIWCAESBkZvcm1hbDoKCNj_OBDc_zgwAlj1pyBgAQ&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoC3oECAsQHg",
+        "domain": "www.google.com",
+        "options": null
+       },
+       {
+        "type": "refinement_chips_element",
+        "title": "Informal",
+        "url": "https://www.google.com/search?q=informal+vestidos+de+fiesta+temuco&hl=es&gl=CL&shoprs=CAEYASoZdmVzdGlkb3MgZGUgZmllc3RhIHRlbXVjbzIYCAESCEluZm9ybWFsOgoI2P84ENn_ODACWPWnIGAB&sa=X&ved=2ahUKEwi_9I6P77mWAxVuEBAIHTcFMKk4ChCKngYoDHoECAsQIA",
+        "domain": "www.google.com",
+        "options": null
+       }
       ]
+     },
+     "item_types": [
+      "local_pack",
+      "organic",
+      "popular_products",
+      "images",
+      "people_also_ask",
+      "people_also_search"
+     ],
+     "se_results_count": 0,
+     "pages_count": 2,
+     "items_count": 28,
+     "items": [
+      {
+       "type": "local_pack",
+       "rank_group": 1,
+       "rank_absolute": 1,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/c-wiz[1]",
+       "title": "Armario de la Karo - Vestidos De Fiesta",
+       "description": "Abierto · Centro Comercial Sevilla - Av. Pablo Neruda 02050, Loc 113",
+       "domain": "www.armariodelakaro.cl",
+       "phone": "+56995593500",
+       "booking_url": null,
+       "url": "https://www.armariodelakaro.cl/",
+       "is_paid": false,
+       "rating": {
+        "rating_type": "Max5",
+        "value": 5,
+        "votes_count": 1300,
+        "rating_max": 5
+       },
+       "cid": "2536235037654414907",
+       "rectangle": null
+      },
+      {
+       "type": "local_pack",
+       "rank_group": 2,
+       "rank_absolute": 2,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/c-wiz[2]",
+       "title": "Solange Tenorio Boutique",
+       "description": "Abierto · Avenida las encinas 01556 Barrio Pehuén Temuco",
+       "domain": "stboutique.mercadoshops.cl",
+       "phone": "+56983604462",
+       "booking_url": null,
+       "url": "https://stboutique.mercadoshops.cl/",
+       "is_paid": false,
+       "rating": {
+        "rating_type": "Max5",
+        "value": 4.2,
+        "votes_count": 10,
+        "rating_max": 5
+       },
+       "cid": "18326901553150786801",
+       "rectangle": null
+      },
+      {
+       "type": "local_pack",
+       "rank_group": 3,
+       "rank_absolute": 3,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[3]/div[1]/c-wiz[3]",
+       "title": "Ammo Store",
+       "description": "Abierto · Av. Alemania 0425, Loc 207",
+       "domain": "www.ammo.cl",
+       "phone": "+56954011541",
+       "booking_url": null,
+       "url": "http://www.ammo.cl/",
+       "is_paid": false,
+       "rating": {
+        "rating_type": "Max5",
+        "value": 5,
+        "votes_count": 2,
+        "rating_max": 5
+       },
+       "cid": "14051568573815135695",
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 1,
+       "rank_absolute": 4,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.instagram.com",
+       "title": "Ammo | vestidos de fiesta en Temuco (@ammostorechile)",
+       "url": "https://www.instagram.com/ammostorechile/?hl=es",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "Más de 9 K seguidores",
+       "website_name": "Instagram · ammostorechile",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Arriendo y venta | Vestidos de Fiesta y accesorios Temuco Av. Alemania 0425, loc 207. Lun a Vie: 14:00 a 19:00 · ¡Descubre nuestra colección de arriendos!",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": null,
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 2,
+       "rank_absolute": 5,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[5]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "ammo.cl",
+       "title": "Vestidos de Fiesta en Temuco – Arriendo y Venta | Ammo Store",
+       "url": "https://ammo.cl/",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://ammo.cl",
+       "website_name": "ammo.cl",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Vestidos de fiesta en Temuco en arriendo y venta. Exclusivos para matrimonios, graduaciones y galas. Reserva tu vestido y sorprende en tu evento.",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "Vestidos de fiesta en Temuco en arriendo y venta"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 3,
+       "rank_absolute": 6,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[7]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.armariodelakaro.cl",
+       "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños Exclusivos",
+       "url": "https://www.armariodelakaro.cl/",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://www.armariodelakaro.cl",
+       "website_name": "Armario de la Karo",
+       "is_image": true,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": [
+        "is_image"
+       ],
+       "description": "hace 5 días — Encuentra el vestido de fiesta perfecto en Temuco, más de 1.800 modelos en Stock para Gala, Licenciatura, y Matrimonio, visitanos!",
+       "pre_snippet": "hace 5 días",
+       "extended_snippet": null,
+       "images": [
+        {
+         "type": "images_element",
+         "alt": null,
+         "url": null,
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSC7OZzcxNWa6bgqLO9mPKsOHESYRr2k6NN9Hn6kzFc06K1QJp2eTmOTTYa99Bjog-hVQXReUY&s"
+        },
+        {
+         "type": "images_element",
+         "alt": null,
+         "url": null,
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4q7nZzyBVe5ECQMCaQVA53nb1VwmG29g9_0N5QAFewDIbz7Dqh85III6e0A&s"
+        },
+        {
+         "type": "images_element",
+         "alt": null,
+         "url": null,
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN_HjPCfpZjO1re89hKooAADmalL9vKyYjYFuydfNePnOremcYaxSjOkUkwQ&s"
+        },
+        {
+         "type": "images_element",
+         "alt": null,
+         "url": null,
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdmhoVXVI5c7lR99ytJw7anm8_ZpulMdbd397mB7hGDSJMkgd3FAuz2QkZfg&s"
+        },
+        {
+         "type": "images_element",
+         "alt": null,
+         "url": null,
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9qDIMG2voKVcx8mBwzzhgVCqUKyBuvx2Ui3wGbhPaC94tHx-79yTVwUlu2g&s"
+        }
+       ],
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "Encuentra el vestido de fiesta perfecto en Temuco"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": "2026-08-19 18:13:34 +00:00",
+       "rectangle": null
+      },
+      {
+       "type": "popular_products",
+       "rank_group": 1,
+       "rank_absolute": 7,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[9]",
+       "title": "Productos populares",
+       "items": [
+        {
+         "type": "popular_products_element",
+         "title": "Vestido Gala Negro Lentejuelas — Garbo",
+         "url": null,
+         "domain": null,
+         "description": "Florentie",
+         "more_sellers": false,
+         "seller": "Florentie",
+         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRA-aM1omyLKvgZvLcyOe-PTd-zrXql71Rt4sBSOtn18e64T1iweWEXd0RTASpizQp0ItbFZtg8xYUaizfRa7drboRW-pmAqRFBaLv49utvtrdLzm-YJjvl",
+         "price": {
+          "current": 79990,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$79.990"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": "1770345457577690561",
+          "data_docid": "3915975258043028710",
+          "gid": "1165963041111172232"
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido de Fiesta Temuco Modelo Lucía",
+         "url": null,
+         "domain": null,
+         "description": "Armario de la Karo\nEn tiendas, Temuco",
+         "more_sellers": false,
+         "seller": "Armario de la Karo",
+         "image_url": "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ9Q9CYjZqxy87YE1GpbAwvmB8juwzv4d-OlfLHPQXl2AnS1s23ccADESY0sksRmz_USTK4-BFepDndO5SGBpzdv3MgzYtj6GbdT4k5VToFxPgABBVwKIbaaA",
+         "price": {
+          "current": 269900,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$269.900"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": null,
+          "data_docid": "8141638409828747161",
+          "gid": null
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido lentejuelas fiesta Ximena",
+         "url": null,
+         "domain": null,
+         "description": "Florentie",
+         "more_sellers": false,
+         "seller": "Florentie",
+         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTTuDtgqosYehiGeh1bdQORKvbTQSfr9E_oPTSHls1rWYsrT8BLpsJgZ4qUklTZ8l010lsWOxbshENWlt0Mxt2q61q1kZQmH5h3rr40B5btVlthU5W1iTHq0w",
+         "price": {
+          "current": 119990,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$119.990"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": "6473394681639360175",
+          "data_docid": "3368161905290487284",
+          "gid": "2926199230146737977"
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido Fiesta Clarissa Azul | Enigma Estudio L",
+         "url": null,
+         "domain": null,
+         "description": "Enigma Estudio",
+         "more_sellers": false,
+         "seller": "Enigma Estudio",
+         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRp0oU1h8CQAGAjGQg8MFq8kyxP_KJRtyXZGgr7PXt9OSmTqw8zSr5MBuVfJC1U_9Dpw6Zrpb9oxDPGEp1GjXZsY9IBvklkQQiD10U7orXb",
+         "price": {
+          "current": 72990,
+          "regular": 90990,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$72.990 $90.990"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": null,
+          "data_docid": "13829076476773824861",
+          "gid": null
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido de Fiesta modelo Ámbar",
+         "url": null,
+         "domain": null,
+         "description": "Armario de la Karo\nEn tiendas, Temuco",
+         "more_sellers": false,
+         "seller": "Armario de la Karo",
+         "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTXCC515a48uCD9r8IJjXjdKfxEwH_ML2EndlL2Ty8TA8BI2wVSMWJKw32ERWZP73-g-a0lQyNhwOsSh77TgHD8vbzbLs_kQZxbxdixvo_GF7M08d6uH0q4z-o",
+         "price": {
+          "current": 279900,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$279.900"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": null,
+          "data_docid": "322319745787528689",
+          "gid": null
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido Cascada Fiesta Vestido Invitada",
+         "url": null,
+         "domain": null,
+         "description": "Mariquita Trasquilá",
+         "more_sellers": false,
+         "seller": "Mariquita Trasquilá",
+         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTjRHUTu8d86gXyhNFA3-8KQbNwg6jb4NrSwVsBYb4FVIpKNa3RN-X2tfvod_rBYqF_sCiHYvD4R2_WdbtY2IDZ1oYq8gPMv_286sKLrHZ0mCqdWvPpVes8",
+         "price": {
+          "current": 42490,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$42.490"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": "15788349275441507709",
+          "data_docid": "8957208617498047747",
+          "gid": "3533129313236707232"
+         }
+        }
+       ],
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 4,
+       "rank_absolute": 8,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[11]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.instagram.com",
+       "title": "𝑉𝑒𝑠𝑡𝑖𝑑𝑜𝑠 𝑑𝑒 𝑓𝑖𝑒𝑠𝑡𝑎 (@blanka.atelier) · Temuco",
+       "url": "https://www.instagram.com/blanka.atelier/?hl=es",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "Más de 50,4 k seguidores",
+       "website_name": "Instagram · blanka.atelier",
+       "is_image": true,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": [
+        "is_image"
+       ],
+       "description": "Confección nacional. Diseños exclusivos que elevarán tu look. Escríbenos y encuentra tu versión más chic ✨ ... ✨ El vestido que vas a querer para tu próximo ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": [
+        {
+         "type": "images_element",
+         "alt": "vestidos de fiesta temuco de www.instagram.com",
+         "url": "https://www.instagram.com/blanka.atelier/?hl=es",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4QCpKQLYMNPxaveNzU4ONssg6YL-6WPDjbPuWW6w11A&usqp=CAE&s"
+        }
+       ],
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": null,
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 5,
+       "rank_absolute": 9,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[13]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "listado.mercadolibre.cl",
+       "title": "Vestido Gala Temuco",
+       "url": "https://listado.mercadolibre.cl/vestido-gala-temuco",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://listado.mercadolibre.cl",
+       "website_name": "Mercado Libre",
+       "is_image": true,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": [
+        "is_image"
+       ],
+       "description": "Sus detalles de encaje, pedrería o bordados añaden un toque de glamour y sofisticación. Además, con tallas que van desde XS hasta XL y diferentes largos, este ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": [
+        {
+         "type": "images_element",
+         "alt": "vestidos de fiesta temuco de listado.mercadolibre.cl",
+         "url": "https://listado.mercadolibre.cl/vestido-gala-temuco",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSdalkB5HF8yuNs8BS6cP6GQODWABsCZ03BDrIe_cX0aw&usqp=CAE&s"
+        }
+       ],
+       "amp_version": false,
+       "rating": {
+        "rating_type": "Max5",
+        "value": 4.6,
+        "votes_count": 13000,
+        "rating_max": 5
+       },
+       "price": null,
+       "highlighted": [
+        "Sus detalles de encaje, pedrería o bordados añaden un toque de glamour y sofisticación"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "images",
+       "rank_group": 1,
+       "rank_absolute": 10,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[15]",
+       "title": "Imágenes",
+       "url": null,
+       "items": [
+        {
+         "type": "images_element",
+         "alt": "Atrévete con las nuevas combinaciones de colores 💙💚✨✨✨👗, # vestidos de  fiesta,licenciaturas ,moda de fiesta  #Ventastemuco#temucoventas#ventasaraucania#temuco#pitrufquen#gorbea#lautaro#victoria#labranz...",
+         "url": "https://www.instagram.com/reel/C-_aL4IS6yH/",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt5q2Pf9yH06YyAKE_SKuxC8xlZBUGiXoCOnVLLHHvXsaK3ej2MX6wGy8&s"
+        },
+        {
+         "type": "images_element",
+         "alt": "💃 Vive tu momento con estilo en Blanka Atelier, 📍España 270, Temuco, ✨  Vestidos de fiesta, gala y graduación, #VestidosDeFiesta #BlankaAtelier  #Temuco #ModaJuvenil #Gala2025 #DressGoals",
+         "url": "https://www.instagram.com/reel/DPgyBRCDaMT/",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQrun82o4gD-LHqoTfmc2z_fHBwvRanlxD4vOb41wGpJtmNme9uw78cgP8&s"
+        },
+        {
+         "type": "images_element",
+         "alt": "Bellos vestidos !! para tus fiestas ✨👛 hermosos colores y ...",
+         "url": "https://www.facebook.com/kalutemuco/posts/bellos-vestidos-para-tus-fiestas-hermosos-colores-y-modelosencuentranos-en-manue/2358101210897385/",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRoE791QKQUc37SyPJDsAq0TrzEa_rTudZTXIy0P01o2JFPwv091KyQn4Y&s"
+        },
+        {
+         "type": "images_element",
+         "alt": "Vestido de Fiesta Matrimonio Noche - Armario de la Karo - Vestidos de Fiesta",
+         "url": "https://www.armariodelakaro.cl/producto/vestido-de-fiesta-matrimonio-noche/",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGBVgdENfB8y2Zz21P4S5zBZBuJ04kz9pEMSvxppbfpc4KmkSVDqyh7nk&s"
+        }
+       ],
+       "related_image_searches": null,
+       "rectangle": null
+      },
+      {
+       "type": "people_also_ask",
+       "rank_group": 1,
+       "rank_absolute": 11,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[17]/div[1]",
+       "items": [
+        {
+         "type": "people_also_ask_element",
+         "title": "¿Qué precio tienen los vestidos de fiesta?",
+         "seed_question": null,
+         "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[17]/div[1]/div[2]/div[2]/div[1]",
+         "expanded_element": [
+          {
+           "type": "people_also_ask_ai_overview_expanded_element",
+           "items": null,
+           "references": null,
+           "asynchronous_ai_overview": true
+          }
+         ]
+        },
+        {
+         "type": "people_also_ask_element",
+         "title": "¿Dónde puedo encontrar vestidos de fiesta XL?",
+         "seed_question": null,
+         "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[17]/div[1]/div[2]/div[2]/div[2]",
+         "expanded_element": [
+          {
+           "type": "people_also_ask_ai_overview_expanded_element",
+           "items": null,
+           "references": null,
+           "asynchronous_ai_overview": true
+          }
+         ]
+        },
+        {
+         "type": "people_also_ask_element",
+         "title": "¿Qué ropa elegante para mujer se puede usar en una fiesta?",
+         "seed_question": null,
+         "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[17]/div[1]/div[2]/div[2]/div[3]",
+         "expanded_element": [
+          {
+           "type": "people_also_ask_ai_overview_expanded_element",
+           "items": null,
+           "references": null,
+           "asynchronous_ai_overview": true
+          }
+         ]
+        },
+        {
+         "type": "people_also_ask_element",
+         "title": "¿Dónde puedo encontrar vestidos largos elegantes y sencillos?",
+         "seed_question": null,
+         "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[17]/div[1]/div[2]/div[2]/div[4]",
+         "expanded_element": [
+          {
+           "type": "people_also_ask_ai_overview_expanded_element",
+           "items": null,
+           "references": null,
+           "asynchronous_ai_overview": true
+          }
+         ]
+        }
+       ],
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 6,
+       "rank_absolute": 12,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[19]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "florentie.cl",
+       "title": "Vestidos de Fiesta y Gala 2026",
+       "url": "https://florentie.cl/vestidos-fiesta/?srsltid=AfmBOoqTRG0E6OAc1N2j-PDerMHptaf28BF-aNhBNzbVed7uwfL46Nvm",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://florentie.cl",
+       "website_name": "Florentie",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Los vestidos de fiesta para matrimonio de día son modelos de largo midi —entre 90 y 110 cm— o completo, en telas livianas como gasa, chifón y encaje, en colores ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": null,
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 7,
+       "rank_absolute": 13,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[21]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.facebook.com",
+       "title": "New Freyja Vestidos de Fiesta y Novia - Arriendo y Venta en Temuco",
+       "url": "https://www.facebook.com/groups/125057071629/?locale=es_LA",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "Más de 1,9 K seguidores",
+       "website_name": "Facebook · New Freyja Vestidos de Fiesta y Novia -  Arriendo y Venta en Temuco",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Vestidos importados y exclusivos para venta y arriendo. Todas las tallas (XS a 3XL). Precios muy convenientes. Tambien hay accesorios (carteras, zapatos,...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "Vestidos importados y exclusivos para venta y arriendo"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 8,
+       "rank_absolute": 14,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[23]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.falabella.com",
+       "title": "Vestidos de Fiesta 👗✨ | Falabella Chile",
+       "url": "https://www.falabella.com/falabella-cl/category/CATG36075/Vestidos-de-Fiesta",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://www.falabella.com",
+       "website_name": "Falabella",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Lúcete con el vestido de fiesta ideal para ti. Revisa la variedad de estilos : largos, con lentejuelas, florales, satín y más en falabella.com.",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": {
+        "rating_type": "Max5",
+        "value": 4.2,
+        "votes_count": 1500,
+        "rating_max": 5
+       },
+       "price": null,
+       "highlighted": [
+        "Revisa la variedad de estilos"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": [
+        "vestidos de fiesta",
+        "vestidos de fiesta",
+        "vestidos",
+        "vestidos de gala",
+        "vestidos de gala",
+        "ropa formal",
+        "ropa de fiesta",
+        "armario de la karo"
+       ],
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 9,
+       "rank_absolute": 15,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[3]/div[1]/div[1]/div[24]/div[1]/div[1]",
+       "domain": "www.instagram.com",
+       "title": "Vestidos de Fiesta Temuco | #vestidosdefiestatemuco ...",
+       "url": "https://www.instagram.com/reel/DUliYQXCda6/?hl=es-la",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "Más de 120 \"me gusta\"",
+       "website_name": "Instagram · armariodelakaro_temuco",
+       "is_image": false,
+       "is_video": true,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": [
+        "is_video"
+       ],
+       "description": "Tenemos una gran variedad de vestidos de fiesta hermoso diseños y colores únicos! Y de todas las tallas. Para todos tus eventos como Galas , ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": null,
+       "links": [
+        {
+         "type": "link_element",
+         "title": "0:50",
+         "description": null,
+         "url": "https://www.instagram.com/reel/DUliYQXCda6/?hl=es-la",
+         "domain": "www.instagram.com"
+        }
+       ],
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": "2026-02-24 18:13:34 +00:00",
+       "rectangle": null
+      },
+      {
+       "type": "people_also_search",
+       "rank_group": 1,
+       "rank_absolute": 16,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[11]/div[4]/div[1]/div[3]/div[1]",
+       "title": "También se buscó",
+       "items": [
+        "Vestidos de fiesta usados en Temuco",
+        "Vestidos de fiesta mall mirage Temuco",
+        "Vestidos en Temuco",
+        "Vestidos de gala Caracol Temuco"
+       ],
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 10,
+       "rank_absolute": 17,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "miplacard.cl",
+       "title": "Mi Placard Vestidos de Fiesta y Novias | Envíos a todo Chile – MI ...",
+       "url": "https://miplacard.cl/?srsltid=AfmBOoq4ZTwpChAwGSxDM_auv2236jXdlAVDWMcSc90_eUW842zqEVeo",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://miplacard.cl",
+       "website_name": "mi placard",
+       "is_image": true,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": [
+        "is_image"
+       ],
+       "description": "La tienda en Chile con mayor variedad de vestidos de fiesta, graduación y novias. Diseños exclusivos y tallas para todas a precios justos.",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": [
+        {
+         "type": "images_element",
+         "alt": "vestidos de fiesta temuco de miplacard.cl",
+         "url": "https://miplacard.cl/?srsltid=AfmBOoq4ZTwpChAwGSxDM_auv2236jXdlAVDWMcSc90_eUW842zqEVeo",
+         "image_url": "https://api.dataforseo.com/cdn/i/08241813-2362-0139-0000-5e780adb0406:0"
+        }
+       ],
+       "amp_version": false,
+       "rating": null,
+       "price": {
+        "current": 3990,
+        "regular": null,
+        "max_value": null,
+        "currency": "CLP",
+        "is_price_range": false,
+        "displayed_price": "Entrega por $3.990"
+       },
+       "highlighted": null,
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 11,
+       "rank_absolute": 18,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.instagram.com",
+       "title": "Vestidos de fiesta (@jeannettemenard) · Temuco",
+       "url": "https://www.instagram.com/jeannettemenard/?hl=es",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "Más de 3,2 K seguidores",
+       "website_name": "Instagram · jeannettemenard",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "* Vestidos de novia y fiesta a medida. * Stock disponible ... Estamos ubicados en Torremolinos 320 local 5, Temuco ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "Vestidos de novia y fiesta a medida"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 12,
+       "rank_absolute": 19,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[3]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "mallmirage.cl",
+       "title": "Vestidos",
+       "url": "https://mallmirage.cl/categoria-producto/moda/mujer/vestidos/",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://mallmirage.cl",
+       "website_name": "Mall Mirage",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Vestido de Fiesta Sin mangas Rosa Palo · 96.700 ; Vestido de Fiesta Verde Esmeralda Saten · 76.200 ; Vestido Fiesta Español · 189.000 ; Vestido Fiesta Español Hebilla.",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": null,
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 13,
+       "rank_absolute": 20,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[4]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "vestuariotienditamagica.cl",
+       "title": "Tienda ⋆ Página 3 de 4 ⋆ Venta de Vestuario y Accesorios Infantiles",
+       "url": "https://vestuariotienditamagica.cl/tienda/page/3/",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://vestuariotienditamagica.cl",
+       "website_name": "vestuariotienditamagica.cl",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Atendemos presencialmente en la ciudad de Temuco. Creada en el año 2014. Ofrecemos una gran variedad de Vestidos de fiesta, de bautizo, paje, cumpleaños ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "Atendemos presencialmente en la ciudad de Temuco"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 14,
+       "rank_absolute": 21,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[5]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "ammo.cl",
+       "title": "Arriendo de Vestidos en Temuco | Ammo Store",
+       "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://ammo.cl",
+       "website_name": "ammo.cl",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "¿Buscas vestido para una boda, graduación o gala? En AMMÔ tienes una colección de vestidos importados disponibles para arriendo en Temuco.",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "vestidos importados disponibles para arriendo en Temuco"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "images",
+       "rank_group": 2,
+       "rank_absolute": 22,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[6]",
+       "title": "Imágenes",
+       "url": null,
+       "items": [
+        {
+         "type": "images_element",
+         "alt": "Amando este modelo …. Te gustaría probártelo???? Visítanos en ...",
+         "url": "https://www.instagram.com/p/DBg2LueRicb/",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA8FZ38ctJFuPJloJFAHk-W6uLVGaJcO5s5o7Cb20v3eSO4ua4ID1W3d8&s"
+        },
+        {
+         "type": "images_element",
+         "alt": "Mi Placard Vestidos de Fiesta y Novias | Envíos a todo Chile ...",
+         "url": "https://miplacard.cl/?srsltid=AfmBOor8nZ96-Ogdt6Tl9xmnAj6OUOsJtcdBfww7TO1dA3m-dz3yV-aB",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-B95-JQClunqo4qhQFOZatzZab0drivROwgswhdmGoJbu_W0jB-Tfsdk&s"
+        },
+        {
+         "type": "images_element",
+         "alt": "Vestido Largo de Fiesta Teresa Verde Oscuro",
+         "url": "https://miplacard.cl/products/vestido-largo-de-fiesta-teresa-verde-oscuro?srsltid=AfmBOoqWjpB6mw6YAlVP_mOfURKPf7ve3nTyaUEW_OzMu-jf1lpltcwB",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7ATB5oTW9_XopvZXxFhqFQf1pahdpV3YhhuXvzaFCZAdm54kDVJdYFx4&s"
+        },
+        {
+         "type": "images_element",
+         "alt": "Vestidos de Fiesta en Temuco | Diseños Exclusivos | Armario ...",
+         "url": "https://www.armariodelakaro.cl/",
+         "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDe0CT7BppKttYK_59Q_yhHBFTW38LHB_FFE2tjhJagNo1mSKsvDLwjk8&s"
+        }
+       ],
+       "related_image_searches": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 15,
+       "rank_absolute": 23,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[7]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.tiktok.com",
+       "title": "Vestidos Para Fiestas En Temuco",
+       "url": "https://www.tiktok.com/discover/vestidos-para-fiestas-en-temuco",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://www.tiktok.com",
+       "website_name": "TikTok",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "hace 7 días — Ven a conocer nuestra línea de vestidos importados en nuestro local de av. Alemania 0425 local 207 (paseo los suizos), Temuco. Nuestro horario ...",
+       "pre_snippet": "hace 7 días",
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "av. Alemania 0425 local 207"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": "2026-08-17 18:13:37 +00:00",
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 16,
+       "rank_absolute": 24,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[8]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.miaminovias.cl",
+       "title": "Vestido de Novia| Miaminovias | Temuco",
+       "url": "https://www.miaminovias.cl/products/vestido-de-novia-miaminovias-temuco?srsltid=AfmBOopAJBTMw1OYVBNWLr2RQjFyKOvwZsW-hyT3g8oLyIj-otyZdqkm",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "https://www.miaminovias.cl",
+       "website_name": "Miaminovias Chile",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Vestidos Falda Extraible · Remate Final · Diseños lisos · Tallas Grandes · Matrimonio Civil · Vestidos de Fiesta /Madrinas · Quinceañera · Stock Inmediato ...",
+       "pre_snippet": "Vestidos Falda Extraible · Remate Final · Diseños lisos · Tallas Grandes · Matrimonio Civil · Vestidos de Fiesta /Madrinas · Quinceañera · Stock Inmediato ...",
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": {
+        "current": 890000,
+        "regular": null,
+        "max_value": null,
+        "currency": "CLP",
+        "is_price_range": false,
+        "displayed_price": "$890.000"
+       },
+       "highlighted": [
+        "Vestidos Falda Extraible"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 17,
+       "rank_absolute": 25,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[9]/div[1]/div[1]/div[1]/div[1]",
+       "domain": "www.chocolateamargo.cl",
+       "title": "ChocolateAmargo",
+       "url": "http://www.chocolateamargo.cl/",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "http://www.chocolateamargo.cl",
+       "website_name": "ChocolateAmargo",
+       "is_image": false,
+       "is_video": false,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": null,
+       "description": "Una tienda de Diseños exclusivos en vestuario y accesorios en el rubro de la moda femenina con altos estándares de calidad e innovación, ubicada en la ciudad de ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": [
+        "Diseños exclusivos en vestuario y accesorios"
+       ],
+       "links": null,
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": null,
+       "rectangle": null
+      },
+      {
+       "type": "organic",
+       "rank_group": 18,
+       "rank_absolute": 26,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[10]/div[1]/div[1]",
+       "domain": "www.instagram.com",
+       "title": "Ya estan en la tienda todos los vestidos que tanto esperábamos , ven por el ...",
+       "url": "https://www.instagram.com/reel/DZyRsG9pxo_/?hl=es-la",
+       "cache_url": null,
+       "related_search_url": null,
+       "breadcrumb": "Más de 260 \"me gusta\"",
+       "website_name": "Instagram · armariodelakaro_temuco",
+       "is_image": false,
+       "is_video": true,
+       "is_featured_snippet": false,
+       "is_malicious": false,
+       "is_web_story": false,
+       "checks": [
+        "is_video"
+       ],
+       "description": "✨ ¡Tenemos distintos modelos, colores y tallas! Ven a encontrar ese vestido que te hará sentir espectacular. ❤️ Claro Solar 598, 2° ...",
+       "pre_snippet": null,
+       "extended_snippet": null,
+       "images": null,
+       "amp_version": false,
+       "rating": null,
+       "price": null,
+       "highlighted": null,
+       "links": [
+        {
+         "type": "link_element",
+         "title": "0:34",
+         "description": null,
+         "url": "https://www.instagram.com/reel/DZyRsG9pxo_/?hl=es-la",
+         "domain": "www.instagram.com"
+        }
+       ],
+       "faq": null,
+       "extended_people_also_search": null,
+       "about_this_result": null,
+       "related_result": null,
+       "timestamp": "2026-06-24 18:13:37 +00:00",
+       "rectangle": null
+      },
+      {
+       "type": "popular_products",
+       "rank_group": 2,
+       "rank_absolute": 27,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[3]/div[1]/div[1]/div[11]",
+       "title": "Productos populares",
+       "items": [
+        {
+         "type": "popular_products_element",
+         "title": "Vestido de Fiesta Modelo Julieta",
+         "url": null,
+         "domain": null,
+         "description": "Armario de la Karo\nEn tiendas, Temuco",
+         "more_sellers": false,
+         "seller": "Armario de la Karo",
+         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSZBClCEqtw69zbOWIZNaLcewDxL0VC3zn-8lDn7sCMM8GoapMgGCSVvM93WtS6M3O-uKBWPpOib_shgjtT7eQNj6PqM8xkZLoYKLokoMzDfwSVNduvhD3t",
+         "price": {
+          "current": 284900,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$284.900"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": null,
+          "data_docid": "17676395506624108417",
+          "gid": null
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido fiesta pierna abierta Miranda",
+         "url": null,
+         "domain": null,
+         "description": "Florentie",
+         "more_sellers": false,
+         "seller": "Florentie",
+         "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSH_jMd0lqM8FaQCy4uuP8mCucvnPZJqUY_KDBphDdjZgOBP37Y8LXR5VZMKhLYiPYeYnHB8SxTSzFVctVF7Pe-XRzsinvYqa6ImNKnwvdcJcnOqYrSdqPZ",
+         "price": {
+          "current": 64990,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$64.990"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": "14698175987952338647",
+          "data_docid": "16636697842104655579",
+          "gid": "6182208243345235838"
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido Fiesta Clara Terracota S",
+         "url": null,
+         "domain": null,
+         "description": "Enigma Estudio",
+         "more_sellers": false,
+         "seller": "Enigma Estudio",
+         "image_url": "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRux4zJjWP3NWHRbVa6chuZCvhdI0Cy5r0MKnyryS85OWlJW1NGBoZU0Q_XEb5Z-1FZw5xtYJejtuxXreQhW3QOfEaYS5lNXQvVISrHW1o",
+         "price": {
+          "current": 80990,
+          "regular": 105990,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$80.990 $105.990"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": null,
+          "data_docid": "10713815802216890957",
+          "gid": null
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido de Fiesta Modelo Leonor",
+         "url": null,
+         "domain": null,
+         "description": "Armario de la Karo\nEn tiendas, Temuco",
+         "more_sellers": false,
+         "seller": "Armario de la Karo",
+         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcT1G6ZuqYbKNVZks_Jx-7LzrdiDAXh37KXLBAJ2or203KBPd1ACI7cDksboAD_yhdWdM-dt5wyhaHmLRN_o6tKtIKDeuZUwEyCC4aKcEsJfkcU_ryTwFWJ8",
+         "price": {
+          "current": 279900,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$279.900"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": null,
+          "data_docid": "5034867975635743722",
+          "gid": null
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido Mujer Formal Fiesta Gala Noche Calidad Premium Brillos 2021",
+         "url": null,
+         "domain": null,
+         "description": "Falabella.com",
+         "more_sellers": false,
+         "seller": "Falabella.com",
+         "image_url": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQj3iCu65vZy3vsPq5YLQ6HVcChTIMUeYD1bgFLH_IaQqkwDSZp39wZgxUN8yhVo87jJ76cA2WX-Yo9Xae5bls1o2uHXDXDaAe8b3xudeWq3D2rRY4NkDV5",
+         "price": {
+          "current": 54990,
+          "regular": null,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$54.990"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": "2825335662888168791",
+          "data_docid": "8482951912008409657",
+          "gid": "13596942849303446804"
+         }
+        },
+        {
+         "type": "popular_products_element",
+         "title": "Vestido Fiesta Adela Mocca- Enigma Estudio S",
+         "url": null,
+         "domain": null,
+         "description": "Enigma Estudio",
+         "more_sellers": false,
+         "seller": "Enigma Estudio",
+         "image_url": "https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRaEHRVXaQBMxPS1ki4QTmAhfwZQpG-mgsE1fdf78dXpxGBhJMYxr1OuYFVeZybmF8MUXoKM9wTXNtm6XteNpn7aI872EwFUG04sjPdQ2QshdAnUbIYWe2Rnw",
+         "price": {
+          "current": 50990,
+          "regular": 80990,
+          "max_value": null,
+          "currency": "CLP",
+          "is_price_range": false,
+          "displayed_price": "$50.990 $80.990"
+         },
+         "rating": null,
+         "product_identifiers": {
+          "product_id": null,
+          "data_docid": "753994736328282222",
+          "gid": null
+         }
+        }
+       ],
+       "rectangle": null
+      },
+      {
+       "type": "people_also_search",
+       "rank_group": 2,
+       "rank_absolute": 28,
+       "page": 2,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[2]/div[1]/div[12]/div[4]/div[1]/div[3]/div[1]",
+       "title": "También se buscó",
+       "items": [
+        "Vestidos de fiesta usados en Temuco",
+        "Vestidos de fiesta mall mirage Temuco",
+        "Vestidos en Temuco",
+        "Vestidos de gala Caracol Temuco"
+       ],
+       "rectangle": null
+      }
+     ]
     }
-  ]
+   ]
+  }
+ ]
 }
