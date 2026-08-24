@@ -176,7 +176,7 @@ const Keyword = (props: KeywordProps) => {
          whitespace-nowrap'>
             {url ? (
                <a href={url} target="_blank" rel="noreferrer" className='hover:text-indigo-600' title={url}>
-                  <span className='mr-1 lg:hidden'><Icon type="link-alt" size={12} color="#999" /></span>{turncatedURL || '/'}
+                  <span className='mr-1 lg:hidden'><Icon type="link-alt" size={12} color='currentColor' /></span>{turncatedURL || '/'}
                </a>
             ) : <span>—</span>}
          </div>
@@ -212,7 +212,7 @@ const Keyword = (props: KeywordProps) => {
                <Icon type="dots" size={20} />
             </button>
             {showOptions && (
-               <ul className='keyword_options customShadow absolute w-[190px] right-0 bg-white rounded border z-20 text-sm'>
+               <ul className='keyword_options customShadow absolute w-[190px] right-0 bg-surface rounded border z-20 text-sm'>
                   {canRefresh && <li>
                      <a className={optionsButtonStyle} onClick={() => { refreshkeyword([ID]); setShowOptions(false); }}>
                      <span className=' bg-indigo-100 text-blue-700 px-1 rounded'><Icon type="reload" size={11} /></span> Refrescar posición</a>
@@ -239,14 +239,14 @@ const Keyword = (props: KeywordProps) => {
          </div>
 
          {lastUpdateError && lastUpdateError.date && showPositionError && (
-            <div className={`absolute p-2 bg-white z-30 border border-red-200 rounded w-[240px] left-4 shadow-sm text-xs
+            <div className={`absolute p-2 bg-surface z-30 border border-red-200 rounded w-[240px] left-4 shadow-sm text-xs
             ${index > 2 ? 'lg:bottom-12 mt-[-70px]' : ' top-12'}`}>
                Error al actualizar la posición (intentado <TimeAgo
                                                          formatter={timeAgoFormatter}
                                                          title={dayjs(lastUpdateError.date).format('DD-MMM-YYYY, HH:mm')}
                                                          date={lastUpdateError.date} />)
                <i className='absolute top-0 right-0 ml-2 p-2 font-semibold not-italic cursor-pointer' onClick={() => setPositionError(false)}>
-                  <Icon type="close" size={16} color="#999" />
+                  <Icon type="close" size={16} color='currentColor' />
                </i>
                <div className=' border-t-[1px] border-red-100 mt-2 pt-1'>
                   {lastUpdateError.scraper && <strong className='capitalize'>{lastUpdateError.scraper}: </strong>}{lastUpdateError.error}

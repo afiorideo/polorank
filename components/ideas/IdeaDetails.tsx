@@ -58,7 +58,7 @@ const IdeaDetails = ({ keyword, closeDetails }:IdeaDetailsProps) => {
 
    return (
        <div className="IdeaDetails fixed w-full h-screen top-0 left-0 z-[99999]" onClick={closeOnBGClick} data-testid="IdeaDetails">
-            <div className="IdeaDetails absolute w-full lg:w-5/12 bg-white customShadow top-0 right-0 h-screen" >
+            <div className="IdeaDetails absolute w-full lg:w-5/12 bg-surface customShadow top-0 right-0 h-screen" >
                <div className='IdeaDetails__header p-6 border-b border-b-slate-200 text-slate-500'>
                   <h3 className=' text-lg font-bold'>
                      <span title={countries[keyword.country][0]}

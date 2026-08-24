@@ -59,7 +59,7 @@ const SingleDomain: NextPage = () => {
          )}
          {activDomain && activDomain.domain
          && <Head>
-               <title>{`${activDomain.domain} - SerpBear` } </title>
+               <title>{`${activDomain.domain} - PoloRank` } </title>
             </Head>
          }
          <TopBar user={auth.user} showSettings={() => setShowSettings(true)} showAddModal={() => setShowAddDomain(true)} />

@@ -15,13 +15,13 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>SerpBear</title>
-        <meta name="description" content="SerpBear Google Keyword Position Tracking App" />
+        <title>PoloRank</title>
+        <meta name="description" content="PoloRank — tracking de posiciones SEO de Emignia" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main role={'main'} className='main flex items-center justify-center w-full h-screen'>
-        <Icon type='loading' size={36} color="#999" />
+        <Icon type='loading' size={36} color='currentColor' />
       </main>
       <Toaster position='bottom-center' containerClassName="react_toaster" />
     </div>

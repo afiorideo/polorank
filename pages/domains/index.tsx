@@ -90,7 +90,7 @@ const Domains: NextPage = () => {
                </div>
          )}
          <Head>
-            <title>Domains - SerpBear</title>
+            <title>Dominios - PoloRank</title>
          </Head>
          <TopBar user={auth.user} showSettings={() => setShowSettings(true)} showAddModal={() => setShowAddDomain(true)} />
 
@@ -123,12 +123,12 @@ const Domains: NextPage = () => {
                            />;
                })}
                {isLoading && (
-                  <div className='noDomains mt-4 p-5 py-12 rounded border text-center bg-white text-sm'>
+                  <div className='noDomains mt-4 p-5 py-12 rounded border text-center bg-surface text-sm'>
                      <Icon type="loading" /> Loading Domains...
                   </div>
                )}
                {!isLoading && domainsData && domainsData.domains && domainsData.domains.length === 0 && (
-                  <div className='noDomains mt-4 p-5 py-12 rounded border text-center bg-white text-sm'>
+                  <div className='noDomains mt-4 p-5 py-12 rounded border text-center bg-surface text-sm'>
                      No Domains Found. Add a Domain to get started!
                   </div>
                )}

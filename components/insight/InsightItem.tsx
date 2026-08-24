@@ -30,12 +30,12 @@ const InsightItem = ({ item, lastItem, type, domain }:InsightItemProps) => {
 
          <div className='keyword_pos text-center inline-block mr-3 lg:mr-0 lg:flex-1'>
             <span className='mr-1 lg:hidden'>
-               <Icon type="tracking" size={14} color="#999" />
+               <Icon type="tracking" size={14} color='currentColor' />
             </span>
             {Math.round(position)}
          </div>
 
-         <div className={`keyword_position absolute bg-[#f8f9ff] w-fit min-w-[50px] h-14 p-2 text-base mt-[-55px] rounded right-5 lg:relative
+         <div className={`keyword_position absolute bg-surface-2 w-fit min-w-[50px] h-14 p-2 text-base mt-[-55px] rounded right-5 lg:relative
           lg:bg-transparent lg:w-auto lg:h-auto lg:mt-0 lg:p-0 lg:text-sm lg:flex-1 lg:basis-40 lg:grow-0 lg:right-0 text-center font-semibold`}>
             {formattedNum(clicks)}
             <span className='block text-xs text-gray-500 lg:hidden'>Visits</span>
@@ -43,14 +43,14 @@ const InsightItem = ({ item, lastItem, type, domain }:InsightItemProps) => {
 
          <div className='keyword_imp text-center inline-block mr-3 lg:mr-0 lg:flex-1'>
             <span className='mr-1 lg:hidden'>
-               <Icon type="eye" size={14} color="#999" />
+               <Icon type="eye" size={14} color='currentColor' />
             </span>
             {formattedNum(impressions)}
          </div>
 
          <div className='keyword_ctr text-center inline-block mt-4 relative mr-3 lg:mr-0 lg:flex-1 lg:m-0 '>
             <span className='mr-1 lg:hidden'>
-               <Icon type="target" size={14} color="#999" />
+               <Icon type="target" size={14} color='currentColor' />
             </span>
             {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(ctr)}%
          </div>

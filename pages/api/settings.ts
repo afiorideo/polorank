@@ -100,7 +100,7 @@ export const getAppSettings = async () : Promise<SettingsType> => {
       notification_interval: 'never',
       notification_email: '',
       notification_email_from: '',
-      notification_email_from_name: 'SerpBear',
+      notification_email_from_name: 'PoloRank',
       smtp_server: '',
       smtp_port: '',
       smtp_username: '',

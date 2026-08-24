@@ -47,7 +47,7 @@ const UsersSettings = () => {
 
    const labelStyle = 'mb-2 font-semibold inline-block text-sm text-gray-700';
    const inputStyle = 'w-full p-2 border border-gray-200 rounded focus:outline-none focus:border-blue-200 text-sm';
-   const selectStyle = `${inputStyle} bg-white`;
+   const selectStyle = `${inputStyle} bg-surface`;
 
    return (
       <div className='settings__content styled-scrollbar p-6 text-gray-600'>

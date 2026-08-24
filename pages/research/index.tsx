@@ -6,6 +6,7 @@ import { CSSTransition } from 'react-transition-group';
 import { guardPage } from '../../utils/auth/pageGuard';
 import { useAuthUser } from '../../services/auth';
 import Icon from '../../components/common/Icon';
+import Logo from '../../components/common/Logo';
 import TopBar from '../../components/common/TopBar';
 import KeywordIdeasTable from '../../components/ideas/KeywordIdeasTable';
 import { exportKeywordIdeas } from '../../utils/client/exportcsv';
@@ -62,16 +63,16 @@ const Research: NextPage = () => {
    return (
       <div className={'Login'}>
          <Head>
-            <title>Research Keywords - SerpBear</title>
+            <title>Investigación de keywords - PoloRank</title>
          </Head>
          <TopBar user={auth.user} showSettings={() => setShowSettings(true)} showAddModal={() => null } />
          <div className=" w-full max-w-7xl mx-auto lg:flex lg:flex-row">
             <div className="sidebar w-full p-6 lg:pt-44 lg:w-1/5 lg:block lg:pr-0" data-testid="sidebar">
                <h3 className="hidden py-7 text-base font-bold text-blue-700 lg:block">
-                  <span className=' relative top-[3px] mr-1'><Icon type="logo" size={24} color="#364AFF" /></span> SerpBear
+                  <Logo size={30} />
                </h3>
                <div className={`sidebar_menu domKeywords max-h-96 overflow-auto styled-scrollbar p-4
-                bg-white border border-gray-200 rounded lg:rounded-none lg:rounded-s lg:border-r-0`}>
+                bg-surface border border-gray-200 rounded lg:rounded-none lg:rounded-s lg:border-r-0`}>
                   <div className={'mb-3'}>
                      <label className={labelStyle}>Generate Ideas from given Keywords (Max 20)</label>
                      <textarea

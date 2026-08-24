@@ -82,13 +82,13 @@ const SelectField = (props: SelectFieldProps) => {
                {selected.length > 0 ? (selectedLabels.slice(0, 2).join(', ')) : defaultLabel}
             </span>
             {multiple && selected.length > 2
-            && <span className={`px-2 py-0 ${rounded} bg-[#eaecff] text-[0.7rem] font-bold`}>{(selected.length)}</span>}
+            && <span className={`px-2 py-0 ${rounded} bg-brand-soft text-[0.7rem] font-bold`}>{(selected.length)}</span>}
             <span className='ml-2'><Icon type={showOptions ? 'caret-up' : 'caret-down'} size={9} /></span>
          </div>
          {showOptions && (
             <div
             className={`select_list mt-1 border absolute min-w-[${minWidth}px] top-[30px] right-0 ${fullWidth ? 'w-full' : 'w-[210px]'}
-            ${rounded === 'rounded-3xl' ? 'rounded-lg' : rounded} max-h-${maxHeight} bg-white z-50 overflow-y-auto styled-scrollbar`}>
+            ${rounded === 'rounded-3xl' ? 'rounded-lg' : rounded} max-h-${maxHeight} bg-surface z-50 overflow-y-auto styled-scrollbar`}>
                {options.length > 20 && (
                   <div className=''>
                      <input
@@ -106,7 +106,7 @@ const SelectField = (props: SelectFieldProps) => {
                      return (
                         <li
                         key={opt.value}
-                        className={`select-none cursor-pointer px-3 py-2 hover:bg-[#FCFCFF] capitalize text-ellipsis overflow-hidden
+                        className={`select-none cursor-pointer px-3 py-2 hover:bg-surface-2 capitalize text-ellipsis overflow-hidden
                         ${itemActive ? ' bg-indigo-50 text-indigo-600 hover:bg-indigo-50' : ''} `}
                         onClick={() => selectItem(opt)}
                         >

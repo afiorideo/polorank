@@ -91,7 +91,7 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
       if (e.target === e.currentTarget) { closeDetails(); }
    };
 
-   const kpi = 'flex-1 min-w-[110px] rounded-lg border border-slate-200 bg-white px-3 py-2';
+   const kpi = 'flex-1 min-w-[110px] rounded-lg border border-slate-200 bg-surface px-3 py-2';
    const kpiLabel = 'block text-[10px] uppercase tracking-wide text-gray-400 font-semibold';
    const kpiValue = 'block text-xl font-bold text-slate-700';
    const navBtn = 'px-2 py-1 rounded border border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200'
@@ -99,8 +99,8 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
 
    return (
        <div className="keywordDetails fixed w-full h-screen top-0 left-0 z-[99999]" onClick={closeOnBGClick} data-testid="keywordDetails">
-            <div className="keywordDetails absolute w-full lg:w-6/12 xl:w-5/12 bg-[#F7F7FC] customShadow top-0 right-0 h-screen flex flex-col" >
-               <div className='keywordDetails__header p-5 pr-24 border-b border-b-slate-200 bg-white text-slate-600'>
+            <div className="keywordDetails absolute w-full lg:w-6/12 xl:w-5/12 bg-bg customShadow top-0 right-0 h-screen flex flex-col" >
+               <div className='keywordDetails__header p-5 pr-24 border-b border-b-slate-200 bg-surface text-slate-600'>
                   <h3 className='text-lg font-bold flex items-center flex-wrap gap-2'>
                      <span title={countries[keyword.country] && countries[keyword.country][0]}
                      className={`fflag fflag-${keyword.country} w-[18px] h-[12px]`} />
@@ -139,7 +139,7 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
                   <div className='keywordDetails__section'>
                      <div className="keywordDetails__section__head flex justify-between items-center mb-3">
                         <h3 className=' font-bold text-gray-700'>Historial de posición</h3>
-                        <div className='inline-flex rounded-full border border-gray-200 bg-white overflow-hidden text-xs'
+                        <div className='inline-flex rounded-full border border-gray-200 bg-surface overflow-hidden text-xs'
                         data-testid='range_selector'>
                            {RANGES.map((r) => (
                               <span key={r.value}
@@ -169,7 +169,7 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
                            )}
                         </div>
                      </div>
-                     <div className='keywordDetails__section__chart h-56 bg-white rounded-lg border border-slate-200 p-2'>
+                     <div className='keywordDetails__section__chart h-56 bg-surface rounded-lg border border-slate-200 p-2'>
                         {isLoading && !keywordData && <p className='text-xs text-gray-400 p-4'>Cargando historial completo…</p>}
                         {chartData.labels.length > 0 && <Chart labels={chartData.labels} series={chartData.series} noMaxLimit />}
                      </div>
@@ -179,7 +179,7 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
                      <h3 className='font-bold text-gray-700 mb-2'>Por mes</h3>
                      {months.length === 0 && <p className='text-xs text-gray-400'>Todavía no hay historial suficiente.</p>}
                      {months.length > 0 && (
-                        <div className='bg-white rounded-lg border border-slate-200 overflow-x-auto'>
+                        <div className='bg-surface rounded-lg border border-slate-200 overflow-x-auto'>
                            <table className='w-full text-sm' data-testid='monthly_table'>
                               <thead>
                                  <tr className='text-left text-[10px] uppercase tracking-wide text-gray-400 border-b border-slate-100'>
@@ -254,7 +254,7 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
                            return (
                               <div
                               ref={domainExist ? searchResultFound : null}
-                              className={`leading-5 mb-2 p-2 text-sm break-all rounded bg-white border
+                              className={`leading-5 mb-2 p-2 text-sm break-all rounded bg-surface border
                               ${domainExist ? 'border-amber-300 bg-amber-50' : 'border-slate-100'}`}
                               key={seg.item.url + seg.item.position}>
                                  <h4 className='font-semibold text-blue-700 text-[13px]'>

@@ -120,7 +120,7 @@ const generateEmail = async (domainName:string, keywords:KeywordType[], settings
    const stat = `${improved > 0 ? `${improved} Improved` : ''} 
                   ${improved > 0 && declined > 0 ? ', ' : ''} ${declined > 0 ? `${declined} Declined` : ''}`;
    const updatedEmail = emailTemplate
-         .replace('{{logo}}', `<img class="logo_img" src="${serpBearLogo}" alt="SerpBear" width="24" height="24" />`)
+         .replace('{{logo}}', `<img class="logo_img" src="${serpBearLogo}" alt="PoloRank" width="24" height="24" />`)
          .replace('{{currentDate}}', currentDate)
          .replace('{{domainName}}', domainName)
          .replace('{{keywordsCount}}', keywordsCount.toString())

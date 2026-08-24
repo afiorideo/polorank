@@ -130,7 +130,7 @@ const IdeasKeywordsTable = ({
 
    return (
       <div>
-         <div className='domKeywords flex flex-col bg-[white] rounded-md text-sm border mb-5'>
+         <div className='domKeywords flex flex-col bg-surface rounded-md text-sm border mb-5'>
             {selectedKeywords.length > 0 && (
                <div className='font-semibold text-sm py-4 px-8 text-gray-500 '>
                   <div className={`inline-block ${isResearchPage ? ' mr-2' : ''}`}>Add Keywords to Tracker</div>
@@ -181,7 +181,7 @@ const IdeasKeywordsTable = ({
             )}
             <div className='domkeywordsTable domkeywordsTable--sckeywords styled-scrollbar w-full overflow-auto min-h-[60vh]'>
                <div className=' lg:min-w-[800px]'>
-                  <div className={`domKeywords_head domKeywords_head--${sortBy} hidden lg:flex p-3 px-6 bg-[#FCFCFF]
+                  <div className={`domKeywords_head domKeywords_head--${sortBy} hidden lg:flex p-3 px-6 bg-surface-2
                    text-gray-600 justify-between items-center font-semibold border-y`}>
                      <span className='domKeywords_head_keyword flex-1 basis-20 w-auto '>
                      {finalKeywords.length > 0 && (

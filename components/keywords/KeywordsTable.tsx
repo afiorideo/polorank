@@ -181,7 +181,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
 
    return (
       <div>
-         <div className='domKeywords flex flex-col bg-[white] rounded-md text-sm border mb-5'>
+         <div className='domKeywords flex flex-col bg-surface rounded-md text-sm border mb-5'>
             {selectedKeywords.length > 0 && (
                <div className='font-semibold text-sm py-4 px-8 text-gray-500 '>
                   <ul className=''>
@@ -235,7 +235,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
             )}
             <div className='domkeywordsTable domkeywordsTable--keywords styled-scrollbar w-full overflow-auto min-h-[60vh]'>
                <div className='lg:min-w-[1000px]'>
-                  <div className='domKeywords_head hidden lg:flex items-center gap-2 py-3 px-6 bg-[#FCFCFF] text-[11px] uppercase tracking-wide
+                  <div className='domKeywords_head hidden lg:flex items-center gap-2 py-3 px-6 bg-surface-2 text-[11px] uppercase tracking-wide
                    text-gray-500 font-semibold border-y'>
                      <button
                         className={`p-0 leading-[0px] inline-block rounded-sm pt-0 px-[1px] pb-[3px] border border-slate-300 shrink-0
@@ -293,14 +293,14 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                      {showSCData && show('Search Console') && (
                         <div className='domKeywords_head_sc basis-[170px] shrink-0 text-center relative'>
                            <div
-                           className='select-none cursor-pointer inline-block bg-white rounded-full px-2 py-[2px] border border-gray-200
+                           className='select-none cursor-pointer inline-block bg-surface rounded-full px-2 py-[2px] border border-gray-200
                            normal-case tracking-normal'
                            onClick={() => setShowScDataTypes(!showScDataTypes)}>
                               <Icon type="google" size={11} /> {scDataObject[scDataType]}
                               <Icon classes="ml-1" type={showScDataTypes ? 'caret-up' : 'caret-down'} size={10} />
                            </div>
                            {showScDataTypes && (
-                              <div className='absolute bg-white border border-gray-200 z-50 w-44 rounded mt-1 text-gray-500
+                              <div className='absolute bg-surface border border-gray-200 z-50 w-44 rounded mt-1 text-gray-500
                               normal-case tracking-normal text-left'>
                                  {Object.keys(scDataObject).map((itemKey) => {
                                     return <span

@@ -80,20 +80,20 @@ const DomainSettings = ({ domain, closeModal }: DomainSettingsProps) => {
          <Modal closeModal={() => closeModal(false)} title={'Domain Settings'} width="[500px]" verticalCenter={currentTab === 'searchconsole'} >
             <div data-testid="domain_settings" className=" text-sm">
                <div className=' mt-3 mb-5 border  border-slate-200 px-2 py-4 pb-0
-               relative left-[-20px] w-[calc(100%+40px)] border-l-0 border-r-0 bg-[#f8f9ff]'>
+               relative left-[-20px] w-[calc(100%+40px)] border-l-0 border-r-0 bg-surface-2'>
                   <ul>
                      <li
-                     className={`${tabStyle} ${currentTab === 'scraping' ? ' bg-white text-blue-600 border-slate-200' : 'border-transparent'}`}
+                     className={`${tabStyle} ${currentTab === 'scraping' ? ' bg-surface text-blue-600 border-slate-200' : 'border-transparent'}`}
                      onClick={() => setCurrentTab('scraping')}>
                         <Icon type='scraper' /> Scraping
                      </li>
                      <li
-                     className={`${tabStyle} ${currentTab === 'notification' ? ' bg-white text-blue-600 border-slate-200' : 'border-transparent'} `}
+                     className={`${tabStyle} ${currentTab === 'notification' ? ' bg-surface text-blue-600 border-slate-200' : 'border-transparent'} `}
                      onClick={() => setCurrentTab('notification')}>
                        <Icon type='email' /> Notification
                      </li>
                      <li
-                     className={`${tabStyle} ${currentTab === 'searchconsole' ? ' bg-white text-blue-600 border-slate-200' : 'border-transparent'}`}
+                     className={`${tabStyle} ${currentTab === 'searchconsole' ? ' bg-surface text-blue-600 border-slate-200' : 'border-transparent'}`}
                      onClick={() => setCurrentTab('searchconsole')}>
                         <Icon type='google' /> Search Console
                      </li>

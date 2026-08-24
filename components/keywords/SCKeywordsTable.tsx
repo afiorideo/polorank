@@ -116,7 +116,7 @@ const SCKeywordsTable = ({ domain, keywords = [], isLoading = true, isConsoleInt
 
    return (
       <div>
-         <div className='domKeywords flex flex-col bg-[white] rounded-md text-sm border mb-4'>
+         <div className='domKeywords flex flex-col bg-surface rounded-md text-sm border mb-4'>
             {selectedKeywords.length > 0 && (
                <div className='font-semibold text-sm py-4 px-8 text-gray-500 '>
                   <ul className=''>
@@ -148,7 +148,7 @@ const SCKeywordsTable = ({ domain, keywords = [], isLoading = true, isConsoleInt
             )}
             <div className='domkeywordsTable domkeywordsTable--sckeywords styled-scrollbar w-full overflow-auto min-h-[60vh]'>
                <div className=' lg:min-w-[800px]'>
-                  <div className={`domKeywords_head domKeywords_head--${sortBy} hidden lg:flex p-3 px-6 bg-[#FCFCFF]
+                  <div className={`domKeywords_head domKeywords_head--${sortBy} hidden lg:flex p-3 px-6 bg-surface-2
                    text-gray-600 justify-between items-center font-semibold border-y`}>
                      <span className='domKeywords_head_keyword flex-1 basis-20 w-auto '>
                      {finalKeywords[device].length > 0 && (
@@ -182,7 +182,7 @@ const SCKeywordsTable = ({ domain, keywords = [], isLoading = true, isConsoleInt
                         </List>
                      )}
                      {!isLoading && finalKeywords[device] && finalKeywords[device].length > 0 && (
-                        <div className={`domKeywords_head hidden lg:flex p-3 px-6 bg-[#FCFCFF]
+                        <div className={`domKeywords_head hidden lg:flex p-3 px-6 bg-surface-2
                            text-gray-600 justify-between items-center font-semibold border-y`}>
                               <span className='domKeywords_head_keyword flex-1 basis-20 w-auto font-semibold'>
                                  {finalKeywords[device].length} {device} Keywords

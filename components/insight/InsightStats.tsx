@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Line } from 'react-chartjs-2';
+import { chartColor } from '../../utils/client/chartColors';
 import { formattedNum } from '../../utils/client/helpers';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
@@ -75,7 +76,9 @@ const InsightStats = ({ stats = [], totalKeywords = 0, totalPages = 0 }:InsightS
       const { clicks, impressions } = chartData.series || {};
       const dataSet = [
          { label: 'Visits', data: clicks, borderColor: 'rgb(117, 50, 205)', backgroundColor: 'rgba(117, 50, 205, 0.5)', yAxisID: 'y' },
-         { label: 'Impressions', data: impressions, borderColor: 'rgb(31, 205, 176)', backgroundColor: 'rgba(31, 205, 176, 0.5)', yAxisID: 'y1' },
+         {
+            label: 'Impressions', data: impressions, borderColor: chartColor(), backgroundColor: chartColor(0.35), yAxisID: 'y1',
+         },
       ];
       return <Line datasetIdKey={'xxx'} options={chartOptions} data={{ labels: chartData.labels, datasets: dataSet }} />;
    };
@@ -90,7 +93,7 @@ const InsightStats = ({ stats = [], totalKeywords = 0, totalPages = 0 }:InsightS
                {new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(totalStat.clicks || 0).replace('T', 'K')}
             </div>
             <div
-            className='flex-1 border border-gray-200 px-6 py-5 rounded mb-4 text-2xl text-[#1fcdb0] lg:mr-5'
+            className='flex-1 border border-gray-200 px-6 py-5 rounded mb-4 text-2xl text-emerald-600 lg:mr-5'
             title={`${formattedNum(totalStat.impressions || 0)} Impressions`}>
                <span className=' block text-sm font-normal text-gray-500'>Impressions</span>
                {new Intl.NumberFormat('en-US', { notation: 'compact', compactDisplay: 'short' }).format(totalStat.impressions || 0).replace('T', 'K')}

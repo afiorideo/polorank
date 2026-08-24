@@ -33,7 +33,7 @@ const SCInsight = ({ insight, isLoading = true, isConsoleIntegrated = true, doma
       };
 
       return (
-         <div className={`domKeywords_head hidden lg:flex p-3 px-6 bg-[#FCFCFF]
+         <div className={`domKeywords_head hidden lg:flex p-3 px-6 bg-surface-2
             text-gray-600 justify-between items-center font-semibold border-y`}>
             <span className='domKeywords_head_keyword flex-1 basis-20 w-auto '>{headerNames[activeTab][0]}</span>
             <span className='domKeywords_head_position flex-1 basis-40 grow-0 text-center'>{headerNames[activeTab][1]}</span>
@@ -47,11 +47,11 @@ const SCInsight = ({ insight, isLoading = true, isConsoleIntegrated = true, doma
    };
 
    const deviceTabStyle = 'select-none cursor-pointer px-3 py-2 rounded-3xl mr-2';
-   const deviceTabCountStyle = 'px-2 py-0 rounded-3xl bg-[#DEE1FC] text-[0.7rem] font-bold ml-1';
+   const deviceTabCountStyle = 'px-2 py-0 rounded-3xl bg-brand-soft-2 text-[0.7rem] font-bold ml-1';
 
    return (
       <div>
-         <div className='domKeywords flex flex-col bg-[white] rounded-md text-sm border mb-5'>
+         <div className='domKeywords flex flex-col bg-surface rounded-md text-sm border mb-5'>
             <div className='domKeywords_filters py-4 px-6 flex flex-col justify-between
             text-sm text-gray-500 font-semibold border-b-[1px] lg:border-0 lg:flex-row'>
                <div>
@@ -60,7 +60,7 @@ const SCInsight = ({ insight, isLoading = true, isConsoleIntegrated = true, doma
                         const tabInsightItem = insight[tabItem as keyof InsightDataType];
                         return <li
                         key={`tab-${tabItem}`}
-                        className={`${deviceTabStyle} ${activeTab === tabItem ? ' bg-[#F8F9FF] text-gray-700' : ''}`}
+                        className={`${deviceTabStyle} ${activeTab === tabItem ? ' bg-surface-2 text-gray-700' : ''}`}
                         onClick={() => switchTab(tabItem)}>
                               <i className='hidden not-italic lg:inline-block ml-1 capitalize'>{tabItem}</i>
                               {tabItem !== 'stats' && (

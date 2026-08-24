@@ -38,7 +38,7 @@ const SCKeyword = (props: SCKeywordProps) => {
             </a>
          </div>
 
-         <div className={`keyword_position absolute bg-[#f8f9ff] w-fit min-w-[50px] h-15 p-2 text-base mt-[-20px] rounded right-5 lg:relative
+         <div className={`keyword_position absolute bg-surface-2 w-fit min-w-[50px] h-15 p-2 text-base mt-[-20px] rounded right-5 lg:relative
           lg:bg-transparent lg:w-auto lg:h-auto lg:mt-0 lg:p-0 lg:text-sm lg:flex-1 lg:basis-40 lg:grow-0 lg:right-0 text-center font-semibold`}>
             <KeywordPosition position={position} />
             <span className='block text-xs text-gray-500 lg:hidden'>Position</span>
@@ -46,21 +46,21 @@ const SCKeyword = (props: SCKeywordProps) => {
 
          <div className='keyword_imp text-center inline-block lg:flex-1 '>
             <span className='mr-3 lg:hidden'>
-               <Icon type="eye" size={14} color="#999" />
+               <Icon type="eye" size={14} color='currentColor' />
             </span>
             {formattedNum(impressions)}
          </div>
 
          <div className={'keyword_visits text-center inline-block mt-4 mr-5 ml-5 lg:flex-1 lg:m-0 max-w-[70px] lg:max-w-none lg:pr-5'}>
             <span className='mr-3 lg:hidden'>
-               <Icon type="cursor" size={14} color="#999" />
+               <Icon type="cursor" size={14} color='currentColor' />
             </span>
             {formattedNum(clicks)}
          </div>
 
          <div className='keyword_ctr text-center inline-block mt-4 relative lg:flex-1 lg:m-0 '>
             <span className='mr-3 lg:hidden'>
-               <Icon type="target" size={14} color="#999" />
+               <Icon type="target" size={14} color='currentColor' />
             </span>
             {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(ctr)}%
          </div>

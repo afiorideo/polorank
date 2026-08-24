@@ -1,9 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { redirectIfAuthenticated } from '../../utils/auth/pageGuard';
+import Logo from '../../components/common/Logo';
 
 type Step = 'email' | 'code';
 
@@ -76,11 +76,10 @@ const Login: NextPage = () => {
          </Head>
          <div className='flex items-center justify-center w-full h-screen'>
             <div className='w-80 mt-[-300px]'>
-               <h3 className="py-7 text-2xl font-bold text-blue-700 text-center flex items-center justify-center gap-2">
-                  <img src='/brand/polo-face.png' alt='' width={40} height={44} />
-                  PoloRank
+               <h3 className="py-7 flex items-center justify-center">
+                  <Logo size={48} />
                </h3>
-               <div className='relative bg-[white] rounded-md text-sm border p-5'>
+               <div className='relative bg-surface rounded-md text-sm border border-line p-5 shadow-card'>
                   {step === 'email' && (
                      <form onSubmit={sendCode} data-testid='login_email_form'>
                         <div className="settings__section__input mb-5">

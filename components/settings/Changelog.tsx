@@ -14,7 +14,7 @@ type ChangeLogProps = {
 const ChangeLogloader = () => {
    return (
       <div className='w-full h-full absolute flex justify-center items-center'>
-         <Icon type="loading" size={36} color='#999' />
+         <Icon type="loading" size={36} color='currentColor' />
       </div>
    );
 };
@@ -49,15 +49,15 @@ const ChangeLog = ({ closeChangeLog }: ChangeLogProps) => {
       return [];
    }, [changeLogData]);
 
-   return <SidePanel title='SerpBear Changelog' closePanel={onClose}>
+   return <SidePanel title='Novedades de SerpBear (base de PoloRank)' closePanel={onClose}>
             <React.Suspense fallback={<ChangeLogloader />}>
                {!isLoading && changeLogs.length > 0 && (
-                  <div className='changelog-body bg-[#f8f9ff] px-6 pt-4 pb-10 overflow-y-auto styled-scrollbar'>
+                  <div className='changelog-body bg-surface-2 px-6 pt-4 pb-10 overflow-y-auto styled-scrollbar'>
                      {changeLogs.map(({ version, content, date, major }) => {
                         return (
                            <div
                            key={version}
-                           className={`domKeywords bg-white rounded mb-6 border ${major ? ' border-indigo-400' : 'border-transparent'}`}>
+                           className={`domKeywords bg-surface rounded mb-6 border ${major ? ' border-indigo-400' : 'border-transparent'}`}>
                               <h4 className=' px-5 py-3 border-b border-b-gray-100 flex justify-between text-indigo-700 font-semibold'>
                                  <a href={`https://github.com/towfiqi/serpbear/releases/tag/${version}`}>
                                     {version} {major && <span className=' text-xs bg-amber-100 text-amber-700 px-2 py-1 rounded ml-2'>Major</span>}

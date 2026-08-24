@@ -36,12 +36,12 @@ const IdeasFilters = (props: IdeasFilterProps) => {
    ];
 
    const sortItemStyle = (sortType:string) => {
-      return `cursor-pointer py-2 px-3 hover:bg-[#FCFCFF] ${sortBy === sortType ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-50' : ''}`;
+      return `cursor-pointer py-2 px-3 hover:bg-surface-2 ${sortBy === sortType ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-50' : ''}`;
    };
 
    const deviceTabStyle = 'select-none cursor-pointer px-3 py-2 rounded-3xl mr-2';
-   const deviceTabCountStyle = 'px-2 py-0 rounded-3xl bg-[#DEE1FC] text-[0.7rem] font-bold ml-1';
-   const mobileFilterOptionsStyle = 'visible mt-8 border absolute min-w-[0] rounded-lg max-h-96 bg-white z-50 w-52 right-2 p-4';
+   const deviceTabCountStyle = 'px-2 py-0 rounded-3xl bg-brand-soft-2 text-[0.7rem] font-bold ml-1';
+   const mobileFilterOptionsStyle = 'visible mt-8 border absolute min-w-[0] rounded-lg max-h-96 bg-surface z-50 w-52 right-2 p-4';
 
    return (
       <div className='domKeywords_filters py-4 px-6 flex justify-between text-sm text-gray-500 font-semibold border-b-[1px] lg:border-0 items-center'>
@@ -49,7 +49,7 @@ const IdeasFilters = (props: IdeasFilterProps) => {
             <ul className='flex text-xs'>
                <li
                 data-testid="desktop_tab"
-               className={`${deviceTabStyle} ${keywordType === 'all' ? ' bg-[#F8F9FF] text-gray-700' : ''}`}
+               className={`${deviceTabStyle} ${keywordType === 'all' ? ' bg-surface-2 text-gray-700' : ''}`}
                onClick={() => { setKeywordType('all'); showFavorites(false); }}>
                      <Icon type='keywords' classes='top-[3px]' size={15} />
                      <i className='hidden not-italic lg:inline-block ml-1'>All Keywords</i>
@@ -57,7 +57,7 @@ const IdeasFilters = (props: IdeasFilterProps) => {
                </li>
                <li
                data-testid="mobile_tab"
-               className={`${deviceTabStyle} ${keywordType === 'favorites' ? ' bg-[#F8F9FF] text-gray-700' : ''}`}
+               className={`${deviceTabStyle} ${keywordType === 'favorites' ? ' bg-surface-2 text-gray-700' : ''}`}
                onClick={() => { setKeywordType('favorites'); showFavorites(true); }}>
                      <Icon type='star' classes='top-[4px]' />
                      <i className='hidden not-italic lg:inline-block ml-1'>Favorites</i>
@@ -114,7 +114,7 @@ const IdeasFilters = (props: IdeasFilterProps) => {
                      <ul
                      data-testid="sort_options"
                      className='sort_options mt-2 border absolute min-w-[0] right-0 rounded-lg
-                     max-h-96 bg-white z-[9999] w-44 overflow-y-auto styled-scrollbar'>
+                     max-h-96 bg-surface z-[9999] w-44 overflow-y-auto styled-scrollbar'>
                         {sortOptionChoices.map((sortOption) => {
                            return <li
                                     key={sortOption.value}

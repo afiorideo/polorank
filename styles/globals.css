@@ -4,9 +4,67 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-   background-color: #f8f9ff;
+/* ==========================================================================
+   PoloRank — design tokens (Emignia palette). RGB triplets so Tailwind can apply opacity.
+   Light = white surfaces + violet accents · Dark = Emignia deep (#080812 / #0D0D1E).
+   ========================================================================== */
+:root {
+   --c-bg: 244 244 250;          /* #F4F4FA app background */
+   --c-surface: 255 255 255;     /* cards, sidebar, panels */
+   --c-surface-2: 250 250 254;   /* table heads, subtle blocks */
+   --c-line: 226 232 240;        /* borders #E2E8F0 */
+   --c-line-2: 241 245 249;      /* lighter dividers */
+   --c-ink: 26 26 46;            /* text #1A1A2E */
+   --c-ink-2: 71 85 105;         /* secondary text */
+   --c-muted: 100 116 139;       /* muted text #64748B */
+   --c-faint: 148 163 184;       /* placeholders, disabled */
+   --c-brand: 108 99 255;        /* #6C63FF */
+   --c-brand-hover: 85 80 224;   /* #5550E0 */
+   --c-brand-text: 85 80 224;    /* violet used as text/links */
+   --c-brand-soft: 238 238 252;  /* #EEEEFC selection */
+   --c-brand-soft-2: 222 220 255;
+   --c-ok: 21 128 61;            --c-ok-soft: 220 252 231;
+   --c-warn: 180 83 9;           --c-warn-soft: 254 243 199;  --c-warn-line: 252 211 77;
+   --c-bad: 185 28 28;           --c-bad-soft: 254 226 226;   --c-bad-line: 252 165 165;
+   --c-shadow: 20 34 71;
+   --c-chart: 108 99 255;
 }
+
+.dark {
+   --c-bg: 8 8 18;               /* #080812 */
+   --c-surface: 13 13 30;        /* #0D0D1E */
+   --c-surface-2: 18 18 42;      /* #12122A */
+   --c-line: 42 42 74;           /* #2A2A4A */
+   --c-line-2: 30 30 56;
+   --c-ink: 240 240 246;         /* #F0F0F6 */
+   --c-ink-2: 199 203 224;
+   --c-muted: 148 163 184;       /* #94A3B8 */
+   --c-faint: 94 102 128;
+   --c-brand: 123 116 255;       /* slightly lighter violet for dark surfaces */
+   --c-brand-hover: 139 133 255;
+   --c-brand-text: 165 160 255;  /* #A5A0FF */
+   --c-brand-soft: 30 27 75;     /* #1E1B4B */
+   --c-brand-soft-2: 42 38 102;
+   --c-ok: 52 211 153;           --c-ok-soft: 15 61 46;
+   --c-warn: 251 191 36;         --c-warn-soft: 63 42 10;     --c-warn-line: 120 80 20;
+   --c-bad: 248 113 113;         --c-bad-soft: 63 18 18;      --c-bad-line: 120 40 40;
+   --c-shadow: 0 0 0;
+   --c-chart: 139 133 255;
+}
+
+html { color-scheme: light; }
+html.dark { color-scheme: dark; }
+
+body {
+   background-color: rgb(var(--c-bg));
+   color: rgb(var(--c-ink));
+   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+h1, h2, .font-display { font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif; }
+
+input, select, textarea { background-color: rgb(var(--c-surface)); color: rgb(var(--c-ink)); }
+input::placeholder, textarea::placeholder { color: rgb(var(--c-faint)); }
 
 .max-w-7xl {
    max-width: 90rem;
@@ -23,17 +81,17 @@ body {
 
 .domKeywords {
    /* min-height: 70vh; */
-   border-color: #e9ebff;
-   box-shadow: 0 0 20px rgb(20 34 71 / 5%);
+   border-color: rgb(var(--c-line));
+   box-shadow: 0 0 20px rgb(var(--c-shadow) / 0.06);
 }
 
 .customShadow {
-   border-color: #e9ebff;
-   box-shadow: 0 0 20px rgb(20 34 71 / 5%);
+   border-color: rgb(var(--c-line));
+   box-shadow: 0 0 20px rgb(var(--c-shadow) / 0.06);
 }
 
 .styled-scrollbar {
-   scrollbar-color: #d6dbec transparent;
+   scrollbar-color: rgb(var(--c-faint)) transparent;
    scrollbar-width: thin;
 }
 
@@ -41,7 +99,7 @@ body {
    width: 6px;
    height: 6px;
    border-radius: 0;
-   background: #f5f7ff;
+   background: rgb(var(--c-surface-2));
    margin-right: 4px;
    border: 0 solid transparent;
 }
@@ -51,13 +109,13 @@ body {
    height: 6px;
    border-radius: 0;
    color: #d6dbec;
-   background: #d6d8e1;
+   background: rgb(var(--c-faint));
    border: 0 solid transparent;
    box-shadow: none;
 }
 
 .ct-area {
-   fill: #10b98d73;
+   fill: rgb(var(--c-chart) / 0.45);
 }
 
 .ct-label.ct-horizontal {
@@ -71,7 +129,7 @@ body {
 .chart_tooltip {
    width: 95px;
    height: 75px;
-   background-color: white;
+   background-color: rgb(var(--c-surface));
    position: absolute;
    display: none;
    padding: 0 8px;
@@ -84,7 +142,7 @@ body {
    pointer-events: none;
    border: 1px solid;
    border-radius: 4px;
-   border-color: #a7aed3;
+   border-color: rgb(var(--c-line));
    box-shadow: 0 0 10px rgb(0 0 0 / 12%);
    font-family: "Trebuchet MS", Roboto, Ubuntu, sans-serif;
    -webkit-font-smoothing: antialiased;
@@ -193,22 +251,22 @@ body {
 
 .domItem {
    transition: all 0.15s linear;
-   border-color: #e9ebff;
-   box-shadow: 0 0 20px rgb(20 34 71 / 5%);
+   border-color: rgb(var(--c-line));
+   box-shadow: 0 0 20px rgb(var(--c-shadow) / 0.06);
 }
 
 .domItem:hover h3 {
-   color: #364aff
+   color: rgb(var(--c-brand-text))
 }
 
 .noDomains {
-   border-color: #e9ebff;
-   box-shadow: 0 0 20px rgb(20 34 71 / 5%);
+   border-color: rgb(var(--c-line));
+   box-shadow: 0 0 20px rgb(var(--c-shadow) / 0.06);
 }
 
 .domItem:hover {
-   border-color: #9499d8;
-   box-shadow: 0 0 20px rgb(30 65 161 / 25%);
+   border-color: rgb(var(--c-brand));
+   box-shadow: 0 0 20px rgb(var(--c-brand) / 0.25);
 }
 
 .domain_selector .selected,
@@ -236,7 +294,7 @@ body {
    content: "";
    width: 1px;
    height: 35px;
-   background: #eee;
+   background: rgb(var(--c-line));
    position: absolute;
    right: 0;
 }
@@ -261,9 +319,9 @@ body {
       position: absolute;
       left: -40px;
       top: -22px;
-      background: #222;
+      background: rgb(var(--c-ink));
       border-radius: 3px;
-      color: #fff;
+      color: rgb(var(--c-surface));
       font-size: 12px;
       padding: 0 10px;
       padding-bottom: 3px;
@@ -277,7 +335,7 @@ body {
       height: 0;
       border-style: solid;
       border-width: 5px 5px 0;
-      border-color: #222 transparent transparent;
+      border-color: rgb(var(--c-ink)) transparent transparent;
       bottom: -5px;
       position: absolute;
       left: 0;
@@ -290,7 +348,7 @@ body {
       position: absolute;
       width: 1px;
       height: 100%;
-      background: #eff0f1;
+      background: rgb(var(--c-line));
       top: 0;
       right: 240px;
    }

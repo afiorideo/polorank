@@ -130,12 +130,12 @@ const KeywordFilters = (props: KeywordFilterProps) => {
       sortOptionChoices.push({ value: 'ctr_desc', label: 'Menor CTR' });
    }
    const sortItemStyle = (sortType:string) => {
-      return `cursor-pointer py-2 px-3 hover:bg-[#FCFCFF] ${sortBy === sortType ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-50' : ''}`;
+      return `cursor-pointer py-2 px-3 hover:bg-surface-2 ${sortBy === sortType ? 'bg-indigo-50 text-indigo-600 hover:bg-indigo-50' : ''}`;
    };
    const deviceTabStyle = 'select-none cursor-pointer px-3 py-2 rounded-3xl mr-2';
-   const deviceTabCountStyle = 'px-2 py-0 rounded-3xl bg-[#DEE1FC] text-[0.7rem] font-bold ml-1';
-   const mobileFilterOptionsStyle = 'visible mt-8 border absolute min-w-[0] rounded-lg max-h-96 bg-white z-50 w-52 right-2 p-4';
-   const segment = 'inline-flex rounded-full border border-gray-200 bg-white overflow-hidden text-xs';
+   const deviceTabCountStyle = 'px-2 py-0 rounded-3xl bg-brand-soft-2 text-[0.7rem] font-bold ml-1';
+   const mobileFilterOptionsStyle = 'visible mt-8 border absolute min-w-[0] rounded-lg max-h-96 bg-surface z-50 w-52 right-2 p-4';
+   const segment = 'inline-flex rounded-full border border-gray-200 bg-surface overflow-hidden text-xs';
    const segItem = (on: boolean, tone = '') => {
       const off = `text-gray-500 hover:bg-gray-50 ${tone}`;
       return `px-3 py-1.5 cursor-pointer select-none ${on ? 'bg-blue-700 text-white' : off}`;
@@ -152,7 +152,7 @@ const KeywordFilters = (props: KeywordFilterProps) => {
                <ul className='flex text-xs'>
                   <li
                    data-testid="desktop_tab"
-                  className={`${deviceTabStyle} ${device === 'desktop' ? ' bg-[#F8F9FF] text-gray-700' : ''}`}
+                  className={`${deviceTabStyle} ${device === 'desktop' ? ' bg-surface-2 text-gray-700' : ''}`}
                   onClick={() => setDevice('desktop')}>
                         <Icon type='desktop' classes='top-[3px]' size={15} />
                         <i className='hidden not-italic lg:inline-block ml-1'>Desktop</i>
@@ -160,7 +160,7 @@ const KeywordFilters = (props: KeywordFilterProps) => {
                   </li>
                   <li
                   data-testid="mobile_tab"
-                  className={`${deviceTabStyle} ${device === 'mobile' ? ' bg-[#F8F9FF] text-gray-700' : ''}`}
+                  className={`${deviceTabStyle} ${device === 'mobile' ? ' bg-surface-2 text-gray-700' : ''}`}
                   onClick={() => setDevice('mobile')}>
                         <Icon type='mobile' />
                         <i className='hidden not-italic lg:inline-block ml-1'>Mobile</i>
@@ -222,7 +222,7 @@ const KeywordFilters = (props: KeywordFilterProps) => {
                      <ul
                      data-testid="sort_options"
                      className='sort_options mt-2 border absolute w-52 min-w-[0] right-0 rounded-lg
-                     max-h-96 bg-white z-[9999] overflow-y-auto styled-scrollbar'>
+                     max-h-96 bg-surface z-[9999] overflow-y-auto styled-scrollbar'>
                         {sortOptionChoices.map((sortOption) => {
                            return <li
                                     key={sortOption.value}
@@ -248,7 +248,7 @@ const KeywordFilters = (props: KeywordFilterProps) => {
                      <ul
                      data-testid="sort_options"
                      className='sort_options mt-2 border absolute w-52 min-w-[0] right-0 rounded-lg
-                     max-h-96 bg-white z-[9999] overflow-y-auto styled-scrollbar border-gray-200 '>
+                     max-h-96 bg-surface z-[9999] overflow-y-auto styled-scrollbar border-gray-200 '>
                         {columnOptionChoices.map(({ value, label, locked }) => {
                            return <li
                                     key={value}
