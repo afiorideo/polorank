@@ -2,7 +2,7 @@
  * PoloRank — access-code email content (pure, testable).
  */
 /** Public URL of the email logo (served by the app itself); no attachments so mail clients show nothing extra. */
-export const logoUrl = (appUrl: string): string => `${appUrl}/brand/polo-face-email.png`;
+export const logoUrl = (appUrl: string): string => process.env.EMAIL_LOGO_URL || `${appUrl}/brand/polo-face-email.png`;
 export const loginCodeEmail = (code: string, appUrl: string) => {
    const subject = `Tu código de acceso a PoloRank: ${code}`;
    const text = [
