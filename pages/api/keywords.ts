@@ -6,6 +6,7 @@ import { getAppSettings } from './settings';
 import { authenticate } from '../../utils/verifyUser';
 import { canAccessDomain, canManageKeywords } from '../../utils/auth/guards';
 import parseKeywords from '../../utils/parseKeywords';
+import { sliceHistory, summarizeHistory } from '../../utils/history';
 import { integrateKeywordSCData, readLocalSCData } from '../../utils/searchConsole';
 import refreshAndUpdateKeywords from '../../utils/refresh';
 import { getKeywordsVolume, updateKeywordsVolumeData } from '../../utils/adwords';
@@ -69,15 +70,9 @@ const getKeywords = async (req: NextApiRequest, res: NextApiResponse<KeywordsGet
       const allKeywords:Keyword[] = await Keyword.findAll({ where: { domain } });
       const keywords: KeywordType[] = parseKeywords(allKeywords.map((e) => e.get({ plain: true })));
       const processedKeywords = keywords.map((keyword) => {
-         const historyArray = Object.keys(keyword.history).map((dateKey:string) => ({
-            date: new Date(dateKey).getTime(),
-            dateRaw: dateKey,
-            position: keyword.history[dateKey],
-         }));
-         const historySorted = historyArray.sort((a, b) => a.date - b.date);
-         const lastWeekHistory :KeywordHistory = {};
-         historySorted.slice(-7).forEach((x:any) => { lastWeekHistory[x.dateRaw] = x.position; });
-         const keywordWithSlimHistory = { ...keyword, lastResult: [], history: lastWeekHistory };
+         // PoloRank: the list carries 30 days of history (sparkline) + precomputed stats (best, 7/30/60/90 changes, results received)
+         const stats = summarizeHistory(keyword.history, keyword.position, keyword.lastResult);
+         const keywordWithSlimHistory = { ...keyword, lastResult: [], history: sliceHistory(keyword.history, 30), stats };
          const finalKeyword = domainSCData ? integrateKeywordSCData(keywordWithSlimHistory, domainSCData) : keywordWithSlimHistory;
          return finalKeyword;
       });

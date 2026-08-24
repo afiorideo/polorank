@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Toaster } from 'react-hot-toast';
 import { FixedSizeList as List, ListChildComponentProps } from 'react-window';
 import { filterKeywords, keywordsByDevice, sortKeywords } from '../../utils/client/sortFilter';
 import Icon from '../common/Icon';
-import Keyword from './Keyword';
+import Keyword, { DEFAULT_TRACKING_COLUMNS } from './Keyword';
 import KeywordDetails from './KeywordDetails';
 import KeywordFilters from './KeywordFilter';
 import Modal from '../common/Modal';
@@ -27,24 +28,41 @@ type KeywordsTableProps = {
    permissions?: { canRefresh?: boolean, canManageKeywords?: boolean },
 }
 
+type CompareDays = 7 | 30 | 60 | 90;
+const COMPARE_VALUES: CompareDays[] = [7, 30, 60, 90];
+
+/** Read trend/top/cmp from the URL so a link keeps the view (spec §8.2). */
+const filtersFromQuery = (query: { [k: string]: string | string[] | undefined }): Partial<KeywordFilters> => {
+   const out: Partial<KeywordFilters> = {};
+   const trend = String(query.trend || '');
+   const top = String(query.top || '');
+   const cmp = parseInt(String(query.cmp || ''), 10) as CompareDays;
+   if (trend === 'up' || trend === 'down') { out.trend = trend; }
+   if (top === '10' || top === '20') { out.top = top; }
+   if (COMPARE_VALUES.includes(cmp)) { out.compare = cmp; }
+   return out;
+};
+
 const KeywordsTable = (props: KeywordsTableProps) => {
-   const titleColumnRef = useRef(null);
+   const router = useRouter();
    const { keywords = [], isLoading = true, isConsoleIntegrated = false, settings, permissions } = props;
    const canRefresh = permissions?.canRefresh !== false;
    const canManageKeywords = permissions?.canManageKeywords !== false;
    const showSCData = isConsoleIntegrated;
    const [device, setDevice] = useState<string>('desktop');
+   const [deviceAutoPicked, setDeviceAutoPicked] = useState(false);
    const [selectedKeywords, setSelectedKeywords] = useState<number[]>([]);
    const [showKeyDetails, setShowKeyDetails] = useState<KeywordType|null>(null);
    const [showRemoveModal, setShowRemoveModal] = useState<boolean>(false);
    const [showTagManager, setShowTagManager] = useState<null|number>(null);
    const [showAddTags, setShowAddTags] = useState<boolean>(false);
    const [SCListHeight, setSCListHeight] = useState(500);
-   const [filterParams, setFilterParams] = useState<KeywordFilters>({ countries: [], tags: [], search: '' });
+   const [filterParams, setFilterParams] = useState<KeywordFilters>({
+      countries: [], tags: [], search: '', trend: 'all', top: 'all', compare: 30, ...filtersFromQuery(router?.query || {}),
+   });
    const [sortBy, setSortBy] = useState<string>('date_asc');
    const [scDataType, setScDataType] = useState<string>('threeDays');
    const [showScDataTypes, setShowScDataTypes] = useState<boolean>(false);
-   const [maxTitleColumnWidth, setMaxTitleColumnWidth] = useState(235);
    const { mutate: deleteMutate } = useDeleteKeywords(() => {});
    const { mutate: favoriteMutate } = useFavKeywords(() => {});
    const { mutate: refreshMutate } = useRefreshKeywords(() => {});
@@ -52,35 +70,52 @@ const KeywordsTable = (props: KeywordsTableProps) => {
 
    useWindowResize(() => {
       setSCListHeight(window.innerHeight - (isMobile ? 200 : 400));
-      if (titleColumnRef.current) {
-         setMaxTitleColumnWidth((titleColumnRef.current as HTMLElement).clientWidth);
-      }
    });
 
+   // First load: open the device tab that actually has keywords (e.g. a domain tracked only on mobile)
    useEffect(() => {
-      if (titleColumnRef.current) {
-         setMaxTitleColumnWidth((titleColumnRef.current as HTMLElement).clientWidth);
-      }
-   }, [titleColumnRef]);
+      if (deviceAutoPicked || keywords.length === 0) { return; }
+      const desktopCount = keywords.filter((k) => k.device === 'desktop').length;
+      const mobileCount = keywords.filter((k) => k.device === 'mobile').length;
+      if (desktopCount === 0 && mobileCount > 0) { setDevice('mobile'); }
+      setDeviceAutoPicked(true);
+   }, [keywords, deviceAutoPicked]);
 
-   const tableColumns = settings?.keywordsColumns || ['Best', 'History', 'Volume', 'Search Console'];
-   const { mutate: updateMutate, isLoading: isUpdatingSettings } = useUpdateSettings(() => console.log(''));
+   // Keep trend/top/cmp in the URL (shallow) so the current view can be shared/bookmarked
+   useEffect(() => {
+      if (!router || !router.isReady) { return; }
+      const next: { [k: string]: string } = {};
+      Object.keys(router.query).forEach((k) => { if (!['trend', 'top', 'cmp'].includes(k)) { next[k] = String(router.query[k]); } });
+      if (filterParams.trend && filterParams.trend !== 'all') { next.trend = filterParams.trend; }
+      if (filterParams.top && filterParams.top !== 'all') { next.top = filterParams.top; }
+      if (filterParams.compare && filterParams.compare !== 30) { next.cmp = String(filterParams.compare); }
+      const current = { ...router.query } as { [k: string]: string };
+      const same = Object.keys(next).length === Object.keys(current).length && Object.keys(next).every((k) => String(current[k]) === next[k]);
+      if (!same) { router.replace({ pathname: router.pathname, query: next }, undefined, { shallow: true }); }
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [filterParams.trend, filterParams.top, filterParams.compare]);
+
+   const tableColumns = settings?.trackingColumns || DEFAULT_TRACKING_COLUMNS;
+   const { mutate: updateMutate } = useUpdateSettings(() => console.log(''));
+   const compareDays: CompareDays = filterParams.compare || 30;
 
    const scDataObject:{ [k:string] : string} = {
-      threeDays: 'Last Three Days',
-      sevenDays: 'Last Seven Days',
-      thirtyDays: 'Last Thirty Days',
-      avgThreeDays: 'Last Three Days Avg',
-      avgSevenDays: 'Last Seven Days Avg',
-      avgThirtyDays: 'Last Thirty Days Avg',
+      threeDays: 'Últimos 3 días',
+      sevenDays: 'Últimos 7 días',
+      thirtyDays: 'Últimos 30 días',
+      avgThreeDays: 'Promedio 3 días',
+      avgSevenDays: 'Promedio 7 días',
+      avgThirtyDays: 'Promedio 30 días',
    };
 
    const processedKeywords: {[key:string] : KeywordType[]} = useMemo(() => {
       const procKeywords = keywords.filter((x) => x.device === device);
       const filteredKeywords = filterKeywords(procKeywords, filterParams);
-      const sortedKeywords = sortKeywords(filteredKeywords, sortBy, scDataType);
+      const sortedKeywords = sortKeywords(filteredKeywords, sortBy, scDataType, compareDays);
       return keywordsByDevice(sortedKeywords, device);
-   }, [keywords, device, sortBy, filterParams, scDataType]);
+   }, [keywords, device, sortBy, filterParams, scDataType, compareDays]);
+
+   const visibleKeywords = processedKeywords[device] || [];
 
    const allDomainTags: string[] = useMemo(() => {
       const allTags = keywords.reduce((acc: string[], keyword) => [...acc, ...keyword.tags], []).filter((t) => t && t.trim() !== '');
@@ -88,7 +123,6 @@ const KeywordsTable = (props: KeywordsTableProps) => {
    }, [keywords]);
 
    const selectKeyword = (keywordID: number) => {
-      console.log('Select Keyword: ', keywordID);
       let updatedSelectd = [...selectedKeywords, keywordID];
       if (selectedKeywords.includes(keywordID)) {
          updatedSelectd = selectedKeywords.filter((keyID) => keyID !== keywordID);
@@ -98,12 +132,23 @@ const KeywordsTable = (props: KeywordsTableProps) => {
 
    const updateColumns = (column:string) => {
       const newColumns = tableColumns.includes(column) ? tableColumns.filter((col) => col !== column) : [...tableColumns, column];
-      updateMutate({ ...defaultSettings, ...settings, keywordsColumns: newColumns });
+      updateMutate({ ...defaultSettings, ...settings, trackingColumns: newColumns });
    };
 
-   const shouldHideColumn = useCallback((col:string) => {
-      return settings?.keywordsColumns && !settings?.keywordsColumns.includes(col) ? 'lg:hidden' : '';
-   }, [settings?.keywordsColumns]);
+   const show = useCallback((col:string) => tableColumns.includes(col), [tableColumns]);
+
+   /** Click on a header toggles asc/desc for that column. */
+   const headerSort = (asc: string, desc: string) => setSortBy(sortBy === asc ? desc : asc);
+   const sortMark = (asc: string, desc: string) => {
+      if (sortBy === asc) { return <span className='ml-1 text-indigo-500'>↑</span>; }
+      if (sortBy === desc) { return <span className='ml-1 text-indigo-500'>↓</span>; }
+      return null;
+   };
+   const th = 'shrink-0 cursor-pointer select-none hover:text-indigo-600';
+
+   // Navigation inside the side panel (previous / next keyword of the current view)
+   const detailIndex = showKeyDetails ? visibleKeywords.findIndex((k) => k.ID === showKeyDetails.ID) : -1;
+   const openDetailsAt = (idx: number) => { if (idx >= 0 && idx < visibleKeywords.length) { setShowKeyDetails(visibleKeywords[idx]); } };
 
    const Row = ({ data, index, style }:ListChildComponentProps) => {
       const keyword = data[index];
@@ -122,16 +167,17 @@ const KeywordsTable = (props: KeywordsTableProps) => {
          manageTags={() => setShowTagManager(keyword.ID)}
          removeKeyword={() => { setSelectedKeywords([keyword.ID]); setShowRemoveModal(true); }}
          showKeywordDetails={() => setShowKeyDetails(keyword)}
-         lastItem={index === (processedKeywords[device].length - 1)}
+         lastItem={index === (visibleKeywords.length - 1)}
          showSCData={showSCData}
          scDataType={scDataType}
          tableColumns={tableColumns}
-         maxTitleColumnWidth={maxTitleColumnWidth}
+         compareDays={compareDays}
          />
       );
    };
 
-   const selectedAllItems = selectedKeywords.length === processedKeywords[device].length;
+   const selectedAllItems = visibleKeywords.length > 0 && selectedKeywords.length === visibleKeywords.length;
+   const deviceCount = keywords.filter((k) => k.device === device).length;
 
    return (
       <div>
@@ -139,12 +185,15 @@ const KeywordsTable = (props: KeywordsTableProps) => {
             {selectedKeywords.length > 0 && (
                <div className='font-semibold text-sm py-4 px-8 text-gray-500 '>
                   <ul className=''>
+                     <li className='inline-block mr-4 text-gray-400'>
+                        {selectedKeywords.length} seleccionada{selectedKeywords.length > 1 ? 's' : ''}
+                     </li>
                      {canRefresh && <li className='inline-block mr-4'>
                         <a
                         className='block px-2 py-2 cursor-pointer hover:text-indigo-600'
                         onClick={() => { refreshMutate({ ids: selectedKeywords }); setSelectedKeywords([]); }}
                         >
-                           <span className=' bg-indigo-100 text-blue-700 px-1 rounded'><Icon type="reload" size={11} /></span> Refresh Keywords
+                           <span className=' bg-indigo-100 text-blue-700 px-1 rounded'><Icon type="reload" size={11} /></span> Refrescar
                         </a>
                      </li>}
                      {canManageKeywords && <li className='inline-block mr-4'>
@@ -152,15 +201,20 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                         className='block px-2 py-2 cursor-pointer hover:text-indigo-600'
                         onClick={() => setShowRemoveModal(true)}
                         >
-                           <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Remove Keywords</a>
+                           <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Quitar</a>
                      </li>}
                      {canManageKeywords && <li className='inline-block mr-4'>
                         <a
                         className='block px-2 py-2 cursor-pointer hover:text-indigo-600'
                         onClick={() => setShowAddTags(true)}
                         >
-                           <span className=' bg-green-100 text-green-500  px-1 rounded'><Icon type="tags" size={14} /></span> Tag Keywords</a>
+                           <span className=' bg-green-100 text-green-500  px-1 rounded'><Icon type="tags" size={14} /></span> Etiquetar</a>
                      </li>}
+                     <li className='inline-block'>
+                        <a className='block px-2 py-2 cursor-pointer text-gray-400 hover:text-indigo-600' onClick={() => setSelectedKeywords([])}>
+                           Deseleccionar
+                        </a>
+                     </li>
                   </ul>
                </div>
             )}
@@ -179,76 +233,102 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                   integratedConsole={isConsoleIntegrated}
                />
             )}
-            <div className={`domkeywordsTable domkeywordsTable--keywords 
-            ${showSCData && tableColumns.includes('Search Console') ? 'domkeywordsTable--hasSC' : ''} 
-               styled-scrollbar w-full overflow-auto min-h-[60vh]`}>
-               <div className=' lg:min-w-[800px]'>
-                  <div className={`domKeywords_head domKeywords_head--${sortBy} hidden lg:flex p-3 px-6 bg-[#FCFCFF]
-                   text-gray-600 justify-between items-center font-semibold border-y`}>
-                     <span ref={titleColumnRef} className={`domKeywords_head_keyword flex-1 basis-[4rem] w-auto lg:flex-1 
-                        ${showSCData && tableColumns.includes('Search Console') ? 'lg:basis-20' : 'lg:basis-10'} lg:w-auto lg:flex lg:items-center `}>
-                     {processedKeywords[device].length > 0 && (
-                        <button
-                           className={`p-0 mr-2 leading-[0px] inline-block rounded-sm pt-0 px-[1px] pb-[3px]  border border-slate-300 
-                           ${selectedAllItems ? ' bg-blue-700 border-blue-700 text-white' : 'text-transparent'}`}
-                           onClick={() => setSelectedKeywords(selectedAllItems ? [] : processedKeywords[device].map((k: KeywordType) => k.ID))}
-                           >
-                              <Icon type="check" size={10} />
-                        </button>
-                     )}
-                  {/* ${showSCData ? 'lg:min-w-[220px]' : 'lg:min-w-[280px]'} */}
-                        <span className={`inline-block lg:flex lg:items-center 
-                           ${showSCData && tableColumns.includes('Search Console') ? 'lg:max-w-[235px]' : ''}`}>
-                           Keyword
-                        </span>
+            <div className='domkeywordsTable domkeywordsTable--keywords styled-scrollbar w-full overflow-auto min-h-[60vh]'>
+               <div className='lg:min-w-[1000px]'>
+                  <div className='domKeywords_head hidden lg:flex items-center gap-2 py-3 px-6 bg-[#FCFCFF] text-[11px] uppercase tracking-wide
+                   text-gray-500 font-semibold border-y'>
+                     <button
+                        className={`p-0 leading-[0px] inline-block rounded-sm pt-0 px-[1px] pb-[3px] border border-slate-300 shrink-0
+                        ${selectedAllItems ? ' bg-blue-700 border-blue-700 text-white' : 'text-transparent'}`}
+                        title='Seleccionar todas'
+                        onClick={() => setSelectedKeywords(selectedAllItems ? [] : visibleKeywords.map((k: KeywordType) => k.ID))}
+                        >
+                           <Icon type="check" size={10} />
+                     </button>
+                     {show('Evol') && <span className='domKeywords_head_evol basis-[84px] shrink-0 text-center'>Evol.</span>}
+                     <span className={`domKeywords_head_keyword flex-1 min-w-[180px] ${th}`} onClick={() => headerSort('alpha_asc', 'alpha_desc')}>
+                        Keyword{sortMark('alpha_asc', 'alpha_desc')}
                      </span>
-                     <span className='domKeywords_head_position flex-1 basis-24 grow-0 text-center'>Position</span>
-                     <span className={`domKeywords_head_best flex-1 basis-16 grow-0 text-center  ${shouldHideColumn('Best')}`}>Best</span>
-                     <span className={`domKeywords_head_history flex-1 basis-20 grow-0  ${shouldHideColumn('History')}`}>History (7d)</span>
-                     <span className={`domKeywords_head_volume flex-1 basis-24 grow-0 text-center ${shouldHideColumn('Volume')}`}>Volume</span>
-                     <span className='domKeywords_head_url flex-1'>URL</span>
-                     <span className='domKeywords_head_updated flex-1 relative left-3 max-w-[150px]'>Updated</span>
-                     {showSCData && tableColumns.includes('Search Console') && (
-                        <div className='domKeywords_head_sc flex-1 min-w-[170px] lg:max-w-[170px] mr-7 text-center'>
-                           {/* Search Console */}
-                           <div>
-                              <div
-                              className=' w-48 select-none cursor-pointer absolute bg-white rounded-full
-                              px-2 py-[2px] mt-[-22px] ml-3 border border-gray-200 z-40'
-                              onClick={() => setShowScDataTypes(!showScDataTypes)}>
-                                 <Icon type="google" size={13} /> {scDataObject[scDataType]}
-                                 <Icon classes="ml-2" type={showScDataTypes ? 'caret-up' : 'caret-down'} size={10} />
-                              </div>
-                              {showScDataTypes && (
-                                 <div className='absolute bg-white border border-gray-200 z-50 w-44 rounded mt-2 ml-5 text-gray-500'>
-                                    {Object.keys(scDataObject).map((itemKey) => {
-                                       return <span
-                                                className={`block p-2 cursor-pointer hover:bg-indigo-50 hover:text-indigo-600
-                                                 ${scDataType === itemKey ? 'bg-indigo-100 text-indigo-600' : ''}`}
-                                                key={itemKey}
-                                                onClick={() => { setScDataType(itemKey); setShowScDataTypes(false); }}>
-                                                   {scDataObject[itemKey]}
-                                                </span>;
-                                    })}
-                                 </div>
-                              )}
+                     {show('Volume') && (
+                        <span className={`domKeywords_head_volume basis-[64px] text-center ${th}`} onClick={() => headerSort('vol_desc', 'vol_asc')}>
+                           Vol.{sortMark('vol_desc', 'vol_asc')}
+                        </span>
+                     )}
+                     <span
+                        className={`domKeywords_head_position basis-[96px] text-center ${th}`}
+                        onClick={() => headerSort('pos_asc', 'pos_desc')}
+                        title={`Flecha: cambio vs. hace ${compareDays} días`}>
+                        Posición{sortMark('pos_asc', 'pos_desc')}
+                     </span>
+                     {show('Changes') && (
+                        <>
+                           {[30, 60, 90].map((d) => (
+                              <span
+                                 key={d}
+                                 className={`domKeywords_head_d${d} basis-[64px] text-center ${th}`}
+                                 title={`Cambio vs. hace ${d} días (posición de entonces entre paréntesis)`}
+                                 onClick={() => {
+                                    setFilterParams({ ...filterParams, compare: d as CompareDays });
+                                    headerSort('change_desc', 'change_asc');
+                                 }}>
+                                 {d}d{compareDays === d ? sortMark('change_desc', 'change_asc') : null}
+                              </span>
+                           ))}
+                        </>
+                     )}
+                     {show('Snippets') && (
+                        <span className='domKeywords_head_snippets basis-[110px] shrink-0 text-center' title='Bloques especiales de la SERP'>
+                           Snippets
+                        </span>
+                     )}
+                     <span className='domKeywords_head_url flex-1 min-w-[110px]'>URL posicionada</span>
+                     {show('Best') && (
+                        <span
+                           className={`domKeywords_head_best basis-[52px] text-center ${th}`}
+                           onClick={() => headerSort('best_asc', 'pos_asc')}
+                           title='Mejor posición histórica'>
+                           Mejor{sortMark('best_asc', '')}
+                        </span>
+                     )}
+                     {showSCData && show('Search Console') && (
+                        <div className='domKeywords_head_sc basis-[170px] shrink-0 text-center relative'>
+                           <div
+                           className='select-none cursor-pointer inline-block bg-white rounded-full px-2 py-[2px] border border-gray-200
+                           normal-case tracking-normal'
+                           onClick={() => setShowScDataTypes(!showScDataTypes)}>
+                              <Icon type="google" size={11} /> {scDataObject[scDataType]}
+                              <Icon classes="ml-1" type={showScDataTypes ? 'caret-up' : 'caret-down'} size={10} />
                            </div>
-                           <div className='relative top-2 flex justify-between'>
-                              <span className='min-w-[40px]'>Pos</span>
-                              <span className='min-w-[40px]'>Imp</span>
-                              <span className='min-w-[40px]'>Visits</span>
-                              {/* <span>CTR</span> */}
+                           {showScDataTypes && (
+                              <div className='absolute bg-white border border-gray-200 z-50 w-44 rounded mt-1 text-gray-500
+                              normal-case tracking-normal text-left'>
+                                 {Object.keys(scDataObject).map((itemKey) => {
+                                    return <span
+                                             className={`block p-2 cursor-pointer hover:bg-indigo-50 hover:text-indigo-600
+                                              ${scDataType === itemKey ? 'bg-indigo-100 text-indigo-600' : ''}`}
+                                             key={itemKey}
+                                             onClick={() => { setScDataType(itemKey); setShowScDataTypes(false); }}>
+                                                {scDataObject[itemKey]}
+                                             </span>;
+                                 })}
+                              </div>
+                           )}
+                           <div className='flex justify-between mt-1'>
+                              <span className='min-w-[50px]'>Pos GSC</span>
+                              <span className='min-w-[50px]'>Impr.</span>
+                              <span className='min-w-[50px]'>Clics</span>
                            </div>
                         </div>
                      )}
+                     <span className='basis-[28px] shrink-0' />
                   </div>
                   <div className='domKeywords_keywords border-gray-200 min-h-[55vh] relative'>
-                     {processedKeywords[device] && processedKeywords[device].length > 0 && (
+                     {visibleKeywords.length > 0 && (
                         <List
                         innerElementType="div"
-                        itemData={processedKeywords[device]}
-                        itemCount={processedKeywords[device].length}
-                        itemSize={isMobile ? 146 : 57}
+                        itemData={visibleKeywords}
+                        itemCount={visibleKeywords.length}
+                        itemSize={isMobile ? 120 : 62}
                         height={SCListHeight}
                         width={'100%'}
                         className={'styled-scrollbar'}
@@ -256,33 +336,43 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                            {Row}
                         </List>
                      )}
-                     {!isLoading && processedKeywords[device].length === 0 && (
-                        <p className=' p-9 pt-[10%] text-center text-gray-500'>No Keywords Added for this Device Type.</p>
+                     {!isLoading && visibleKeywords.length === 0 && (
+                        <p className=' p-9 pt-[10%] text-center text-gray-500'>
+                           {deviceCount === 0 ? 'No hay keywords para este dispositivo.' : 'Ninguna keyword coincide con los filtros.'}
+                        </p>
                      )}
                      {isLoading && (
-                        <p className=' p-9 pt-[10%] text-center text-gray-500'>Loading Keywords...</p>
+                        <p className=' p-9 pt-[10%] text-center text-gray-500'>Cargando keywords…</p>
                      )}
                   </div>
                </div>
             </div>
          </div>
          {showKeyDetails && showKeyDetails.ID && (
-            <KeywordDetails keyword={showKeyDetails} closeDetails={() => setShowKeyDetails(null)} />
+            <KeywordDetails
+               keyword={showKeyDetails}
+               closeDetails={() => setShowKeyDetails(null)}
+               onPrev={detailIndex > 0 ? () => openDetailsAt(detailIndex - 1) : undefined}
+               onNext={detailIndex >= 0 && detailIndex < visibleKeywords.length - 1 ? () => openDetailsAt(detailIndex + 1) : undefined}
+            />
          )}
          {showRemoveModal && selectedKeywords.length > 0 && (
-            <Modal closeModal={() => { setSelectedKeywords([]); setShowRemoveModal(false); }} title={'Remove Keywords'}>
+            <Modal closeModal={() => { setSelectedKeywords([]); setShowRemoveModal(false); }} title={'Quitar keywords'}>
                   <div className='text-sm'>
-                     <p>Are you sure you want to remove {selectedKeywords.length > 1 ? 'these' : 'this'} Keyword?</p>
+                     <p>
+                        ¿Seguro que quieres quitar {selectedKeywords.length > 1 ? `estas ${selectedKeywords.length} keywords` : 'esta keyword'}?
+                        Se pierde su historial.
+                     </p>
                      <div className='mt-6 text-right font-semibold'>
                         <button
                         className=' py-1 px-5 rounded cursor-pointer bg-indigo-50 text-slate-500 mr-3'
                         onClick={() => { setSelectedKeywords([]); setShowRemoveModal(false); }}>
-                           Cancel
+                           Cancelar
                         </button>
                         <button
                         className=' py-1 px-5 rounded cursor-pointer bg-red-400 text-white'
                         onClick={() => { deleteMutate(selectedKeywords); setShowRemoveModal(false); setSelectedKeywords([]); }}>
-                           Remove
+                           Quitar
                         </button>
                      </div>
                   </div>

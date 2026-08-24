@@ -29,6 +29,7 @@ describe('códigos de acceso (PoloRank)', () => {
    });
 
    it('el correo del código incluye el código, el vencimiento y el enlace de acceso', () => {
+      delete process.env.EMAIL_LOGO_URL; // el .env local puede apuntar el logo a otro host; acá probamos el default
       const mail = loginCodeEmail('987654', 'https://polorank.emignia.com');
       expect(mail.subject).toContain('987654');
       expect(mail.text).toContain('987654');

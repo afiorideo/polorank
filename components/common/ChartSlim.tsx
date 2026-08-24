@@ -6,7 +6,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, 
 
 type ChartProps ={
    labels: string[],
-   series: number[],
+   series: (number | null)[],
    noMaxLimit?: boolean,
    reverse?: boolean
 }
@@ -22,6 +22,7 @@ const ChartSlim = ({ labels, series, noMaxLimit = false, reverse = true }:ChartP
             reverse,
             min: 1,
             max: noMaxLimit ? undefined : 100,
+            grace: '20%',
          },
          x: {
             display: false,
@@ -46,7 +47,10 @@ const ChartSlim = ({ labels, series, noMaxLimit = false, reverse = true }:ChartP
             datasets: [
                {
                   fill: 'start',
-                  showLine: false,
+                  showLine: true,
+                  borderWidth: 1.5,
+                  tension: 0.3,
+                  spanGaps: false,
                   data: series,
                   pointRadius: 0,
                   borderColor: 'rgb(31, 205, 176)',

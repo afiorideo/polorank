@@ -4,10 +4,26 @@
  * @param {string} sortBy - The sort method.
  * @returns {KeywordType[]}
  */
-export const sortKeywords = (theKeywords:KeywordType[], sortBy:string, scDataType?: string) : KeywordType[] => {
+const changeOf = (k: KeywordType, compareDays: number): number => {
+   const key = `d${compareDays}` as 'd7' | 'd30' | 'd60' | 'd90';
+   const change = k.stats?.changes?.[key]?.change;
+   return change === null || change === undefined ? -Infinity : change;
+};
+
+export const sortKeywords = (theKeywords:KeywordType[], sortBy:string, scDataType?: string, compareDays: number = 30) : KeywordType[] => {
    let sortedItems: KeywordType[] = [];
    const keywords = theKeywords.map((k) => ({ ...k, position: k.position === 0 ? 111 : k.position }));
    switch (sortBy) {
+      // PoloRank: change vs. N days ago (positive = improved) and best position
+      case 'change_desc':
+            sortedItems = theKeywords.sort((a, b) => changeOf(b, compareDays) - changeOf(a, compareDays));
+            break;
+      case 'change_asc':
+            sortedItems = theKeywords.sort((a, b) => changeOf(a, compareDays) - changeOf(b, compareDays));
+            break;
+      case 'best_asc':
+            sortedItems = theKeywords.sort((a, b) => (a.stats?.best?.position || 111) - (b.stats?.best?.position || 111));
+            break;
       case 'date_asc':
             sortedItems = theKeywords.sort((a: KeywordType, b: KeywordType) => new Date(b.added).getTime() - new Date(a.added).getTime());
             break;
@@ -108,7 +124,18 @@ export const filterKeywords = (keywords: KeywordType[], filterParams: KeywordFil
        && keywrd.keyword.toLowerCase().includes(filterParams.search.toLowerCase());
        const tagsMatch = filterParams.tags.length === 0 ? true : filterParams.tags && keywrd.tags.find((x) => filterParams.tags.includes(x));
 
-       if (countryMatch && searchMatch && tagsMatch) {
+       // PoloRank: trend (vs. `compare` days ago) and top-N filters
+       const compareDays = filterParams.compare || 30;
+       const changeKey = `d${compareDays}` as 'd7' | 'd30' | 'd60' | 'd90';
+       const change = keywrd.stats?.changes?.[changeKey]?.change;
+       const trendMatch = !filterParams.trend || filterParams.trend === 'all'
+          ? true
+          : (typeof change === 'number' && (filterParams.trend === 'up' ? change > 0 : change < 0));
+       const topMatch = !filterParams.top || filterParams.top === 'all'
+          ? true
+          : (keywrd.position > 0 && keywrd.position <= parseInt(filterParams.top, 10));
+
+       if (countryMatch && searchMatch && tagsMatch && trendMatch && topMatch) {
           filteredItems.push(keywrd);
        }
    });

@@ -5,8 +5,14 @@ import Icon from '../common/Icon';
 import countries from '../../utils/countries';
 import ChartSlim from '../common/ChartSlim';
 import KeywordPosition from './KeywordPosition';
-import { generateTheChartData } from '../../utils/client/generateChartData';
+import PositionChange from './PositionChange';
+import SerpFeatures from './SerpFeatures';
 import { formattedNum } from '../../utils/client/helpers';
+import { chartSeries, historyPoints } from '../../utils/history';
+import timeAgoFormatter from '../../utils/client/timeago';
+import type { KeywordChange } from '../../utils/history';
+
+export type CompareDays = 7 | 30 | 60 | 90;
 
 type KeywordProps = {
    keywordData: KeywordType,
@@ -22,12 +28,27 @@ type KeywordProps = {
    showSCData: boolean,
    scDataType: string,
    style: Object,
-   maxTitleColumnWidth: number,
+   maxTitleColumnWidth?: number,
    /** PoloRank: row actions allowed for the current user (default true) */
    canRefresh?: boolean,
    canManage?: boolean,
-   tableColumns? : string[]
+   tableColumns? : string[],
+   /** PoloRank: comparison window for the arrow next to the position (default 30 days) */
+   compareDays?: CompareDays,
 }
+
+/** Column visibility keys (see KeywordFilter → columnOptionChoices). */
+export const DEFAULT_TRACKING_COLUMNS = ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console'];
+
+/** Fallback when the API did not send stats: change vs. the previous data point (SerpBear's original arrow). */
+const changeVsPrevious = (history: KeywordHistory, position: number): KeywordChange => {
+   const points = historyPoints(history);
+   if (points.length < 2) { return { change: null, position: null }; }
+   const prev = points[points.length - 2].position;
+   if (prev === 0 && position === 0) { return { change: 0, position: 0 }; }
+   const norm = (p: number) => (p > 0 ? p : 101);
+   return { change: norm(prev) - norm(position), position: prev };
+};
 
 const Keyword = (props: KeywordProps) => {
    const canRefresh = props.canRefresh !== false;
@@ -46,11 +67,12 @@ const Keyword = (props: KeywordProps) => {
       style,
       index,
       scDataType = 'threeDays',
-      tableColumns = [],
-      maxTitleColumnWidth,
+      tableColumns = DEFAULT_TRACKING_COLUMNS,
+      compareDays = 30,
    } = props;
    const {
       keyword, domain, ID, city, position, url = '', lastUpdated, country, sticky, history = {}, updating = false, lastUpdateError = false, volume,
+      tags = [], serpFeatures = [], lastDepth = 0, stats,
    } = keywordData;
 
    const [showOptions, setShowOptions] = useState(false);
@@ -60,180 +82,168 @@ const Keyword = (props: KeywordProps) => {
       return url.replace(`https://${domain}`, '').replace(`https://www.${domain}`, '').replace(`http://${domain}`, '');
    }, [url, domain]);
 
-   const chartData = useMemo(() => {
-      return generateTheChartData(history, '7');
-   }, [history]);
+   const chartData = useMemo(() => chartSeries(history, 30), [history]);
 
-   const positionChange = useMemo(() => {
-      let status = 0;
-      if (Object.keys(history).length >= 2) {
-         const historyArray = Object.keys(history).map((dateKey:string) => {
-            return { date: new Date(dateKey).getTime(), dateRaw: dateKey, position: history[dateKey] };
-         });
-         const historySorted = historyArray.sort((a, b) => a.date - b.date);
-         const previousPos = historySorted[historySorted.length - 2].position;
-         status = previousPos === 0 ? position : previousPos - position;
-         if (position === 0 && previousPos > 0) {
-            status = previousPos - 100;
-         }
-      }
-      return status;
-   }, [history, position]);
+   const compareChange: KeywordChange = useMemo(() => {
+      const key = `d${compareDays}` as 'd7' | 'd30' | 'd60' | 'd90';
+      if (stats && stats.changes && stats.changes[key]) { return stats.changes[key]; }
+      return changeVsPrevious(history, position);
+   }, [stats, compareDays, history, position]);
 
-   const bestPosition: false | {position: number, date: string} = useMemo(() => {
-      let bestPos;
-      if (Object.keys(history).length > 0) {
-         const historyArray = Object.keys(history).map((itemID) => ({ date: itemID, position: history[itemID] }))
-             .sort((a, b) => a.position - b.position).filter((el) => (el.position > 0));
-         if (historyArray[0]) {
-            bestPos = { ...historyArray[0] };
-         }
-      }
-
-      return bestPos || false;
-   }, [history]);
-
+   const bestPosition = stats?.best || null;
+   const show = (col: string) => tableColumns.includes(col);
+   const cell = 'hidden lg:block text-center shrink-0';
    const optionsButtonStyle = 'block px-2 py-2 cursor-pointer hover:bg-indigo-50 hover:text-blue-700';
 
    return (
       <div
       key={keyword + ID}
       style={style}
-      className={`keyword relative py-5 px-4 text-gray-600 border-b-[1px] border-gray-200 lg:py-4 lg:px-6 lg:border-0 
-      lg:flex lg:justify-between lg:items-center ${selected ? ' bg-indigo-50 keyword--selected' : ''} ${lastItem ? 'border-b-0' : ''}`}>
+      data-testid='keyword_row'
+      className={`keyword relative py-4 px-4 text-gray-600 border-b-[1px] border-gray-100 lg:py-2 lg:px-6 lg:border-0
+      lg:flex lg:items-center lg:gap-2 ${selected ? ' bg-indigo-50 keyword--selected' : ''} ${lastItem ? 'border-b-0' : ''}`}>
 
-         <div className=' w-3/4 font-semibold cursor-pointer lg:flex-1 lg:shrink-0 lg:basis-28 lg:w-auto lg:flex lg:items-center'>
-            <button
-               className={`p-0 mr-2 leading-[0px] inline-block rounded-sm pt-0 px-[1px] pb-[3px] border 
-               ${selected ? ' bg-blue-700 border-blue-700 text-white' : 'text-transparent'}`}
-               onClick={() => selectKeyword(ID)}
-               >
-                  <Icon type="check" size={10} />
-            </button>
-            <a
-            style={{ maxWidth: `${maxTitleColumnWidth - 35}px` }}
-            className={'py-2 hover:text-blue-600 lg:flex lg:items-center w-full'}
-            onClick={() => showKeywordDetails()}
-            title={keyword}
-            >
-               <span className={`fflag fflag-${country} w-[18px] h-[12px] mr-2`} title={countries[country] && countries[country][0]} />
-               <span className='inline-block text-ellipsis overflow-hidden whitespace-nowrap w-[calc(100%-50px)]'>
+         {/* selección */}
+         <button
+            data-testid='keyword_select'
+            className={`keyword_select absolute top-4 left-4 lg:relative lg:top-0 lg:left-0 p-0 leading-[0px] inline-block rounded-sm
+            pt-0 px-[1px] pb-[3px] border shrink-0 ${selected ? ' bg-blue-700 border-blue-700 text-white' : 'text-transparent'}`}
+            onClick={() => selectKeyword(ID)}
+            title='Seleccionar'>
+               <Icon type="check" size={10} />
+         </button>
+
+         {/* Evol. — últimos 30 días */}
+         {show('Evol') && (
+            <div className={`${cell} keyword_evol basis-[84px] cursor-pointer`} onClick={() => showKeywordDetails()} title='Evolución 30 días'>
+               {chartData.series.some((v) => v !== null)
+                  ? <ChartSlim labels={chartData.labels} series={chartData.series} />
+                  : <span className='text-gray-300' title='Sin posiciones en los últimos 30 días'>—</span>}
+            </div>
+         )}
+
+         {/* Keyword */}
+         <div className='keyword_title pl-7 lg:pl-0 font-semibold lg:flex-1 lg:min-w-[180px] overflow-hidden'>
+            <a className='cursor-pointer hover:text-blue-600 flex items-center' onClick={() => showKeywordDetails()} title={keyword}>
+               <span className={`fflag fflag-${country} w-[18px] h-[12px] mr-2 shrink-0`} title={countries[country] && countries[country][0]} />
+               <span className='keyword_name inline-block text-ellipsis overflow-hidden whitespace-nowrap'>
                   {keyword}{city ? ` (${city})` : ''}
                </span>
+               {sticky && <span className='ml-2 shrink-0' title='Favorita'><Icon type="star-filled" size={14} color="#fbd346" /></span>}
+               {lastUpdateError && lastUpdateError.date && (
+                  <button className='ml-2 shrink-0' onClick={(e) => { e.stopPropagation(); setPositionError(true); }} title='Error al actualizar'>
+                     <Icon type="error" size={16} color="#FF3672" />
+                  </button>
+               )}
             </a>
-            {sticky && <button className='ml-2 relative top-[2px]' title='Favorite'><Icon type="star-filled" size={16} color="#fbd346" /></button>}
-            {lastUpdateError && lastUpdateError.date
-               && <button className='ml-2 relative top-[2px]' onClick={() => setPositionError(true)}>
-                  <Icon type="error" size={18} color="#FF3672" />
-               </button>
-            }
+            <div className='keyword_meta text-[11px] font-normal text-gray-400 mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis'>
+               {tags.length > 0 && <span className='mr-2 text-indigo-400'>{tags.join(' · ')}</span>}
+               <span title={dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')}>
+                  actualizado <TimeAgo date={lastUpdated} formatter={timeAgoFormatter} title={dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')} />
+               </span>
+            </div>
          </div>
 
-         <div
-         className={`keyword_position absolute bg-[#f8f9ff] w-fit min-w-[50px] h-12 p-2 text-base mt-[-20px] rounded right-5 lg:relative
-          lg:bg-transparent lg:w-auto lg:h-auto lg:mt-0 lg:p-0 lg:text-sm lg:flex-1 lg:basis-24 lg:grow-0 lg:right-0 text-center font-semibold`}>
-            <KeywordPosition position={position} updating={updating} />
-            {!updating && positionChange > 0 && <i className=' not-italic ml-1 text-xs text-[#5ed7c3]'>▲ {positionChange}</i>}
-            {!updating && positionChange < 0 && <i className=' not-italic ml-1 text-xs text-red-300'>▼ {positionChange}</i>}
+         {/* Vol. */}
+         {show('Volume') && (
+            <div className={`${cell} keyword_volume basis-[64px] text-gray-500`} title='Volumen mensual'>
+               {volume ? formattedNum(volume) : '—'}
+            </div>
+         )}
+
+         {/* Posición + cambio vs. "comparar con" */}
+         <div className='keyword_position absolute top-3 right-4 lg:relative lg:top-0 lg:right-0 lg:basis-[96px] shrink-0 text-center'>
+            <KeywordPosition position={position} updating={updating} badge resultsReceived={stats?.resultsReceived} lastDepth={lastDepth} />
+            {!updating && <PositionChange change={compareChange} arrow className='keyword_change ml-1 text-xs' />}
          </div>
 
-         <div
-         title={bestPosition && bestPosition.date
-            ? new Date(bestPosition.date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }) : ''
-         }
-         className={`keyword_best mr-1 bg-[#f8f9ff] float-right mt-8 w-14 rounded right-5 lg:relative lg:block
-          lg:bg-transparent lg:w-auto lg:h-auto lg:mt-0 lg:mr-0 lg:p-0 lg:text-sm lg:flex-1 lg:basis-16 lg:grow-0 lg:right-0 text-center font-semibold
-          ${!tableColumns.includes('Best') ? 'lg:hidden' : ''}
-          `}>
-            {bestPosition ? bestPosition.position || '-' : (position || '-')}
+         {/* 30d · 60d · 90d */}
+         {show('Changes') && (
+            <>
+               <div className={`${cell} keyword_d30 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d30} withPosition /></div>
+               <div className={`${cell} keyword_d60 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d60} withPosition /></div>
+               <div className={`${cell} keyword_d90 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d90} withPosition /></div>
+            </>
+         )}
+
+         {/* Snippets */}
+         {show('Snippets') && (
+            <div className={`${cell} keyword_snippets basis-[110px]`}><SerpFeatures features={serpFeatures} /></div>
+         )}
+
+         {/* URL */}
+         <div className='keyword_url mt-2 pl-7 lg:pl-0 lg:mt-0 lg:flex-1 lg:min-w-[110px] text-gray-400 text-xs overflow-hidden text-ellipsis
+         whitespace-nowrap'>
+            {url ? (
+               <a href={url} target="_blank" rel="noreferrer" className='hover:text-indigo-600' title={url}>
+                  <span className='mr-1 lg:hidden'><Icon type="link-alt" size={12} color="#999" /></span>{turncatedURL || '/'}
+               </a>
+            ) : <span>—</span>}
          </div>
 
-         {chartData.labels.length > 0 && (
+         {/* Mejor */}
+         {show('Best') && (
             <div
-               className={`hidden basis-20 grow-0 cursor-pointer lg:block ${!tableColumns.includes('History') ? 'lg:hidden' : ''}`}
-               onClick={() => showKeywordDetails()}>
-               <ChartSlim labels={chartData.labels} series={chartData.series} />
+            className={`${cell} keyword_best basis-[52px] font-semibold text-gray-500`}
+            title={bestPosition ? `Mejor posición el ${dayjs(bestPosition.date).format('DD-MMM-YYYY')}` : 'Sin historial'}>
+               {bestPosition ? bestPosition.position : (position || '—')}
             </div>
          )}
 
-         <div
-         className={`hidden bg-[#f8f9ff] w-fit min-w-[50px] h-12 p-2 text-base mt-[-20px] rounded right-5 lg:relative lg:block
-          lg:bg-transparent lg:w-auto lg:h-auto lg:mt-0 lg:p-0 lg:text-sm lg:flex-1 lg:basis-24 lg:grow-0 lg:right-0 text-center
-          ${!tableColumns.includes('Volume') ? 'lg:hidden' : ''}
-          `}>
-            {formattedNum(volume)}
-         </div>
-
-         <div
-         className={`keyword_url inline-block mt-4 mr-5 ml-5 lg:flex-1 text-gray-400 lg:m-0 max-w-[70px] 
-         overflow-hidden text-ellipsis whitespace-nowrap lg:max-w-none lg:pr-5 lg:pl-3`}>
-            <a href={url} target="_blank" rel="noreferrer"><span className='mr-3 lg:hidden'>
-               <Icon type="link-alt" size={14} color="#999" /></span>{turncatedURL || '-'}
-            </a>
-         </div>
-
-         <div
-         className='inline-block mt-[4] top-[-5px] relative lg:flex-1 lg:m-0 lg:top-0 max-w-[150px]'>
-            <span className='mr-2 lg:hidden'><Icon type="clock" size={14} color="#999" /></span>
-            <TimeAgo title={dayjs(lastUpdated).format('DD-MMM-YYYY, hh:mm:ss A')} date={lastUpdated} />
-         </div>
-
-         {showSCData && tableColumns.includes('Search Console') && (
-            <div className='keyword_sc_data min-w-[170px] lg:max-w-[170px] text-xs mt-4 pt-2 border-t border-gray-100 top-[6px]
-            relative flex justify-between text-center lg:flex-1 lg:text-sm lg:m-0 lg:mt-0 lg:border-t-0 lg:pt-0 lg:top-0'>
-               <span className='min-w-[40px]'>
-                  <span className='lg:hidden'>SC Position: </span>
-                  <KeywordPosition
-                  position={keywordData?.scData?.position[scDataType as keyof KeywordSCDataChild] || 0}
-                  type='sc'
-                  />
+         {/* Search Console */}
+         {showSCData && show('Search Console') && (
+            <div className='keyword_sc_data hidden lg:flex basis-[170px] shrink-0 justify-between text-center text-xs text-gray-500'>
+               <span className='min-w-[50px]' title='Posición promedio en Search Console'>
+                  <KeywordPosition position={keywordData?.scData?.position[scDataType as keyof KeywordSCDataChild] || 0} type='sc' />
                </span>
-               <span className='min-w-[40px]'>
-                  <span className='lg:hidden'>Impressions: </span>{keywordData?.scData?.impressions[scDataType as keyof KeywordSCDataChild] || 0}
+               <span className='min-w-[50px]' title='Impresiones'>
+                  {keywordData?.scData?.impressions[scDataType as keyof KeywordSCDataChild] || 0}
                </span>
-               <span className='min-w-[40px]'>
-                  <span className='lg:hidden'>Visits: </span>{keywordData?.scData?.visits[scDataType as keyof KeywordSCDataChild] || 0}
-               </span>
-               {/* <span>{keywordData?.scData?.ctr[scDataType] || '0.00%'}</span> */}
+               <span className='min-w-[50px]' title='Clics'>{keywordData?.scData?.visits[scDataType as keyof KeywordSCDataChild] || 0}</span>
             </div>
          )}
 
-         <div className='absolute right-4 mt-[-10px] top-2 lg:flex-1 lg:basis-5 lg:grow-0 lg:shrink-0 lg:relative lg:right-[-10px]'>
+         {/* acciones */}
+         <div className='keyword_actions absolute right-2 bottom-2 lg:relative lg:right-0 lg:bottom-0 lg:basis-[28px] shrink-0'>
             <button
             className={`keyword_dots rounded px-1 text-indigo-300 hover:bg-indigo-50 ${showOptions ? 'bg-indigo-50 text-indigo-600 ' : ''}`}
-            onClick={() => setShowOptions(!showOptions)}>
+            onClick={() => setShowOptions(!showOptions)}
+            title='Acciones'>
                <Icon type="dots" size={20} />
             </button>
             {showOptions && (
-               <ul className='keyword_options customShadow absolute w-[180px] right-0 bg-white rounded border z-20'>
+               <ul className='keyword_options customShadow absolute w-[190px] right-0 bg-white rounded border z-20 text-sm'>
                   {canRefresh && <li>
                      <a className={optionsButtonStyle} onClick={() => { refreshkeyword([ID]); setShowOptions(false); }}>
-                     <span className=' bg-indigo-100 text-blue-700 px-1 rounded'><Icon type="reload" size={11} /></span> Refresh Keyword</a>
+                     <span className=' bg-indigo-100 text-blue-700 px-1 rounded'><Icon type="reload" size={11} /></span> Refrescar posición</a>
                   </li>}
                   {canManage && <li>
                      <a className={optionsButtonStyle}
                      onClick={() => { favoriteKeyword({ keywordID: ID, sticky: !sticky }); setShowOptions(false); }}>
                         <span className=' bg-yellow-300/30 text-yellow-500 px-1 rounded'>
                            <Icon type="star" size={14} />
-                        </span> { sticky ? 'Unfavorite Keyword' : 'Favorite Keyword'}
+                        </span> { sticky ? 'Quitar de favoritas' : 'Marcar favorita'}
                      </a>
                   </li>}
                   {canManage && <li><a className={optionsButtonStyle} onClick={() => { manageTags(); setShowOptions(false); }}>
-                     <span className=' bg-green-100 text-green-500 px-1 rounded'><Icon type="tags" size={14} /></span> Add/Edit Tags</a>
+                     <span className=' bg-green-100 text-green-500 px-1 rounded'><Icon type="tags" size={14} /></span> Editar etiquetas</a>
                   </li>}
                   {canManage && <li><a className={optionsButtonStyle} onClick={() => { removeKeyword([ID]); setShowOptions(false); }}>
-                     <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Remove Keyword</a>
+                     <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Quitar keyword</a>
                   </li>}
-                  {!canRefresh && !canManage && <li className='px-3 py-2 text-xs text-gray-400'>Solo lectura</li>}
+                  <li><a className={optionsButtonStyle} onClick={() => { showKeywordDetails(); setShowOptions(false); }}>
+                     <span className=' bg-slate-100 text-slate-500 px-1 rounded'><Icon type="eye" size={14} /></span> Ver historial</a>
+                  </li>
                </ul>
             )}
          </div>
 
          {lastUpdateError && lastUpdateError.date && showPositionError && (
-            <div className={`absolute p-2 bg-white z-30 border border-red-200 rounded w-[220px] left-4 shadow-sm text-xs 
+            <div className={`absolute p-2 bg-white z-30 border border-red-200 rounded w-[240px] left-4 shadow-sm text-xs
             ${index > 2 ? 'lg:bottom-12 mt-[-70px]' : ' top-12'}`}>
-               Error Updating Keyword position (Tried <TimeAgo
-                                                         title={dayjs(lastUpdateError.date).format('DD-MMM-YYYY, hh:mm:ss A')}
+               Error al actualizar la posición (intentado <TimeAgo
+                                                         formatter={timeAgoFormatter}
+                                                         title={dayjs(lastUpdateError.date).format('DD-MMM-YYYY, HH:mm')}
                                                          date={lastUpdateError.date} />)
                <i className='absolute top-0 right-0 ml-2 p-2 font-semibold not-italic cursor-pointer' onClick={() => setPositionError(false)}>
                   <Icon type="close" size={16} color="#999" />
@@ -243,7 +253,6 @@ const Keyword = (props: KeywordProps) => {
                </div>
             </div>
          )}
-
       </div>
    );
  };

@@ -53,6 +53,8 @@ type KeywordType = {
    serpFeatures?: string[],
    /** PoloRank: number of results requested in the last scrape (10..100). 0 = unknown/legacy scraper. */
    lastDepth?: number,
+   /** PoloRank: precomputed stats (best, changes 7/30/60/90, results received) — see utils/history.ts */
+   stats?: import('./utils/history').KeywordStats,
 }
 
 type KeywordLastResult = {
@@ -66,6 +68,12 @@ type KeywordFilters = {
    countries: string[],
    tags: string[],
    search: string,
+   /** PoloRank: trend vs. `compare` days ago */
+   trend?: 'all' | 'up' | 'down',
+   /** PoloRank: only keywords in the top 10 / top 20 */
+   top?: 'all' | '10' | '20',
+   /** PoloRank: comparison window (days) that drives the position arrow and the trend filter */
+   compare?: 7 | 30 | 60 | 90,
 }
 
 type countryData = {
@@ -124,7 +132,9 @@ type SettingsType = {
    adwords_refresh_token?: string,
    adwords_developer_token?: string,
    adwords_account_id?: string,
-   keywordsColumns: string[]
+   keywordsColumns: string[],
+   /** PoloRank: visible columns of the tracking table (see components/keywords/Keyword.tsx DEFAULT_TRACKING_COLUMNS) */
+   trackingColumns?: string[],
 }
 
 type KeywordSCDataChild = {
