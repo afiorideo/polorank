@@ -6,6 +6,8 @@ import Keyword from '../../database/models/keyword';
 import generateEmail from '../../utils/generateEmail';
 import parseKeywords from '../../utils/parseKeywords';
 import { getAppSettings } from './settings';
+import { authenticate } from '../../utils/verifyUser';
+import { isSuperadmin } from '../../utils/auth/guards';
 
 type NotifyResponse = {
    success?: boolean
@@ -15,6 +17,12 @@ type NotifyResponse = {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    if (req.method === 'POST') {
       await db.sync();
+      // PoloRank: notifications are triggered by the internal cron (API key) or the superadmin
+      const auth = await authenticate(req, res);
+      if (!auth.authorized) { return res.status(401).json({ success: false, error: auth.error }); }
+      if (!auth.viaApiKey && !isSuperadmin(auth.user)) {
+         return res.status(403).json({ success: false, error: 'No tienes permiso para esta acción.' });
+      }
       return notify(req, res);
    }
    return res.status(401).json({ success: false, error: 'Invalid Method' });

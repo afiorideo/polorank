@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import db from '../../database/database';
 import { getCountryInsight, getKeywordsInsight, getPagesInsight } from '../../utils/insight';
 import { fetchDomainSCData, getSearchConsoleApiInfo, readLocalSCData } from '../../utils/searchConsole';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { canAccessDomain } from '../../utils/auth/guards';
 import Domain from '../../database/models/domain';
 
 type SCInsightRes = {
@@ -12,9 +13,13 @@ type SCInsightRes = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    await db.sync();
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
+   }
+   if (!auth.viaApiKey && !canAccessDomain(auth.user, String(req.query.domain || ''))) {
+      return res.status(403).json({ error: 'No tienes permiso para esta acción.' });
    }
    if (req.method === 'GET') {
       return getDomainSearchConsoleInsight(req, res);

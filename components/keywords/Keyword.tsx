@@ -23,10 +23,15 @@ type KeywordProps = {
    scDataType: string,
    style: Object,
    maxTitleColumnWidth: number,
+   /** PoloRank: row actions allowed for the current user (default true) */
+   canRefresh?: boolean,
+   canManage?: boolean,
    tableColumns? : string[]
 }
 
 const Keyword = (props: KeywordProps) => {
+   const canRefresh = props.canRefresh !== false;
+   const canManage = props.canManage !== false;
    const {
       keywordData,
       refreshkeyword,
@@ -201,24 +206,25 @@ const Keyword = (props: KeywordProps) => {
             </button>
             {showOptions && (
                <ul className='keyword_options customShadow absolute w-[180px] right-0 bg-white rounded border z-20'>
-                  <li>
+                  {canRefresh && <li>
                      <a className={optionsButtonStyle} onClick={() => { refreshkeyword([ID]); setShowOptions(false); }}>
                      <span className=' bg-indigo-100 text-blue-700 px-1 rounded'><Icon type="reload" size={11} /></span> Refresh Keyword</a>
-                  </li>
-                  <li>
+                  </li>}
+                  {canManage && <li>
                      <a className={optionsButtonStyle}
                      onClick={() => { favoriteKeyword({ keywordID: ID, sticky: !sticky }); setShowOptions(false); }}>
                         <span className=' bg-yellow-300/30 text-yellow-500 px-1 rounded'>
                            <Icon type="star" size={14} />
                         </span> { sticky ? 'Unfavorite Keyword' : 'Favorite Keyword'}
                      </a>
-                  </li>
-                  <li><a className={optionsButtonStyle} onClick={() => { manageTags(); setShowOptions(false); }}>
+                  </li>}
+                  {canManage && <li><a className={optionsButtonStyle} onClick={() => { manageTags(); setShowOptions(false); }}>
                      <span className=' bg-green-100 text-green-500 px-1 rounded'><Icon type="tags" size={14} /></span> Add/Edit Tags</a>
-                  </li>
-                  <li><a className={optionsButtonStyle} onClick={() => { removeKeyword([ID]); setShowOptions(false); }}>
+                  </li>}
+                  {canManage && <li><a className={optionsButtonStyle} onClick={() => { removeKeyword([ID]); setShowOptions(false); }}>
                      <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Remove Keyword</a>
-                  </li>
+                  </li>}
+                  {!canRefresh && !canManage && <li className='px-3 py-2 text-xs text-gray-400'>Solo lectura</li>}
                </ul>
             )}
          </div>

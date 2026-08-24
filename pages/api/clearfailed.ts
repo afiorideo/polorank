@@ -1,6 +1,7 @@
 import { writeFile } from 'fs/promises';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { isSuperadmin } from '../../utils/auth/guards';
 
 type SettingsGetResponse = {
    cleared?: boolean,
@@ -8,10 +9,12 @@ type SettingsGetResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }
+   if (!isSuperadmin(auth.user)) { return res.status(403).json({ error: 'No tienes permiso para esta acción.' }); }
    if (req.method === 'PUT') {
       return clearFailedQueue(req, res);
    }

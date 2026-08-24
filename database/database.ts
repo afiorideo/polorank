@@ -3,6 +3,8 @@ import sqlite3 from 'sqlite3';
 import Domain from './models/domain';
 import Keyword from './models/keyword';
 import ApiUsage from './models/apiUsage';
+import User from './models/user';
+import LoginCode from './models/loginCode';
 
 const connection = new Sequelize({
    dialect: 'sqlite',
@@ -17,7 +19,7 @@ const connection = new Sequelize({
       idle: 10000,
    },
    logging: false,
-   models: [Domain, Keyword, ApiUsage],
+   models: [Domain, Keyword, ApiUsage, User, LoginCode],
    storage: './data/database.sqlite',
 });
 

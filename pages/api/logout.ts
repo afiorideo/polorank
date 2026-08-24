@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Cookies from 'cookies';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
 
 type logoutResponse = {
    success?: boolean
@@ -8,7 +8,8 @@ type logoutResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }

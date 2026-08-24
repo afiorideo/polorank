@@ -1,8 +1,9 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Toaster } from 'react-hot-toast';
+import { guardPage } from '../utils/auth/pageGuard';
 import Icon from '../components/common/Icon';
 
 const Home: NextPage = () => {
@@ -26,5 +27,7 @@ const Home: NextPage = () => {
     </div>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => guardPage(ctx, { superadminOnly: true });
 
 export default Home;

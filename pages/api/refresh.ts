@@ -5,7 +5,8 @@ import Keyword from '../../database/models/keyword';
 import Domain from '../../database/models/domain';
 import refreshAndUpdateKeywords from '../../utils/refresh';
 import { getAppSettings } from './settings';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate, AuthedRequest } from '../../utils/verifyUser';
+import { isSuperadmin } from '../../utils/auth/guards';
 import parseKeywords from '../../utils/parseKeywords';
 import { scrapeKeywordFromGoogle } from '../../utils/scraper';
 
@@ -26,14 +27,18 @@ type KeywordSearchResultRes = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    await db.sync();
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }
+   // PoloRank: refreshing costs money → superadmin (or the internal cron via API key) only (decision D5)
    if (req.method === 'GET') {
+      if (!isSuperadmin(auth.user)) { return res.status(403).json({ error: 'No tienes permiso para esta acción.' }); }
       return getKeywordSearchResults(req, res);
    }
    if (req.method === 'POST') {
+      if (!auth.viaApiKey && !isSuperadmin(auth.user)) { return res.status(403).json({ error: 'No tienes permiso para esta acción.' }); }
       return refresTheKeywords(req, res);
    }
    return res.status(502).json({ error: 'Unrecognized Route.' });
@@ -48,6 +53,8 @@ const refresTheKeywords = async (req: NextApiRequest, res: NextApiResponse<Keywo
    }
    const keywordIDs = req.query.id !== 'all' && (req.query.id as string).split(',').map((item) => parseInt(item, 10));
    const { domain } = req.query || {};
+   const { authUser } = req as AuthedRequest;
+   const triggeredBy = authUser ? `user:${authUser.uid}` : 'cron';
    console.log('keywordIDs: ', keywordIDs);
 
    try {
@@ -66,10 +73,10 @@ const refresTheKeywords = async (req: NextApiRequest, res: NextApiResponse<Keywo
       // If Single Keyword wait for the scraping process,
       // else, Process the task in background. Do not wait.
       if (keywordIDs && keywordIDs.length === 0) {
-         const refreshed: KeywordType[] = await refreshAndUpdateKeywords(keywordQueries, settings, domainList, 'manual');
+         const refreshed: KeywordType[] = await refreshAndUpdateKeywords(keywordQueries, settings, domainList, triggeredBy);
          keywords = refreshed;
       } else {
-         refreshAndUpdateKeywords(keywordQueries, settings, domainList, 'manual');
+         refreshAndUpdateKeywords(keywordQueries, settings, domainList, triggeredBy);
          keywords = parseKeywords(keywordQueries.map((el) => el.get({ plain: true })));
       }
 

@@ -22,12 +22,16 @@ type KeywordsTableProps = {
    showAddModal: boolean,
    setShowAddModal: Function,
    isConsoleIntegrated: boolean,
-   settings?: SettingsType
+   settings?: SettingsType,
+   /** PoloRank: what the current user may do (defaults: everything, for tests/legacy) */
+   permissions?: { canRefresh?: boolean, canManageKeywords?: boolean },
 }
 
 const KeywordsTable = (props: KeywordsTableProps) => {
    const titleColumnRef = useRef(null);
-   const { keywords = [], isLoading = true, isConsoleIntegrated = false, settings } = props;
+   const { keywords = [], isLoading = true, isConsoleIntegrated = false, settings, permissions } = props;
+   const canRefresh = permissions?.canRefresh !== false;
+   const canManageKeywords = permissions?.canManageKeywords !== false;
    const showSCData = isConsoleIntegrated;
    const [device, setDevice] = useState<string>('desktop');
    const [selectedKeywords, setSelectedKeywords] = useState<number[]>([]);
@@ -107,6 +111,8 @@ const KeywordsTable = (props: KeywordsTableProps) => {
          <Keyword
          key={keyword.ID}
          style={style}
+         canRefresh={canRefresh}
+         canManage={canManageKeywords}
          index={index}
          selected={selectedKeywords.includes(keyword.ID)}
          selectKeyword={selectKeyword}
@@ -133,28 +139,28 @@ const KeywordsTable = (props: KeywordsTableProps) => {
             {selectedKeywords.length > 0 && (
                <div className='font-semibold text-sm py-4 px-8 text-gray-500 '>
                   <ul className=''>
-                     <li className='inline-block mr-4'>
+                     {canRefresh && <li className='inline-block mr-4'>
                         <a
                         className='block px-2 py-2 cursor-pointer hover:text-indigo-600'
                         onClick={() => { refreshMutate({ ids: selectedKeywords }); setSelectedKeywords([]); }}
                         >
                            <span className=' bg-indigo-100 text-blue-700 px-1 rounded'><Icon type="reload" size={11} /></span> Refresh Keywords
                         </a>
-                     </li>
-                     <li className='inline-block mr-4'>
+                     </li>}
+                     {canManageKeywords && <li className='inline-block mr-4'>
                         <a
                         className='block px-2 py-2 cursor-pointer hover:text-indigo-600'
                         onClick={() => setShowRemoveModal(true)}
                         >
                            <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Remove Keywords</a>
-                     </li>
-                     <li className='inline-block mr-4'>
+                     </li>}
+                     {canManageKeywords && <li className='inline-block mr-4'>
                         <a
                         className='block px-2 py-2 cursor-pointer hover:text-indigo-600'
                         onClick={() => setShowAddTags(true)}
                         >
                            <span className=' bg-green-100 text-green-500  px-1 rounded'><Icon type="tags" size={14} /></span> Tag Keywords</a>
-                     </li>
+                     </li>}
                   </ul>
                </div>
             )}

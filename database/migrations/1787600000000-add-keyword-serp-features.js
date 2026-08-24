@@ -6,10 +6,12 @@ module.exports = {
          try {
             const def = await queryInterface.describeTable('keyword');
             if (def && !def.serp_features) {
-               await queryInterface.addColumn('keyword', 'serp_features', { type: Sequelize.DataTypes.STRING, defaultValue: '[]' }, { transaction: t });
+               const featuresCol = { type: Sequelize.DataTypes.STRING, defaultValue: '[]' };
+               await queryInterface.addColumn('keyword', 'serp_features', featuresCol, { transaction: t });
             }
             if (def && !def.last_depth) {
-               await queryInterface.addColumn('keyword', 'last_depth', { type: Sequelize.DataTypes.INTEGER, defaultValue: 0 }, { transaction: t });
+               const depthCol = { type: Sequelize.DataTypes.INTEGER, defaultValue: 0 };
+               await queryInterface.addColumn('keyword', 'last_depth', depthCol, { transaction: t });
             }
          } catch (error) {
             console.log('error :', error);

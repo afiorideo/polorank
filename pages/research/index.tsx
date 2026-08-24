@@ -1,8 +1,10 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
+import { guardPage } from '../../utils/auth/pageGuard';
+import { useAuthUser } from '../../services/auth';
 import Icon from '../../components/common/Icon';
 import TopBar from '../../components/common/TopBar';
 import KeywordIdeasTable from '../../components/ideas/KeywordIdeasTable';
@@ -16,6 +18,7 @@ import Footer from '../../components/common/Footer';
 
 const Research: NextPage = () => {
    const router = useRouter();
+   const auth = useAuthUser();
    const [showSettings, setShowSettings] = useState(false);
    const [showFavorites, setShowFavorites] = useState(false);
    const [language, setLanguage] = useState('1000');
@@ -61,7 +64,7 @@ const Research: NextPage = () => {
          <Head>
             <title>Research Keywords - SerpBear</title>
          </Head>
-         <TopBar showSettings={() => setShowSettings(true)} showAddModal={() => null } />
+         <TopBar user={auth.user} showSettings={() => setShowSettings(true)} showAddModal={() => null } />
          <div className=" w-full max-w-7xl mx-auto lg:flex lg:flex-row">
             <div className="sidebar w-full p-6 lg:pt-44 lg:w-1/5 lg:block lg:pr-0" data-testid="sidebar">
                <h3 className="hidden py-7 text-base font-bold text-blue-700 lg:block">
@@ -146,5 +149,7 @@ const Research: NextPage = () => {
       </div>
    );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => guardPage(ctx, { superadminOnly: true });
 
 export default Research;

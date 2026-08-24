@@ -4,7 +4,8 @@ import db from '../../database/database';
 import Domain from '../../database/models/domain';
 import Keyword from '../../database/models/keyword';
 import getdomainStats from '../../utils/domains';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate, AuthedRequest } from '../../utils/verifyUser';
+import { filterDomainsForUser, isSuperadmin } from '../../utils/auth/guards';
 import { checkSerchConsoleIntegration, removeLocalSCData } from '../../utils/searchConsole';
 import { removeFromRetryQueue } from '../../utils/scraper';
 
@@ -32,13 +33,16 @@ type DomainsUpdateRes = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    await db.sync();
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }
    if (req.method === 'GET') {
       return getDomains(req, res);
    }
+   // PoloRank: creating/updating/deleting domains is superadmin-only
+   if (!isSuperadmin(auth.user)) { return res.status(403).json({ error: 'No tienes permiso para esta acción.' }); }
    if (req.method === 'POST') {
       return addDomain(req, res);
    }
@@ -54,7 +58,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 export const getDomains = async (req: NextApiRequest, res: NextApiResponse<DomainsGetRes>) => {
    const withStats = !!req?.query?.withstats;
    try {
-      const allDomains: Domain[] = await Domain.findAll();
+      const everyDomain: Domain[] = await Domain.findAll();
+      // PoloRank: domain-scoped users only see their own domain; the internal API key (cron) sees all
+      const authed = req as AuthedRequest;
+      const allDomains: Domain[] = authed.authViaApiKey ? everyDomain : filterDomainsForUser(authed.authUser, everyDomain);
       const formattedDomains: DomainType[] = allDomains.map((el) => {
          const domainItem:DomainType = el.get({ plain: true });
          const scData = domainItem?.search_console ? JSON.parse(domainItem.search_console) : {};

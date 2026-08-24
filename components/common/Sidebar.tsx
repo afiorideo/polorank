@@ -6,10 +6,12 @@ import Icon from './Icon';
 
 type SidebarProps = {
    domains: DomainType[],
-   showAddModal: Function
+   showAddModal: Function,
+   /** PoloRank: only the superadmin can add domains (default true for tests/legacy) */
+   canAddDomain?: boolean,
 }
 
-const Sidebar = ({ domains, showAddModal } : SidebarProps) => {
+const Sidebar = ({ domains, showAddModal, canAddDomain = true } : SidebarProps) => {
    const router = useRouter();
 
    return (
@@ -38,9 +40,9 @@ const Sidebar = ({ domains, showAddModal } : SidebarProps) => {
                }
             </ul>
          </div>
-         <div className='sidebar_add border-t font-semibold text-sm text-center mt-6 w-[80%] ml-3 text-zinc-500'>
+         {canAddDomain && <div className='sidebar_add border-t font-semibold text-sm text-center mt-6 w-[80%] ml-3 text-zinc-500'>
             <button data-testid="add_domain" onClick={() => showAddModal(true)} className='p-4 hover:text-blue-600'>+ Add Domain</button>
-         </div>
+         </div>}
     </div>
    );
  };

@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import Cryptr from 'cryptr';
 import db from '../../database/database';
 import Domain from '../../database/models/domain';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { canAccessDomain } from '../../utils/auth/guards';
 
 type DomainGetResponse = {
    domain?: DomainType | null
@@ -10,7 +11,11 @@ type DomainGetResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
+   if (authorized === 'authorized' && req.method === 'GET' && !auth.viaApiKey && !canAccessDomain(auth.user, String(req.query.domain || ''))) {
+      return res.status(403).json({ error: 'No tienes permiso para esta acción.' });
+   }
    if (authorized === 'authorized' && req.method === 'GET') {
       await db.sync();
       return getDomain(req, res);

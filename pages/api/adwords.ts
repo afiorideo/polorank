@@ -4,7 +4,8 @@ import { readFile, writeFile } from 'fs/promises';
 import Cryptr from 'cryptr';
 import getConfig from 'next/config';
 import db from '../../database/database';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { isSuperadmin } from '../../utils/auth/guards';
 import { getAdwordsCredentials, getAdwordsKeywordIdeas } from '../../utils/adwords';
 
 type adwordsValidateResp = {
@@ -20,10 +21,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    if (req.method === 'GET' && req.query.code) {
       return getAdwordsRefreshToken(req, res);
    }
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }
+   if (!isSuperadmin(auth.user)) { return res.status(403).json({ error: 'No tienes permiso para esta acción.' }); }
    if (req.method === 'GET') {
       return getAdwordsRefreshToken(req, res);
    }

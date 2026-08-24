@@ -3,13 +3,17 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import Icon from './Icon';
+import type { SessionUser } from '../../utils/auth/types';
 
 type TopbarProps = {
    showSettings: Function,
    showAddModal: Function,
+   /** PoloRank: current user; when omitted (tests/legacy) all menu items are shown */
+   user?: SessionUser | null,
 }
 
-const TopBar = ({ showSettings, showAddModal }:TopbarProps) => {
+const TopBar = ({ showSettings, showAddModal, user }:TopbarProps) => {
+   const isAdmin = !user || user.role === 'superadmin';
    const [showMobileMenu, setShowMobileMenu] = useState<boolean>(false);
    const router = useRouter();
    const isDomainsPage = router.pathname === '/domains';
@@ -59,18 +63,21 @@ const TopBar = ({ showSettings, showAddModal }:TopbarProps) => {
                      </a>
                   </Link>
                </li>
-               <li className={`block lg:inline-block lg:ml-5 ${router.asPath === '/research' ? ' text-blue-700' : ''}`}>
+               {isAdmin && <li className={`block lg:inline-block lg:ml-5 ${router.asPath === '/research' ? ' text-blue-700' : ''}`}>
                   <Link href={'/research'} passHref={true}>
                      <a className='block px-3 py-2 cursor-pointer'>
                         <Icon type="research" color={router.asPath === '/research' ? '#1d4ed8' : '#888'} size={14} /> Research
                      </a>
                   </Link>
-               </li>
-               <li className='block lg:inline-block lg:ml-5'>
+               </li>}
+               {isAdmin && <li className='block lg:inline-block lg:ml-5'>
                   <a className='block px-3 py-2 cursor-pointer' onClick={() => showSettings()}>
                      <Icon type="settings-alt" color={'#888'} size={14} /> Settings
                   </a>
-               </li>
+               </li>}
+               {user && <li className='block lg:inline-block lg:ml-5 text-xs text-gray-400 font-normal px-3 py-2' title={user.role}>
+                  {user.email}
+               </li>}
                <li className='block lg:inline-block lg:ml-5'>
                   <a className='block px-3 py-2 cursor-pointer' href='https://docs.serpbear.com/' target="_blank" rel='noreferrer'>
                      <Icon type="question" color={'#888'} size={14} /> Help

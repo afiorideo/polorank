@@ -3,7 +3,8 @@ import { Op } from 'sequelize';
 import db from '../../database/database';
 import Keyword from '../../database/models/keyword';
 import { getAppSettings } from './settings';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { canAccessDomain, canManageKeywords } from '../../utils/auth/guards';
 import parseKeywords from '../../utils/parseKeywords';
 import { integrateKeywordSCData, readLocalSCData } from '../../utils/searchConsole';
 import refreshAndUpdateKeywords from '../../utils/refresh';
@@ -23,22 +24,33 @@ type KeywordsDeleteRes = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    await db.sync();
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }
 
+   // PoloRank: role guards (spec §6.2). Reads need access to the domain; writes need keyword-management rights on it.
    if (req.method === 'GET') {
+      if (!auth.viaApiKey && !canAccessDomain(auth.user, String(req.query.domain || ''))) {
+         return res.status(403).json({ error: 'No tienes permiso para esta acción.' });
+      }
       return getKeywords(req, res);
    }
    if (req.method === 'POST') {
+      const incoming: { domain?: string }[] = Array.isArray(req.body?.keywords) ? req.body.keywords : [];
+      if (incoming.length === 0 || !incoming.every((k) => canManageKeywords(auth.user, k.domain))) {
+         return res.status(403).json({ error: 'No tienes permiso para esta acción.' });
+      }
       return addKeywords(req, res);
    }
-   if (req.method === 'DELETE') {
-      return deleteKeywords(req, res);
-   }
-   if (req.method === 'PUT') {
-      return updateKeywords(req, res);
+   if (req.method === 'DELETE' || req.method === 'PUT') {
+      const ids = String(req.query.id || '').split(',').map((item) => parseInt(item, 10)).filter((n) => Number.isFinite(n) && n > 0);
+      const rows: Keyword[] = ids.length > 0 ? await Keyword.findAll({ where: { ID: { [Op.in]: ids } } }) : [];
+      if (rows.length === 0 || !rows.every((k) => canManageKeywords(auth.user, k.domain))) {
+         return res.status(403).json({ error: 'No tienes permiso para esta acción.' });
+      }
+      return req.method === 'DELETE' ? deleteKeywords(req, res) : updateKeywords(req, res);
    }
    return res.status(502).json({ error: 'Unrecognized Route.' });
 }

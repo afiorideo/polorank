@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { CSSTransition } from 'react-transition-group';
 import toast, { Toaster } from 'react-hot-toast';
+import { guardPage } from '../../utils/auth/pageGuard';
+import { useAuthUser } from '../../services/auth';
 import TopBar from '../../components/common/TopBar';
 import AddDomain from '../../components/domains/AddDomain';
 import Settings from '../../components/settings/Settings';
@@ -17,6 +19,7 @@ type thumbImages = { [domain:string] : string }
 
 const Domains: NextPage = () => {
    const router = useRouter();
+   const auth = useAuthUser();
    const [showSettings, setShowSettings] = useState(false);
    const [showAddDomain, setShowAddDomain] = useState(false);
    const [domainThumbs, setDomainThumbs] = useState<thumbImages>({});
@@ -89,7 +92,7 @@ const Domains: NextPage = () => {
          <Head>
             <title>Domains - SerpBear</title>
          </Head>
-         <TopBar showSettings={() => setShowSettings(true)} showAddModal={() => setShowAddDomain(true)} />
+         <TopBar user={auth.user} showSettings={() => setShowSettings(true)} showAddModal={() => setShowAddDomain(true)} />
 
          <div className="flex flex-col w-full max-w-5xl mx-auto p-6 lg:mt-24 lg:p-0">
             <div className='flex justify-between mb-2 items-center'>
@@ -143,5 +146,7 @@ const Domains: NextPage = () => {
       </div>
    );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => guardPage(ctx, { superadminOnly: true });
 
 export default Domains;

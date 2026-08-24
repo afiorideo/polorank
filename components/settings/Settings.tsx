@@ -6,6 +6,7 @@ import NotificationSettings from './NotificationSettings';
 import ScraperSettings from './ScraperSettings';
 import useOnKey from '../../hooks/useOnKey';
 import IntegrationSettings from './IntegrationSettings';
+import UsersSettings from './UsersSettings';
 
 type SettingsProps = {
    closeSettings: Function,
@@ -124,8 +125,14 @@ const Settings = ({ closeSettings }:SettingsProps) => {
                      onClick={() => setCurrentTab('integrations')}>
                        <Icon type='integration' size={14} /> Integrations
                      </li>
+                     <li
+                     className={`${tabStyle} ${currentTab === 'usuarios' ? tabStyleActive : 'border-transparent'}`}
+                     onClick={() => setCurrentTab('usuarios')}>
+                       <Icon type='lock' size={14} /> Usuarios
+                     </li>
                   </ul>
                </div>
+               {currentTab === 'usuarios' && <UsersSettings />}
                {currentTab === 'scraper' && settings && (
                   <ScraperSettings settings={settings} updateSettings={updateSettings} settingsError={settingsError} />
                )}

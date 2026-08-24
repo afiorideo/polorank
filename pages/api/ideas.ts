@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import db from '../../database/database';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { canAccessDomain, canManageKeywords } from '../../utils/auth/guards';
 import {
    KeywordIdeasDatabase, getAdwordsCredentials, getAdwordsKeywordIdeas, getLocalKeywordIdeas, updateLocalKeywordIdeas,
 } from '../../utils/adwords';
@@ -17,9 +18,15 @@ type keywordsIdeasGetResp = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    await db.sync();
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
+   }
+   const ideasDomain = String(req.query.domain || req.body?.domain || '');
+   const ideasAllowed = req.method === 'GET' ? canAccessDomain(auth.user, ideasDomain) : canManageKeywords(auth.user, ideasDomain);
+   if (!ideasAllowed) {
+      return res.status(403).json({ error: 'No tienes permiso para esta acción.' });
    }
    if (req.method === 'GET') {
       return getKeywordIdeas(req, res);

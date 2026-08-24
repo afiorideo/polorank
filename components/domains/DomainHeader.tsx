@@ -14,11 +14,18 @@ type DomainHeaderProps = {
    scFilter?: string
    setScFilter?: Function
    showIdeaUpdateModal?:Function
+   /** PoloRank: what the current user may do here (defaults: everything, for tests/legacy) */
+   permissions?: { canRefresh?: boolean, canManageKeywords?: boolean, canManageDomain?: boolean },
 }
 
 const DomainHeader = (
-   { domain, showAddModal, showSettingsModal, exportCsv, domains, scFilter = 'thirtyDays', setScFilter, showIdeaUpdateModal }: DomainHeaderProps,
+   {
+      domain, showAddModal, showSettingsModal, exportCsv, domains, scFilter = 'thirtyDays', setScFilter, showIdeaUpdateModal, permissions,
+   }: DomainHeaderProps,
 ) => {
+   const canRefresh = permissions?.canRefresh !== false;
+   const canManageKeywords = permissions?.canManageKeywords !== false;
+   const canManageDomain = permissions?.canManageDomain !== false;
    const router = useRouter();
    const [showOptions, setShowOptions] = useState<boolean>(false);
    const [ShowSCDates, setShowSCDates] = useState<boolean>(false);
@@ -107,7 +114,7 @@ const DomainHeader = (
                      <Icon type='download' size={20} /><i className={`${buttonLabelStyle}`}>Export as csv</i>
                   </button>
                )}
-               {!isConsole && !isInsight && !isIdeas && (
+               {!isConsole && !isInsight && !isIdeas && canRefresh && (
                   <button
                   className={`domheader_action_button relative ${buttonStyle} lg:ml-3`}
                   aria-pressed="false"
@@ -115,15 +122,15 @@ const DomainHeader = (
                      <Icon type='reload' size={14} /><i className={`${buttonLabelStyle}`}>Reload All Serps</i>
                   </button>
                 )}
-               <button
+               {canManageDomain && <button
                data-testid="show_domain_settings"
                className={`domheader_action_button relative ${buttonStyle} lg:ml-3`}
                aria-pressed="false"
                onClick={() => showSettingsModal(true)}><Icon type='settings' size={20} />
                   <i className={`${buttonLabelStyle}`}>Domain Settings</i>
-               </button>
+               </button>}
             </div>
-            {!isConsole && !isInsight && !isIdeas && (
+            {!isConsole && !isInsight && !isIdeas && canManageKeywords && (
                <button
                data-testid="add_keyword"
                className={'ml-2 inline-block text-blue-700 font-bold text-sm lg:px-4 lg:py-2'}

@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Op } from 'sequelize';
 import db from '../../database/database';
 import Keyword from '../../database/models/keyword';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { isSuperadmin } from '../../utils/auth/guards';
 import parseKeywords from '../../utils/parseKeywords';
 import { getKeywordsVolume, updateKeywordsVolumeData } from '../../utils/adwords';
 
@@ -13,10 +14,12 @@ type KeywordsRefreshRes = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
    await db.sync();
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }
+   if (!isSuperadmin(auth.user)) { return res.status(403).json({ error: 'No tienes permiso para esta acción.' }); }
    if (req.method === 'POST') {
       return updatekeywordVolume(req, res);
    }

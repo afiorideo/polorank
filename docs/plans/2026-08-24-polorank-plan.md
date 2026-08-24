@@ -62,7 +62,7 @@
 ## M3 — Tracking
 
 1. **Cálculos puros** — `utils/history.ts`: `positionAt(history, daysAgo)` (±3 días de tolerancia), `deltas(history)` → {7,30,60,90}, `bestPosition(history)`, `monthlySummary(history, urlHistory?)` → [{mes, mejor, promedio, peor, cambio}], `trend(history, compareDays)` → subiendo/bajando/igual. Pruebas con un `history` de ejemplo de 120 días.
-2. **API** — `/api/keywords` ya devuelve `history`; agregar `serp_features` y `depth` de la última consulta (para mostrar "+N"). Sin endpoints nuevos.
+2. **API** — `/api/keywords` ya devuelve `history`; agregar `serp_features` y `depth` de la última consulta (para mostrar "+N"). Sin endpoints nuevos. **Nota (test real M2):** con `depth` 20 DataForSEO devuelve 20 bloques de SERP y ~18 orgánicos; el "+N" se calcula sobre los orgánicos realmente recibidos (`lastResult` sin `skipped`), no sobre el `depth` pedido.
 3. **Tabla** — rediseñar `components/keywords/KeywordsTable.tsx` y `Keyword.tsx` con las columnas de la opción B (§8.1), semáforo, "+N", iconos de snippets, columnas GSC condicionadas a Search Console conectado. Mantener orden por columna, selección múltiple, tags y exportar.
 4. **Filtros** — `KeywordFilter.tsx`: Todas/Subiendo/Bajando, Todas/Top 10/Top 20, "Comparar con" (7/30/60/90) que gobierna la flecha de Posición. Persistir la selección en la URL (`?trend=up&top=10&cmp=30`) para que un enlace conserve la vista.
 5. **Panel lateral** — rediseñar `KeywordDetails.tsx` (§8.3): rango, 4 indicadores, gráfico con eje invertido (reusar `Chart.tsx`), tabla mensual, top resultados. Navegación anterior/siguiente sin cerrar el panel.

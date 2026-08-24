@@ -2,7 +2,8 @@ import { writeFile, readFile, rename, stat } from 'fs/promises';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import Cryptr from 'cryptr';
 import getConfig from 'next/config';
-import verifyUser from '../../utils/verifyUser';
+import { authenticate } from '../../utils/verifyUser';
+import { isSuperadmin } from '../../utils/auth/guards';
 import allScrapers from '../../scrapers/index';
 
 type SettingsGetResponse = {
@@ -11,14 +12,18 @@ type SettingsGetResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-   const authorized = verifyUser(req, res);
+   const auth = await authenticate(req, res);
+   const authorized = auth.authorized ? 'authorized' : auth.error;
    if (authorized !== 'authorized') {
       return res.status(401).json({ error: authorized });
    }
    if (req.method === 'GET') {
+      // PoloRank: non-superadmins only get the harmless subset (no API keys, no SMTP, no tokens)
+      if (!auth.viaApiKey && !isSuperadmin(auth.user)) { return getPublicSettings(res); }
       return getSettings(req, res);
    }
    if (req.method === 'PUT') {
+      if (!isSuperadmin(auth.user)) { return res.status(403).json({ error: 'No tienes permiso para esta acción.' }); }
       return updateSettings(req, res);
    }
    return res.status(502).json({ error: 'Unrecognized Route.' });
@@ -150,4 +155,23 @@ export const getAppSettings = async () : Promise<SettingsType> => {
    }
 
    return decryptedSettings;
+};
+
+/** PoloRank: settings visible to domain admins/users — only what the UI needs to render, nothing secret. */
+const getPublicSettings = async (res: NextApiResponse<SettingsGetResponse>) => {
+   try {
+      const settings = await getAppSettings();
+      const publicSettings = {
+         scraper_type: settings.scraper_type,
+         keywordsColumns: settings.keywordsColumns,
+         available_scrapers: settings.available_scrapers,
+         search_console_integrated: settings.search_console_integrated,
+         version: settings.version,
+         scrape_interval: settings.scrape_interval,
+         notification_interval: 'never',
+      };
+      return res.status(200).json({ settings: publicSettings });
+   } catch (error) {
+      return res.status(500).json({ error: 'Error loading settings' });
+   }
 };

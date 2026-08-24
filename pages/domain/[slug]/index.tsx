@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { CSSTransition } from 'react-transition-group';
+import { guardPage } from '../../../utils/auth/pageGuard';
+import { useAuthUser } from '../../../services/auth';
 import Sidebar from '../../../components/common/Sidebar';
 import TopBar from '../../../components/common/TopBar';
 import DomainHeader from '../../../components/domains/DomainHeader';
@@ -19,6 +21,7 @@ import Footer from '../../../components/common/Footer';
 
 const SingleDomain: NextPage = () => {
    const router = useRouter();
+   const auth = useAuthUser();
    const [showAddKeywords, setShowAddKeywords] = useState(false);
    const [showAddDomain, setShowAddDomain] = useState(false);
    const [showDomainSettings, setShowDomainSettings] = useState(false);
@@ -59,12 +62,17 @@ const SingleDomain: NextPage = () => {
                <title>{`${activDomain.domain} - SerpBear` } </title>
             </Head>
          }
-         <TopBar showSettings={() => setShowSettings(true)} showAddModal={() => setShowAddDomain(true)} />
+         <TopBar user={auth.user} showSettings={() => setShowSettings(true)} showAddModal={() => setShowAddDomain(true)} />
          <div className="flex w-full max-w-7xl mx-auto">
-            <Sidebar domains={theDomains} showAddModal={() => setShowAddDomain(true)} />
+            <Sidebar canAddDomain={auth.canManageDomains} domains={theDomains} showAddModal={() => setShowAddDomain(true)} />
             <div className="domain_keywords px-5 pt-10 lg:px-0 lg:pt-8 w-full">
                {activDomain && activDomain.domain
                ? <DomainHeader
+                  permissions={{
+                     canRefresh: auth.canRefresh,
+                     canManageKeywords: auth.canManageKeywords(activDomain?.domain),
+                     canManageDomain: auth.canManageDomains,
+                  }}
                   domain={activDomain}
                   domains={theDomains}
                   showAddModal={setShowAddKeywords}
@@ -74,6 +82,7 @@ const SingleDomain: NextPage = () => {
                   : <div className='w-full lg:h-[100px]'></div>
                }
                <KeywordsTable
+                  permissions={{ canRefresh: auth.canRefresh, canManageKeywords: auth.canManageKeywords(activDomain?.domain) }}
                isLoading={keywordsLoading}
                domain={activDomain}
                keywords={theKeywords}
@@ -111,5 +120,7 @@ const SingleDomain: NextPage = () => {
       </div>
    );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => guardPage(ctx, { slugParam: 'slug' });
 
 export default SingleDomain;

@@ -1,119 +1,145 @@
-import type { NextPage } from 'next';
+/* eslint-disable @next/next/no-img-element */
+import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import Icon from '../../components/common/Icon';
+import { redirectIfAuthenticated } from '../../utils/auth/pageGuard';
 
-type LoginError = {
-   type: string,
-   msg: string,
-}
+type Step = 'email' | 'code';
 
 const Login: NextPage = () => {
-   const [error, setError] = useState<LoginError|null>(null);
-   const [username, setUsername] = useState<string>('');
-   const [password, setPassword] = useState<string>('');
    const router = useRouter();
+   const [step, setStep] = useState<Step>('email');
+   const [email, setEmail] = useState('');
+   const [code, setCode] = useState('');
+   const [error, setError] = useState<string | null>(null);
+   const [info, setInfo] = useState<string | null>(null);
+   const [pending, setPending] = useState(false);
 
-   const loginuser = async () => {
-      let loginError: LoginError |null = null;
-      if (!username || !password) {
-         if (!username && !password) {
-            loginError = { type: 'empty_username_password', msg: 'Please Insert Your App Username & Password to login.' };
+   const post = async (route: string, body: object) => {
+      const headers = new Headers({ 'Content-Type': 'application/json', Accept: 'application/json' });
+      const res = await fetch(`${window.location.origin}${route}`, { method: 'POST', headers, body: JSON.stringify(body) });
+      return res.json();
+   };
+
+   const sendCode = async (e?: React.FormEvent) => {
+      if (e) { e.preventDefault(); }
+      setError(null);
+      setInfo(null);
+      const mail = email.trim().toLowerCase();
+      if (!mail) { return; }
+      setPending(true);
+      try {
+         const res = await post('/api/auth/request', { email: mail });
+         if (!res.success) {
+            setError(res.error || 'No pudimos enviar el código.');
+         } else {
+            setEmail(mail);
+            setStep('code');
+            setInfo(res.message || `Si el correo está autorizado, te llegará un código de 6 dígitos a ${mail}.`);
          }
-         if (!username && password) {
-            loginError = { type: 'empty_username', msg: 'Please Insert Your App Username' };
+      } catch (fetchError) {
+         setError('No pudimos conectar con el servidor. Inténtalo de nuevo.');
+      }
+      setPending(false);
+   };
+
+   const verify = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setError(null);
+      const token = code.trim();
+      if (token.length < 6) { return; }
+      setPending(true);
+      try {
+         const res = await post('/api/auth/verify', { email, code: token });
+         if (!res.success) {
+            setError(res.error || 'Código incorrecto o vencido.');
+            setPending(false);
+            return;
          }
-         if (!password && username) {
-            loginError = { type: 'empty_password', msg: 'Please Insert Your App Password' };
-         }
-         setError(loginError);
-         setTimeout(() => { setError(null); }, 3000);
-      } else {
-         try {
-            const header = new Headers({ 'Content-Type': 'application/json', Accept: 'application/json' });
-            const fetchOpts = { method: 'POST', headers: header, body: JSON.stringify({ username, password }) };
-            const fetchRoute = `${window.location.origin}/api/login`;
-            const res = await fetch(fetchRoute, fetchOpts).then((result) => result.json());
-            // console.log(res);
-            if (!res.success) {
-               let errorType = '';
-               if (res.error && res.error.toLowerCase().includes('username')) {
-                   errorType = 'incorrect_username';
-               }
-               if (res.error && res.error.toLowerCase().includes('password')) {
-                   errorType = 'incorrect_password';
-               }
-               setError({ type: errorType, msg: res.error });
-               setTimeout(() => { setError(null); }, 3000);
-            } else {
-               router.push('/');
-            }
-         } catch (fetchError) {
-            setError({ type: 'unknown', msg: 'Could not login, The Server is not responsive.' });
-            setTimeout(() => { setError(null); }, 3000);
-         }
+         router.push(res.redirect || '/');
+      } catch (fetchError) {
+         setError('No pudimos conectar con el servidor. Inténtalo de nuevo.');
+         setPending(false);
       }
    };
 
    const labelStyle = 'mb-2 font-semibold inline-block text-sm text-gray-700';
-   // eslint-disable-next-line max-len
    const inputStyle = 'w-full p-2 border border-gray-200 rounded mb-3 focus:outline-none focus:border-blue-200';
-   const errorBorderStyle = 'border-red-400 focus:border-red-400';
+   const buttonStyle = 'w-full py-2 px-5 rounded cursor-pointer bg-blue-700 text-white font-semibold text-sm disabled:opacity-60';
+   const linkStyle = 'text-xs text-gray-500 hover:text-blue-700 cursor-pointer';
+
    return (
       <div className={'Login'}>
          <Head>
-            <title>Login - SerpBear</title>
+            <title>Ingresar - PoloRank</title>
          </Head>
          <div className='flex items-center justify-center w-full h-screen'>
             <div className='w-80 mt-[-300px]'>
-               <h3 className="py-7 text-2xl font-bold text-blue-700 text-center">
-                  <span className=' relative top-[3px] mr-1'>
-                     <Icon type="logo" size={30} color="#364AFF" />
-                  </span> SerpBear
+               <h3 className="py-7 text-2xl font-bold text-blue-700 text-center flex items-center justify-center gap-2">
+                  <img src='/brand/polo-face.png' alt='' width={40} height={44} />
+                  PoloRank
                </h3>
                <div className='relative bg-[white] rounded-md text-sm border p-5'>
-                  <div className="settings__section__input mb-5">
-                     <label className={labelStyle}>Username</label>
-                     <input
-                        className={`
-                           ${inputStyle} 
-                           ${error && error.type.includes('username') ? errorBorderStyle : ''} 
-                        `}
-                        type="text"
-                        value={username}
-                        onChange={(event) => setUsername(event.target.value)}
-                     />
-                  </div>
-                  <div className="settings__section__input mb-5">
-                     <label className={labelStyle}>Password</label>
-                     <input
-                        className={`
-                           ${inputStyle} 
-                           ${error && error.type.includes('password') ? errorBorderStyle : ''} 
-                        `}
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                     />
-                  </div>
-                  <button
-                  onClick={() => loginuser()}
-                  className={'py-3 px-5 w-full rounded cursor-pointer bg-blue-700 text-white font-semibold text-sm'}>
-                     Login
-                  </button>
-                  {error && error.msg
-                  && <div
-                     className={'absolute w-full bottom-[-100px] ml-[-20px] rounded text-center p-3 bg-red-100 text-red-600 text-sm font-semibold'}>
-                        {error.msg}
-                     </div>
-                  }
+                  {step === 'email' && (
+                     <form onSubmit={sendCode} data-testid='login_email_form'>
+                        <div className="settings__section__input mb-5">
+                           <label className={labelStyle} htmlFor='login_email'>Correo</label>
+                           <input
+                              id='login_email'
+                              className={`${inputStyle} ${error ? 'border-red-400 focus:border-red-400' : ''}`}
+                              type="email"
+                              autoComplete='email'
+                              autoFocus
+                              required
+                              value={email}
+                              onChange={(event) => setEmail(event.target.value)}
+                              placeholder='tu@correo.cl'
+                           />
+                        </div>
+                        {error && <p className='mb-3 text-red-600 text-xs'>{error}</p>}
+                        <button type='submit' className={buttonStyle} disabled={pending}>
+                           {pending ? 'Enviando código…' : 'Enviar código de acceso'}
+                        </button>
+                        <p className='mt-3 text-center text-xs text-gray-400'>Te enviamos un código de 6 dígitos a tu correo. Sin contraseñas.</p>
+                     </form>
+                  )}
+                  {step === 'code' && (
+                     <form onSubmit={verify} data-testid='login_code_form'>
+                        {info && <p className='mb-3 rounded border border-blue-100 bg-blue-50 px-3 py-2 text-xs text-blue-800'>{info}</p>}
+                        <div className="settings__section__input mb-5">
+                           <label className={labelStyle} htmlFor='login_code'>Código de acceso</label>
+                           <input
+                              id='login_code'
+                              className={`${inputStyle} text-center text-2xl tracking-[0.5em] ${error ? 'border-red-400 focus:border-red-400' : ''}`}
+                              inputMode='numeric'
+                              autoComplete='one-time-code'
+                              maxLength={6}
+                              autoFocus
+                              required
+                              value={code}
+                              onChange={(event) => setCode(event.target.value.replace(/\D/g, ''))}
+                              placeholder='000000'
+                           />
+                        </div>
+                        {error && <p className='mb-3 text-red-600 text-xs'>{error}</p>}
+                        <button type='submit' className={buttonStyle} disabled={pending || code.length < 6}>
+                           {pending ? 'Verificando…' : 'Ingresar'}
+                        </button>
+                        <div className='flex items-center justify-between mt-4'>
+                           <button type='button' className={linkStyle}
+                              onClick={() => { setStep('email'); setCode(''); setError(null); setInfo(null); }}>← Cambiar correo</button>
+                           <button type='button' className={linkStyle} disabled={pending} onClick={() => sendCode()}>Reenviar código</button>
+                        </div>
+                     </form>
+                  )}
                </div>
             </div>
          </div>
-
       </div>
    );
 };
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => redirectIfAuthenticated(ctx);
 
 export default Login;
