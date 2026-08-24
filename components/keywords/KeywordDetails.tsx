@@ -233,7 +233,8 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
                      )}
                      {skippedCount > 0 && (
                         <div className='mb-3 p-2 rounded bg-blue-50 border border-blue-100 text-xs text-blue-600'>
-                           Se revisaron {received} resultados · {skippedCount} posiciones no consultadas (según la estrategia de páginas)
+                           Se revisaron los primeros {keyword.lastDepth || received} resultados (estrategia de páginas del dominio)
+                           {received !== (keyword.lastDepth || received) ? ` · Google devolvió ${received} orgánicos` : ''}
                         </div>
                      )}
                      <div className='keywordDetails__section__results' ref={searchResultContainer}>

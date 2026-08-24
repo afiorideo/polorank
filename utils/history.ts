@@ -119,10 +119,13 @@ export const resultsReceived = (lastResult: KeywordLastResult[] | undefined | nu
    return lastResult.filter((r) => r && !r.skipped && r.url).length;
 };
 
-/** Label for a keyword that was not found: "+N" where N = results really checked (falls back to the depth requested, then 100). */
+/**
+ * Label for a keyword that was not found: "+N" where N = depth REQUESTED in the last check (10, 50, 100…), a stable number
+ * the user configured. Only when the depth is unknown (legacy scrapers) it falls back to the results received, then to 100.
+ */
 export const notFoundLabel = (received: number, lastDepth?: number): string => {
    let n = 100;
-   if (received > 0) { n = received; } else if (lastDepth && lastDepth > 0) { n = lastDepth; }
+   if (lastDepth && lastDepth > 0) { n = lastDepth; } else if (received > 0) { n = Math.ceil(received / 10) * 10; }
    return `+${n}`;
 };
 

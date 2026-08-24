@@ -49,8 +49,9 @@ describe('utils/history (PoloRank)', () => {
          { position: 3, url: '', title: '', skipped: true },
       ];
       expect(resultsReceived(last)).toBe(2);
-      expect(notFoundLabel(18)).toBe('+18');
-      expect(notFoundLabel(0, 20)).toBe('+20');
+      expect(notFoundLabel(18, 20)).toBe('+20'); // manda la profundidad pedida, no lo recibido
+      expect(notFoundLabel(47, 50)).toBe('+50');
+      expect(notFoundLabel(18)).toBe('+20'); // sin profundidad conocida: redondea lo recibido a la decena
       expect(notFoundLabel(0)).toBe('+100');
    });
 
