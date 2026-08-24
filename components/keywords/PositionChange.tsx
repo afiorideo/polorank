@@ -16,7 +16,8 @@ const PositionChange = ({ change, withPosition = false, arrow = false, className
       return <span className={`text-gray-300 ${className}`} title='Sin datos para ese período'>—</span>;
    }
    if (change.change === 0 && change.position === 0) {
-      return <span className={`text-gray-300 ${className}`} title='Sigue fuera de los resultados revisados'>fuera</span>;
+      // estaba fuera y sigue fuera → mismo símbolo que "sin cambio", solo cambia el detalle al pasar el mouse
+      return <span className={`text-gray-400 ${className}`} title='Sigue fuera de los resultados revisados'>{arrow ? '=' : '0'}</span>;
    }
    const value = change.change;
    let tone = 'text-gray-400';
