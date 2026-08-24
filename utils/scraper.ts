@@ -4,6 +4,7 @@ import { readFile, writeFile } from 'fs/promises';
 import HttpsProxyAgent from 'https-proxy-agent';
 import countries from './countries';
 import allScrapers from '../scrapers/index';
+import { strategyToDepth } from './depth';
 
 type SearchResult = {
    title: string,
@@ -27,8 +28,16 @@ export type RefreshResult = false | {
    position:number,
    url: string,
    result: KeywordLastResult[],
-   error?: boolean | string
+   error?: boolean | string,
+   /** PoloRank: SERP feature types found (depth-based scrapers only) */
+   serpFeatures?: string[],
+   /** PoloRank: number of results requested (depth-based scrapers only) */
+   depth?: number,
+   /** PoloRank: real cost in USD reported by the API, when available */
+   cost?: number,
 }
+
+type StrategyOptions = { strategy: ScrapeStrategy, paginationLimit: number, smartFullFallback: boolean };
 
 const TOTAL_PAGES = 10;
 const PAGE_SIZE = 10;
@@ -96,11 +105,82 @@ export const getScraperClient = (
       const axiosClient = axios.create(axiosConfig);
       const p = pagination || { start: 0, num: PAGE_SIZE };
       client = axiosClient.get(`https://www.google.com/search?num=${p.num}&start=${p.start}&q=${encodeURI(keyword.keyword)}`);
+   } else if (scraper && scraper.method === 'POST') {
+      // PoloRank: POST scrapers (DataForSEO) send the request as a JSON body
+      const body = scraper.body ? scraper.body(keyword, settings, countries, pagination) : '';
+      client = fetch(apiURL, { method: 'POST', headers, body });
    } else {
       client = fetch(apiURL, { method: 'GET', headers });
    }
 
    return client;
+};
+
+type DepthAttempt = { results: SearchResult[], features: string[], depth: number, error?: string };
+
+/**
+ * PoloRank: scrape a keyword with a depth-based scraper (DataForSEO): one request with the depth
+ * computed from the strategy, plus an optional second request at full depth (smart + full fallback).
+ */
+const scrapeDepthBased = async (
+   keyword: KeywordType,
+   settings: SettingsType,
+   scraperObj: ScraperSettings,
+   options: StrategyOptions,
+   subdomainMatching: string,
+   errorResult: Exclude<RefreshResult, false>,
+): Promise<RefreshResult> => {
+   const { strategy, paginationLimit, smartFullFallback } = options;
+   const maxDepth = TOTAL_PAGES * PAGE_SIZE;
+   let totalCost = 0;
+   let costKnown = false;
+
+   const request = async (depth: number): Promise<DepthAttempt> => {
+      const pagination: ScraperPagination = { start: 0, num: depth, page: 1 };
+      const client = getScraperClient(keyword, settings, scraperObj, pagination);
+      if (!client) { return { results: [], features: [], depth, error: 'No scraper client available' }; }
+      try {
+         const res: any = await client.then((result: any) => result.json());
+         const cost = scraperObj.costExtractor ? scraperObj.costExtractor(res) : undefined;
+         if (typeof cost === 'number') { totalCost += cost; costKnown = true; }
+         const extracted = scraperObj.serpExtractor ? scraperObj.serpExtractor(res) : [];
+         const features = scraperObj.featuresExtractor ? scraperObj.featuresExtractor(res) : [];
+         return { results: extracted.map((item, i) => ({ ...item, position: i + 1 })), features, depth };
+      } catch (error: any) {
+         const msg = error?.message || 'Unknown scraping error';
+         console.log('[ERROR] Scraping (depth', depth, ') for keyword:', keyword.keyword, msg);
+         return { results: [], features: [], depth, error: msg };
+      }
+   };
+
+   const firstDepth = strategyToDepth(strategy, paginationLimit, keyword.position);
+   let attempt = await request(firstDepth);
+
+   // Smart + full fallback: domain not found within the computed depth → one more request at full depth.
+   if (!attempt.error && strategy === 'smart' && smartFullFallback && firstDepth < maxDepth) {
+      const check = getSerp(keyword.domain, attempt.results, subdomainMatching);
+      if (check.position === 0) {
+         const full = await request(maxDepth);
+         if (!full.error && full.results.length > 0) { attempt = full; }
+      }
+   }
+
+   const meta = { depth: attempt.depth, cost: costKnown ? totalCost : undefined, serpFeatures: attempt.features };
+   if (attempt.error) { return { ...errorResult, ...meta, error: attempt.error }; }
+   if (attempt.results.length === 0) { return { ...errorResult, ...meta, error: `No search results found (depth ${attempt.depth})` }; }
+
+   const serp = getSerp(keyword.domain, attempt.results, subdomainMatching);
+   const fullResults = buildFullResults(attempt.results);
+   console.log('[SERP]:', keyword.keyword, serp.position, serp.url, `(strategy: ${strategy}, depth: ${attempt.depth})`);
+   return {
+      ID: keyword.ID,
+      keyword: keyword.keyword,
+      position: serp.position,
+      url: serp.url,
+      result: fullResults,
+      error: false,
+      ...meta,
+   };
 };
 
 /**
@@ -201,6 +281,12 @@ export const scrapeKeywordWithStrategy = async (
 
    const { strategy, paginationLimit, smartFullFallback } = resolveStrategy(settings, domainSettings);
    const subdomainMatching = domainSettings?.subdomain_matching || '';
+
+   // PoloRank: depth-based scrapers (DataForSEO) fetch the whole depth in ONE request, still honoring the strategy
+   if (scraperObj?.depthBased) {
+      return scrapeDepthBased(keyword, settings, scraperObj, { strategy, paginationLimit, smartFullFallback }, subdomainMatching, errorResult);
+   }
+
    let pagesToScrape: number[];
 
    if (strategy === 'custom') {

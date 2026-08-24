@@ -67,8 +67,8 @@ const ScraperSettings = ({ settings, settingsError, updateSettings }:ScraperSett
          {settings.scraper_type !== 'none' && settings.scraper_type !== 'proxy' && (
             <div className="settings__section__secret mb-5">
                <SecretField
-               label='Scraper API Key or Token'
-               placeholder={'API Key/Token'}
+               label={settings.scraper_type === 'dataforseo' ? 'DataForSEO API login:password' : 'Scraper API Key or Token'}
+               placeholder={settings.scraper_type === 'dataforseo' ? 'login@correo.com:password' : 'API Key/Token'}
                value={settings?.scaping_api || ''}
                hasError={settingsError?.type === 'no_api_key'}
                onChange={(value:string) => updateSettings('scaping_api', value)}

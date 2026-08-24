@@ -49,6 +49,10 @@ type KeywordType = {
    scData?: KeywordSCData,
    uid?: string
    city?: string
+   /** PoloRank: SERP feature types present in the last scrape (featured_snippet, people_also_ask, local_pack, video...) */
+   serpFeatures?: string[],
+   /** PoloRank: number of results requested in the last scrape (10..100). 0 = unknown/legacy scraper. */
+   lastDepth?: number,
 }
 
 type KeywordLastResult = {
@@ -264,6 +268,17 @@ interface ScraperSettings {
    allowsCity?: boolean,
    /** Whether this scraper API handles its own pagination (e.g. num=100) and should bypass the app's pagination logic */
    nativePagination?: boolean,
+   /** PoloRank: the scraper fetches N results in ONE request using a `depth` computed from the scrape strategy
+    * (basic/custom/smart). Unlike `nativePagination`, the global/domain strategy is still respected. */
+   depthBased?: boolean,
+   /** PoloRank: HTTP method for the scraper API request. Defaults to GET. */
+   method?: 'GET' | 'POST',
+   /** PoloRank: request body for POST scrapers. Must return a string (usually JSON). */
+   body?(keyword:KeywordType, settings:SettingsType, countries:countryData, pagination?: ScraperPagination): string,
+   /** PoloRank: extract the SERP feature types (featured_snippet, people_also_ask, local_pack...) from the raw API response. */
+   featuresExtractor?(response: any): string[],
+   /** PoloRank: extract the real cost (USD) of the request from the raw API response, when the API reports it. */
+   costExtractor?(response: any): number | undefined,
    /** Set your own custom HTTP header properties when making the scraper API request.
     * The function should return an object that contains all the header properties you want to pass to API request's header.
     * Example: `{'Cache-Control': 'max-age=0', 'Content-Type': 'application/json'}` */

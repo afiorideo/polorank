@@ -66,10 +66,10 @@ const refresTheKeywords = async (req: NextApiRequest, res: NextApiResponse<Keywo
       // If Single Keyword wait for the scraping process,
       // else, Process the task in background. Do not wait.
       if (keywordIDs && keywordIDs.length === 0) {
-         const refreshed: KeywordType[] = await refreshAndUpdateKeywords(keywordQueries, settings, domainList);
+         const refreshed: KeywordType[] = await refreshAndUpdateKeywords(keywordQueries, settings, domainList, 'manual');
          keywords = refreshed;
       } else {
-         refreshAndUpdateKeywords(keywordQueries, settings, domainList);
+         refreshAndUpdateKeywords(keywordQueries, settings, domainList, 'manual');
          keywords = parseKeywords(keywordQueries.map((el) => el.get({ plain: true })));
       }
 

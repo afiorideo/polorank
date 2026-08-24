@@ -1,0 +1,54 @@
+{
+  "version": "0.1.20250526",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.9 sec.",
+  "cost": 0.002,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.8 sec.",
+      "cost": 0.002,
+      "result_count": 1,
+      "path": ["v3", "serp", "google", "organic", "live", "advanced"],
+      "data": {
+        "api": "serp",
+        "function": "live",
+        "se": "google",
+        "se_type": "organic",
+        "keyword": "vestidos de fiesta temuco",
+        "language_code": "es",
+        "location_code": 2152,
+        "device": "mobile",
+        "os": "android",
+        "depth": 10
+      },
+      "result": [
+        {
+          "keyword": "vestidos de fiesta temuco",
+          "type": "organic",
+          "se_domain": "google.cl",
+          "location_code": 2152,
+          "language_code": "es",
+          "check_url": "https://www.google.cl/search?q=vestidos%20de%20fiesta%20temuco",
+          "datetime": "2026-08-24 20:00:00 +00:00",
+          "items_count": 8,
+          "items": [
+            { "type": "people_also_ask", "rank_group": 1, "rank_absolute": 1, "title": "Otras preguntas" },
+            { "type": "organic", "rank_group": 1, "rank_absolute": 2, "domain": "www.competidor.cl", "title": "Vestidos de fiesta en Temuco", "url": "https://www.competidor.cl/vestidos" },
+            { "type": "organic", "rank_group": 2, "rank_absolute": 3, "domain": "ammo.cl", "title": "Ammo | Vestidos de fiesta y gala en Temuco", "url": "https://ammo.cl/" },
+            { "type": "local_pack", "rank_group": 1, "rank_absolute": 4, "title": "Tienda local" },
+            { "type": "organic", "rank_group": 3, "rank_absolute": 5, "domain": "www.otro.cl", "title": "Arriendo de vestidos", "url": "https://www.otro.cl/arriendo" },
+            { "type": "video", "rank_group": 1, "rank_absolute": 6, "title": "Videos" },
+            { "type": "organic", "rank_group": 4, "rank_absolute": 7, "domain": "www.cuarto.cl", "title": "Vestidos elegantes", "url": "https://www.cuarto.cl/" },
+            { "type": "organic", "rank_group": 5, "rank_absolute": 8, "domain": "sin-url.cl", "title": "Sin URL (se descarta)" }
+          ]
+        }
+      ]
+    }
+  ]
+}

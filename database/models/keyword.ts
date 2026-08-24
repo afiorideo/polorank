@@ -70,6 +70,14 @@ class Keyword extends Model {
 
    @Column({ type: DataType.STRING, allowNull: true })
    settings!: string;
+
+   /** PoloRank: JSON list of SERP feature types found in the last scrape */
+   @Column({ type: DataType.STRING, allowNull: true, defaultValue: JSON.stringify([]) })
+   serp_features!: string;
+
+   /** PoloRank: number of results requested in the last scrape (depth-based scrapers) */
+   @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
+   last_depth!: number;
 }
 
 export default Keyword;

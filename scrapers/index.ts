@@ -9,8 +9,10 @@ import valueSerp from './services/valueserp';
 import serper from './services/serper';
 import hasdata from './services/hasdata';
 import crazyserp from './services/crazyserp';
+import dataforseo from './services/dataforseo';
 
 export default [
+   dataforseo,
    scrapingRobot,
    scrapingAnt,
    serpapi,

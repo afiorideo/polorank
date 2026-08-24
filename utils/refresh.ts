@@ -3,6 +3,7 @@ import { setTimeout as sleep } from 'timers/promises';
 import { RefreshResult, removeFromRetryQueue, retryScrape, scrapeKeywordWithStrategy } from './scraper';
 import parseKeywords from './parseKeywords';
 import Keyword from '../database/models/keyword';
+import { logUsage } from './usage';
 
 /**
  * Refreshes the Keywords position by Scraping Google Search Result by
@@ -10,9 +11,15 @@ import Keyword from '../database/models/keyword';
  * @param {Keyword[]} rawKeyword - Keywords to scrape
  * @param {SettingsType} settings - The App Settings that contain the Scraper settings
  * @param {DomainType[]} domains - Optional domain list for per-domain strategy overrides
+ * @param {string} triggeredBy - PoloRank: who originated the refresh ('cron' or 'user:<ID>'), for the usage log
  * @returns {Promise}
  */
-const refreshAndUpdateKeywords = async (rawKeyword:Keyword[], settings:SettingsType, domains?: DomainType[]): Promise<KeywordType[]> => {
+const refreshAndUpdateKeywords = async (
+   rawKeyword:Keyword[],
+   settings:SettingsType,
+   domains?: DomainType[],
+   triggeredBy: string = 'cron',
+): Promise<KeywordType[]> => {
    const keywords:KeywordType[] = rawKeyword.map((el) => el.get({ plain: true }));
    if (!rawKeyword || rawKeyword.length === 0) { return []; }
    const start = performance.now();
@@ -24,7 +31,7 @@ const refreshAndUpdateKeywords = async (rawKeyword:Keyword[], settings:SettingsT
          for (const keyword of rawKeyword) {
             const refreshedKeywordData = refreshedResults.find((k) => k && k.ID === keyword.ID);
             if (refreshedKeywordData) {
-               const updatedKeyword = await updateKeywordPosition(keyword, refreshedKeywordData, settings);
+               const updatedKeyword = await updateKeywordPosition(keyword, refreshedKeywordData, settings, triggeredBy);
                updatedKeywords.push(updatedKeyword);
             }
          }
@@ -34,7 +41,7 @@ const refreshAndUpdateKeywords = async (rawKeyword:Keyword[], settings:SettingsT
          console.log('START SCRAPE: ', keyword.keyword);
          const keywordPlain = keyword.get({ plain: true }) as KeywordType;
          const domainSettings = domains?.find((d) => d.domain === keywordPlain.domain);
-         const updatedKeyword = await refreshAndUpdateKeyword(keyword, settings, domainSettings);
+         const updatedKeyword = await refreshAndUpdateKeyword(keyword, settings, domainSettings, triggeredBy);
          updatedKeywords.push(updatedKeyword);
          if (keywords.length > 0 && settings.scrape_delay && settings.scrape_delay !== '0') {
             await sleep(parseInt(settings.scrape_delay, 10));
@@ -54,10 +61,15 @@ const refreshAndUpdateKeywords = async (rawKeyword:Keyword[], settings:SettingsT
  * @param {DomainType} domainSettings - Optional domain-level settings override
  * @returns {Promise<KeywordType>}
  */
-const refreshAndUpdateKeyword = async (keyword: Keyword, settings: SettingsType, domainSettings?: DomainType): Promise<KeywordType> => {
+const refreshAndUpdateKeyword = async (
+   keyword: Keyword,
+   settings: SettingsType,
+   domainSettings?: DomainType,
+   triggeredBy: string = 'cron',
+): Promise<KeywordType> => {
    const currentKeyword = keyword.get({ plain: true });
    const refreshedKeywordData = await scrapeKeywordWithStrategy(currentKeyword, settings, domainSettings);
-   const updatedKeyword = refreshedKeywordData ? await updateKeywordPosition(keyword, refreshedKeywordData, settings) : currentKeyword;
+   const updatedKeyword = refreshedKeywordData ? await updateKeywordPosition(keyword, refreshedKeywordData, settings, triggeredBy) : currentKeyword;
    return updatedKeyword;
 };
 
@@ -68,7 +80,12 @@ const refreshAndUpdateKeyword = async (keyword: Keyword, settings: SettingsType,
  * @param {SettingsType} settings - The App Settings that contain the Scraper settings
  * @returns {Promise<KeywordType>}
  */
-export const updateKeywordPosition = async (keywordRaw:Keyword, updatedKeyword: RefreshResult, settings: SettingsType): Promise<KeywordType> => {
+export const updateKeywordPosition = async (
+   keywordRaw:Keyword,
+   updatedKeyword: RefreshResult,
+   settings: SettingsType,
+   triggeredBy: string = 'cron',
+): Promise<KeywordType> => {
    const keywordParsed = parseKeywords([keywordRaw.get({ plain: true })]);
       const keyword = keywordParsed[0];
       // const updatedKeyword = refreshed;
@@ -81,8 +98,13 @@ export const updateKeywordPosition = async (keywordRaw:Keyword, updatedKeyword: 
          const dateKey = `${theDate.getFullYear()}-${theDate.getMonth() + 1}-${theDate.getDate()}`;
          history[dateKey] = newPos;
 
+         // PoloRank: depth-based scrapers report the requested depth and the SERP features found
+         const depthMeta = typeof updatedKeyword.depth === 'number'
+            ? { serpFeatures: updatedKeyword.serpFeatures || [], lastDepth: updatedKeyword.depth }
+            : {};
          const updatedVal = {
             position: newPos,
+            ...depthMeta,
             updating: false,
             url: updatedKeyword.url,
             lastResult: updatedKeyword.result,
@@ -102,8 +124,10 @@ export const updateKeywordPosition = async (keywordRaw:Keyword, updatedKeyword: 
 
          // Update the Keyword Position in Database
          try {
+            const { serpFeatures, lastDepth, ...dbVal } = updatedVal as typeof updatedVal & { serpFeatures?: string[], lastDepth?: number };
             await keywordRaw.update({
-               ...updatedVal,
+               ...dbVal,
+               ...(typeof lastDepth === 'number' ? { serp_features: JSON.stringify(serpFeatures || []), last_depth: lastDepth } : {}),
                lastResult: Array.isArray(updatedKeyword.result) ? JSON.stringify(updatedKeyword.result) : updatedKeyword.result,
                history: JSON.stringify(history),
             });
@@ -111,6 +135,20 @@ export const updateKeywordPosition = async (keywordRaw:Keyword, updatedKeyword: 
             updated = { ...keyword, ...updatedVal, lastUpdateError: JSON.parse(updatedVal.lastUpdateError) };
          } catch (error) {
             console.log('[ERROR] Updating SERP for Keyword', keyword.keyword, error);
+         }
+
+         // PoloRank: record the API request (and its real cost) for the usage panel
+         if (typeof updatedKeyword.depth === 'number') {
+            await logUsage({
+               scraper: settings.scraper_type,
+               domain: keyword.domain,
+               keywordID: keyword.ID,
+               keyword: keyword.keyword,
+               depth: updatedKeyword.depth,
+               costUSD: updatedKeyword.cost,
+               triggeredBy,
+               status: updatedKeyword.error ? 'error' : 'ok',
+            });
          }
       }
 
