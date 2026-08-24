@@ -80,6 +80,10 @@ const Settings = ({ closeSettings }:SettingsProps) => {
       if (scraper_type !== 'proxy' && scraper_type !== 'none' && !scaping_api) {
          error = { type: 'no_api_key', msg: 'Insert a Valid API Key or Token for the Scraper Service.' };
       }
+      // PoloRank: DataForSEO usa autenticación básica → el campo debe ser "login:password" (API Access de app.dataforseo.com)
+      if (scraper_type === 'dataforseo' && scaping_api && !/^[^:\s]+@[^:\s]+:.+$/.test(scaping_api.trim())) {
+         error = { type: 'no_api_key', msg: 'DataForSEO necesita el formato correo:password (la API password de app.dataforseo.com → API Access).' };
+      }
 
       if (error) {
          setSettingsError(error);

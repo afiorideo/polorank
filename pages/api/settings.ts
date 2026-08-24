@@ -46,6 +46,10 @@ const updateSettings = async (req: NextApiRequest, res: NextApiResponse<Settings
       return res.status(200).json({ error: 'Settings Data not Provided!' });
    }
    try {
+      // PoloRank: DataForSEO credentials must be "login:password" (Basic auth); refuse anything else so a bad save cannot break the cron
+      if (settings.scraper_type === 'dataforseo' && !/^[^:\s]+@[^:\s]+:.+$/.test((settings.scaping_api || '').trim())) {
+         return res.status(400).json({ error: 'DataForSEO necesita el formato correo:password (API Access de app.dataforseo.com).' });
+      }
       const cryptr = new Cryptr(process.env.SECRET as string);
       const scaping_api = settings.scaping_api ? cryptr.encrypt(settings.scaping_api.trim()) : '';
       const smtp_password = settings.smtp_password ? cryptr.encrypt(settings.smtp_password.trim()) : '';
