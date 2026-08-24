@@ -7,6 +7,7 @@ import ScraperSettings from './ScraperSettings';
 import useOnKey from '../../hooks/useOnKey';
 import IntegrationSettings from './IntegrationSettings';
 import UsersSettings from './UsersSettings';
+import UsageSettings from './UsageSettings';
 
 type SettingsProps = {
    closeSettings: Function,
@@ -131,9 +132,15 @@ const Settings = ({ closeSettings }:SettingsProps) => {
                      onClick={() => setCurrentTab('usuarios')}>
                        <Icon type='lock' size={14} /> Usuarios
                      </li>
+                     <li
+                     className={`${tabStyle} ${currentTab === 'consumo' ? tabStyleActive : 'border-transparent'}`}
+                     onClick={() => setCurrentTab('consumo')}>
+                       <Icon type='date' size={14} /> Consumo
+                     </li>
                   </ul>
                </div>
                {currentTab === 'usuarios' && <UsersSettings />}
+               {currentTab === 'consumo' && <UsageSettings />}
                {currentTab === 'scraper' && settings && (
                   <ScraperSettings settings={settings} updateSettings={updateSettings} settingsError={settingsError} />
                )}
@@ -150,13 +157,16 @@ const Settings = ({ closeSettings }:SettingsProps) => {
                   closeSettings={closeSettings}
                    />
                )}
-               <div className=' border-t-[1px] border-gray-200 p-2 px-3'>
-                  <button
-                  onClick={() => performUpdate()}
-                  className=' py-3 px-5 w-full rounded cursor-pointer bg-blue-700 text-white font-semibold text-sm'>
-                  {isUpdating && <Icon type="loading" size={14} />} Update Settings
-                  </button>
-               </div>
+               {/* PoloRank: the Usuarios and Consumo tabs save on their own — no global "Update Settings" there */}
+               {!['usuarios', 'consumo'].includes(currentTab) && (
+                  <div className=' border-t-[1px] border-gray-200 p-2 px-3'>
+                     <button
+                     onClick={() => performUpdate()}
+                     className=' py-3 px-5 w-full rounded cursor-pointer bg-blue-700 text-white font-semibold text-sm'>
+                     {isUpdating && <Icon type="loading" size={14} />} Update Settings
+                     </button>
+                  </div>
+               )}
             </div>
             <Toaster position='bottom-center' containerClassName="react_toaster" />
        </div>
