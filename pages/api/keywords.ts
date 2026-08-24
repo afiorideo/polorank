@@ -2,8 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { Op } from 'sequelize';
 import db from '../../database/database';
 import Keyword from '../../database/models/keyword';
+import Domain from '../../database/models/domain';
 import { getAppSettings } from './settings';
-import { authenticate } from '../../utils/verifyUser';
+import { authenticate, AuthedRequest } from '../../utils/verifyUser';
 import { canAccessDomain, canManageKeywords } from '../../utils/auth/guards';
 import parseKeywords from '../../utils/parseKeywords';
 import { sliceHistory, summarizeHistory } from '../../utils/history';
@@ -117,7 +118,11 @@ const addKeywords = async (req: NextApiRequest, res: NextApiResponse<KeywordsGet
 
          // Queue the SERP Scraping Process
          const settings = await getAppSettings();
-         refreshAndUpdateKeywords(newKeywords, settings);
+         // PoloRank: the initial check must honour the domain's scrape strategy (SerpBear ignored it here) and log who added them
+         const domainRows: Domain[] = await Domain.findAll();
+         const domainList: DomainType[] = domainRows.map((d) => d.get({ plain: true }));
+         const { authUser } = req as AuthedRequest;
+         refreshAndUpdateKeywords(newKeywords, settings, domainList, authUser ? `user:${authUser.uid}` : 'cron');
 
          // Update the Keyword Volume
          const { adwords_account_id, adwords_client_id, adwords_client_secret, adwords_developer_token } = settings;
