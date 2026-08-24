@@ -1,6 +1,6 @@
 {
-  "name": "serpbear",
-  "version": "3.1.0",
+  "name": "polorank",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -82,5 +82,9 @@
     "standard-version": "^9.5.0",
     "tailwindcss": "^3.4.14",
     "typescript": "^4.8.4"
+  },
+  "description": "PoloRank — tracking de posiciones SEO (basado en SerpBear)",
+  "engines": {
+    "node": "22.x"
   }
 }
