@@ -1,7 +1,8 @@
 /**
  * PoloRank — access-code email content (pure, testable).
  */
-export const LOGO_CID = 'polorank-logo';
+/** Public URL of the email logo (served by the app itself); no attachments so mail clients show nothing extra. */
+export const logoUrl = (appUrl: string): string => `${appUrl}/brand/polo-face-email.png`;
 export const loginCodeEmail = (code: string, appUrl: string) => {
    const subject = `Tu código de acceso a PoloRank: ${code}`;
    const text = [
@@ -11,12 +12,12 @@ export const loginCodeEmail = (code: string, appUrl: string) => {
       '',
       `${appUrl}/login`,
    ].join('\n');
-   // The logo is embedded as an inline attachment (cid) so Gmail/Outlook render it without loading remote images.
+   // The logo is loaded from the app's public URL (Gmail shows remote images by default) — no attachment in the email.
    const html = `
    <div style="background:#F4F4FA;padding:32px 16px;font-family:Inter,Arial,Helvetica,sans-serif">
       <div style="max-width:480px;margin:0 auto;background:#ffffff;border:1px solid #E2E8F0;border-radius:12px;overflow:hidden">
          <div style="padding:20px 24px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center">
-            <img src="cid:${LOGO_CID}" alt="PoloRank" width="44" height="49"
+            <img src="${logoUrl(appUrl)}" alt="PoloRank" width="44" height="49"
                style="display:inline-block;vertical-align:middle;margin-right:12px">
             <span style="display:inline-block;vertical-align:middle;font-size:22px;font-weight:700;color:#1A1A2E">
                Polo<span style="color:#6C63FF">Rank</span>

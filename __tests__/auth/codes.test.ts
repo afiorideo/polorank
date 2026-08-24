@@ -34,6 +34,7 @@ describe('códigos de acceso (PoloRank)', () => {
       expect(mail.text).toContain('987654');
       expect(mail.text).toContain('10 minutos');
       expect(mail.html).toContain('https://polorank.emignia.com/login');
-      expect(mail.html).toContain('cid:polorank-logo');
+      expect(mail.html).toContain('https://polorank.emignia.com/brand/polo-face-email.png');
+      expect(mail.html).not.toContain('cid:');
    });
 });
