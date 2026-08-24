@@ -1,5 +1,6 @@
+import path from 'path';
 import nodeMailer from 'nodemailer';
-import { loginCodeEmail } from './emailTemplate';
+import { LOGO_CID, loginCodeEmail } from './emailTemplate';
 
 export { loginCodeEmail } from './emailTemplate';
 
@@ -25,5 +26,13 @@ export const sendLoginCode = async (to: string, code: string): Promise<void> => 
    const appUrl = (process.env.NEXT_PUBLIC_APP_URL || '').replace(/\/+$/, '');
    const from = process.env.SMTP_FROM || `PoloRank <${process.env.SMTP_USER}>`;
    const { subject, text, html } = loginCodeEmail(code, appUrl);
-   await buildTransport().sendMail({ from, to, subject, text, html });
+   const logoPath = path.join(process.cwd(), 'public', 'brand', 'polo-face-email.png');
+   await buildTransport().sendMail({
+      from,
+      to,
+      subject,
+      text,
+      html,
+      attachments: [{ filename: 'polorank.png', path: logoPath, cid: LOGO_CID, contentDisposition: 'inline' }],
+   });
 };
