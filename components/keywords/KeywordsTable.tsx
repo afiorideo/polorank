@@ -11,6 +11,7 @@ import Modal from '../common/Modal';
 import { useDeleteKeywords, useFavKeywords, useRefreshKeywords } from '../../services/keywords';
 import KeywordTagManager from './KeywordTagManager';
 import AddTags from './AddTags';
+import KeywordScrapeSettings from './KeywordScrapeSettings';
 import useWindowResize from '../../hooks/useWindowResize';
 import useIsMobile from '../../hooks/useIsMobile';
 import { useUpdateSettings } from '../../services/settings';
@@ -56,6 +57,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
    const [showRemoveModal, setShowRemoveModal] = useState<boolean>(false);
    const [showTagManager, setShowTagManager] = useState<null|number>(null);
    const [showAddTags, setShowAddTags] = useState<boolean>(false);
+   const [scrapeTargets, setScrapeTargets] = useState<number[] | null>(null);
    const [SCListHeight, setSCListHeight] = useState(500);
    const [filterParams, setFilterParams] = useState<KeywordFilters>({
       countries: [], tags: [], search: '', trend: 'all', top: 'all', compare: 30, ...filtersFromQuery(router?.query || {}),
@@ -165,6 +167,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
          refreshkeyword={() => refreshMutate({ ids: [keyword.ID] })}
          favoriteKeyword={favoriteMutate}
          manageTags={() => setShowTagManager(keyword.ID)}
+         manageScrape={() => setScrapeTargets([keyword.ID])}
          removeKeyword={() => { setSelectedKeywords([keyword.ID]); setShowRemoveModal(true); }}
          showKeywordDetails={() => setShowKeyDetails(keyword)}
          lastItem={index === (visibleKeywords.length - 1)}
@@ -209,6 +212,13 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                         onClick={() => setShowAddTags(true)}
                         >
                            <span className=' bg-green-100 text-green-500  px-1 rounded'><Icon type="tags" size={14} /></span> Etiquetar</a>
+                     </li>}
+                     {canManageKeywords && <li className='inline-block mr-4'>
+                        <a
+                        className='block px-2 py-2 cursor-pointer hover:text-indigo-600'
+                        onClick={() => setScrapeTargets(selectedKeywords)}
+                        >
+                           <span className=' bg-slate-100 text-slate-500 px-1 rounded'><Icon type="search" size={14} /></span> Profundidad</a>
                      </li>}
                      <li className='inline-block'>
                         <a className='block px-2 py-2 cursor-pointer text-gray-400 hover:text-indigo-600' onClick={() => setSelectedKeywords([])}>
@@ -351,6 +361,8 @@ const KeywordsTable = (props: KeywordsTableProps) => {
          {showKeyDetails && showKeyDetails.ID && (
             <KeywordDetails
                keyword={showKeyDetails}
+               domain={props.domain}
+               settings={settings}
                closeDetails={() => setShowKeyDetails(null)}
                onPrev={detailIndex > 0 ? () => openDetailsAt(detailIndex - 1) : undefined}
                onNext={detailIndex >= 0 && detailIndex < visibleKeywords.length - 1 ? () => openDetailsAt(detailIndex + 1) : undefined}
@@ -377,6 +389,14 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                      </div>
                   </div>
             </Modal>
+         )}
+         {scrapeTargets && scrapeTargets.length > 0 && (
+            <KeywordScrapeSettings
+               keywords={keywords.filter((k) => scrapeTargets.includes(k.ID))}
+               domain={props.domain}
+               settings={settings}
+               closeModal={() => { setScrapeTargets(null); setSelectedKeywords([]); }}
+               />
          )}
          {showTagManager && (
             <KeywordTagManager

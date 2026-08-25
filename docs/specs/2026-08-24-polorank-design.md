@@ -26,7 +26,7 @@ Todo lo demás de SerpBear se conserva sin cambios: cron diario, cola de reinten
 |---|---|---|
 | D1 | Base técnica | **Fork y modificar sobre el stack de SerpBear** (no reescribir en Next 16) |
 | D2 | Modo DataForSEO | **Live** (síncrono, igual al flujo actual de SerpBear) |
-| D3 | Lógica de páginas/profundidad | **Igual a SerpBear**: basic / custom / smart + full fallback, configurable **global y por dominio**. Sin override por keyword. Sin lógica nueva de costos |
+| D3 | Lógica de páginas/profundidad | **Igual a SerpBear**: basic / custom / smart + full fallback, configurable **global y por dominio**. ~~Sin override por keyword~~ → **Actualizado 2026-08-24 (POLO-2026-08-25-01): se agregó override por keyword** (keyword → dominio → global). Sin lógica nueva de costos |
 | D4 | Modelo de usuarios | **Tres roles**: superadmin (todo), admin de dominio (ver + agregar/quitar keywords), usuario de dominio (solo ver). **Un solo dominio** por admin/usuario de dominio |
 | D5 | Refresco manual de posiciones | **Solo superadmin** |
 | D6 | Datos actuales | **Migrar la base SQLite** de SerpBear. SerpBear sigue operativo hasta validar PoloRank. **Cero cruce** (contenedor, base, dominio y cron propios) |

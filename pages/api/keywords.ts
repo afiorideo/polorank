@@ -8,6 +8,7 @@ import { authenticate, AuthedRequest } from '../../utils/verifyUser';
 import { canAccessDomain, canManageKeywords } from '../../utils/auth/guards';
 import parseKeywords from '../../utils/parseKeywords';
 import { sliceHistory, summarizeHistory } from '../../utils/history';
+import { parseKeywordScrape, serializeKeywordScrape } from '../../utils/depth';
 import { integrateKeywordSCData, readLocalSCData } from '../../utils/searchConsole';
 import refreshAndUpdateKeywords from '../../utils/refresh';
 import { getKeywordsVolume, updateKeywordsVolumeData } from '../../utils/adwords';
@@ -168,14 +169,26 @@ const updateKeywords = async (req: NextApiRequest, res: NextApiResponse<Keywords
    if (!req.query.id && typeof req.query.id !== 'string') {
       return res.status(400).json({ error: 'keyword ID is Required!' });
    }
-   if (req.body.sticky === undefined && !req.body.tags === undefined) {
+   if (req.body.sticky === undefined && !req.body.tags === undefined && req.body.scrape === undefined) {
       return res.status(400).json({ error: 'keyword Payload Missing!' });
    }
    const keywordIDs = (req.query.id as string).split(',').map((item) => parseInt(item, 10));
-   const { sticky, tags } = req.body;
+   const { sticky, tags, scrape } = req.body;
 
    try {
       let keywords: KeywordType[] = [];
+      // PoloRank: per-keyword scrape depth. `scrape: null` clears the override (inherit from domain/global).
+      if (scrape !== undefined) {
+         const parsed = scrape === null ? null : parseKeywordScrape({ scrape });
+         if (scrape !== null && !parsed) { return res.status(400).json({ error: 'Configuración de profundidad inválida.' }); }
+         const targets: Keyword[] = await Keyword.findAll({ where: { ID: { [Op.in]: keywordIDs } } });
+         for (const kw of targets) {
+            await kw.update({ settings: serializeKeywordScrape(kw.settings, parsed) });
+         }
+         const refreshed: Keyword[] = await Keyword.findAll({ where: { ID: { [Op.in]: keywordIDs } } });
+         keywords = parseKeywords(refreshed.map((el) => el.get({ plain: true })));
+         return res.status(200).json({ keywords });
+      }
       if (sticky !== undefined) {
          await Keyword.update({ sticky }, { where: { ID: { [Op.in]: keywordIDs } } });
          const updateQuery = { where: { ID: { [Op.in]: keywordIDs } } };

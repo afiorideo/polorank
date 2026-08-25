@@ -9,10 +9,14 @@ import SerpFeatures from './SerpFeatures';
 import { useFetchSingleKeyword } from '../../services/keywords';
 import useOnKey from '../../hooks/useOnKey';
 import { averagePosition, bestPosition, chartSeries, historyPoints, monthlySummary, rangeChange, resultsReceived } from '../../utils/history';
+import { describeScrape, resolveScrapeStrategy } from '../../utils/depth';
 
 type KeywordDetailsProps = {
    keyword: KeywordType,
    closeDetails: Function,
+   /** PoloRank: to show the effective scrape depth (keyword → domain → global) */
+   domain?: DomainType | null,
+   settings?: SettingsType,
    /** PoloRank: navigate to the previous / next keyword of the current view without closing the panel */
    onPrev?: () => void,
    onNext?: () => void,
@@ -28,7 +32,9 @@ const RANGES = [
    { label: 'Todo', value: 'all' },
 ];
 
-const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetailsProps) => {
+const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext, domain, settings }:KeywordDetailsProps) => {
+   const effectiveScrape = resolveScrapeStrategy(settings || { scraper_type: '' } as SettingsType, domain, keyword.scrapeSettings);
+   const scrapeSourceLabel = { keyword: ' (propia)', domain: ' (del dominio)', global: ' (global)' }[effectiveScrape.source];
    const updatedDate = new Date(keyword.lastUpdated);
    const [range, setRange] = useState<string>('180');
    const searchResultContainer = useRef<HTMLDivElement>(null);
@@ -111,6 +117,10 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext }:KeywordDetails
                      {keyword.device === 'mobile' ? 'Mobile' : 'Desktop'} · {keyword.domain}
                      {' · '}agregada el {dayjs(keyword.added).format('DD-MMM-YYYY')}
                      {' · '}{daysTracked} día{daysTracked === 1 ? '' : 's'} con datos
+                     {' · '}<span title='Estrategia de páginas que se usa para esta keyword'>
+                        profundidad: {describeScrape(effectiveScrape)}
+                        {scrapeSourceLabel}
+                     </span>
                      {keyword.url && (
                         <>
                            {' · '}URL actual:{' '}

@@ -134,6 +134,29 @@ export function useUpdateKeywordTags(onSuccess:Function) {
    });
 }
 
+/** PoloRank: set (or clear with null) the scrape depth override of one or more keywords. */
+export function useUpdateKeywordScrape(onSuccess:Function) {
+   const queryClient = useQueryClient();
+   return useMutation(async ({ ids, scrape }:{ ids: number[], scrape: import('../utils/depth').KeywordScrapeSettings | null }) => {
+      const headers = new Headers({ 'Content-Type': 'application/json', Accept: 'application/json' });
+      const fetchOpts = { method: 'PUT', headers, body: JSON.stringify({ scrape }) };
+      const res = await fetch(`${window.location.origin}/api/keywords?id=${ids.join(',')}`, fetchOpts);
+      if (res.status >= 400 && res.status < 600) {
+         throw new Error('Bad response from server');
+      }
+      return res.json();
+   }, {
+      onSuccess: async () => {
+         onSuccess();
+         toast('Profundidad de búsqueda actualizada', { icon: '✔️' });
+         queryClient.invalidateQueries(['keywords']);
+      },
+      onError: () => {
+         toast('No se pudo guardar la profundidad de búsqueda.', { icon: '⚠️' });
+      },
+   });
+}
+
 export function useRefreshKeywords(onSuccess:Function) {
    const queryClient = useQueryClient();
    return useMutation(async ({ ids = [], domain = '' } : {ids?: number[], domain?: string}) => {

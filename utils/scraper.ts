@@ -4,7 +4,7 @@ import { readFile, writeFile } from 'fs/promises';
 import HttpsProxyAgent from 'https-proxy-agent';
 import countries from './countries';
 import allScrapers from '../scrapers/index';
-import { strategyToDepth } from './depth';
+import { parseKeywordScrape, resolveScrapeStrategy, strategyToDepth } from './depth';
 
 type SearchResult = {
    title: string,
@@ -225,28 +225,16 @@ const buildFullResults = (scrapedResults: SearchResult[], totalPositions: number
 };
 
 /**
- * Resolve effective scrape strategy from domain-level overrides or global settings.
+ * Effective scrape strategy: keyword override → domain override → global (PoloRank; see utils/depth.ts).
  */
 const resolveStrategy = (
    settings: SettingsType,
    domainSettings?: Partial<DomainType>,
+   keyword?: KeywordType,
 ): { strategy: ScrapeStrategy, paginationLimit: number, smartFullFallback: boolean } => {
-   const domainStrategy = domainSettings?.scrape_strategy;
-
-   // If no domain-level strategy override is set, use global settings for everything.
-   if (!domainStrategy) {
-      return {
-         strategy: (settings.scrape_strategy || 'basic') as ScrapeStrategy,
-         paginationLimit: settings.scrape_pagination_limit || 5,
-         smartFullFallback: settings.scrape_smart_full_fallback || false,
-      };
-   }
-
-   // Domain override is active — use domain values, fall back to global for unset fields.
-   const strategy: ScrapeStrategy = domainStrategy as ScrapeStrategy;
-   const paginationLimit: number = domainSettings?.scrape_pagination_limit || settings.scrape_pagination_limit || 5;
-   const smartFullFallback: boolean = domainSettings?.scrape_smart_full_fallback || settings.scrape_smart_full_fallback || false;
-   return { strategy, paginationLimit, smartFullFallback };
+   const keywordScrape = keyword ? (keyword.scrapeSettings || parseKeywordScrape((keyword as any).settings)) : null;
+   const r = resolveScrapeStrategy(settings, domainSettings, keywordScrape);
+   return { strategy: r.strategy, paginationLimit: r.paginationLimit, smartFullFallback: r.smartFullFallback };
 };
 
 /**
@@ -279,7 +267,7 @@ export const scrapeKeywordWithStrategy = async (
       return scrapeKeywordFromGoogle(keyword, settings, domainSettings?.subdomain_matching);
    }
 
-   const { strategy, paginationLimit, smartFullFallback } = resolveStrategy(settings, domainSettings);
+   const { strategy, paginationLimit, smartFullFallback } = resolveStrategy(settings, domainSettings, keyword);
    const subdomainMatching = domainSettings?.subdomain_matching || '';
 
    // PoloRank: depth-based scrapers (DataForSEO) fetch the whole depth in ONE request, still honoring the strategy

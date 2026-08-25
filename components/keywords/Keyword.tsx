@@ -9,6 +9,7 @@ import PositionChange from './PositionChange';
 import SerpFeatures from './SerpFeatures';
 import { formattedNum } from '../../utils/client/helpers';
 import { chartSeries, historyPoints } from '../../utils/history';
+import { describeScrape } from '../../utils/depth';
 import timeAgoFormatter from '../../utils/client/timeago';
 import type { KeywordChange } from '../../utils/history';
 
@@ -24,6 +25,8 @@ type KeywordProps = {
    selectKeyword: Function,
    manageTags: Function,
    showKeywordDetails: Function,
+   /** PoloRank: open the per-keyword scrape depth dialog */
+   manageScrape?: Function,
    lastItem?:boolean,
    showSCData: boolean,
    scDataType: string,
@@ -62,6 +65,7 @@ const Keyword = (props: KeywordProps) => {
       selected,
       showKeywordDetails,
       manageTags,
+      manageScrape,
       lastItem,
       showSCData = true,
       style,
@@ -72,7 +76,7 @@ const Keyword = (props: KeywordProps) => {
    } = props;
    const {
       keyword, domain, ID, city, position, url = '', lastUpdated, country, sticky, history = {}, updating = false, lastUpdateError = false, volume,
-      tags = [], serpFeatures = [], lastDepth = 0, stats,
+      tags = [], serpFeatures = [], lastDepth = 0, stats, scrapeSettings = null,
    } = keywordData;
 
    const [showOptions, setShowOptions] = useState(false);
@@ -130,6 +134,17 @@ const Keyword = (props: KeywordProps) => {
                   {keyword}{city ? ` (${city})` : ''}
                </span>
                {sticky && <span className='ml-2 shrink-0' title='Favorita'><Icon type="star-filled" size={14} color="#fbd346" /></span>}
+               {scrapeSettings && (
+                  <span
+                  className='keyword_scrape ml-2 shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 not-italic'
+                  title='Profundidad de búsqueda propia (no hereda del dominio)'>
+                     🔍 {describeScrape({
+                        strategy: scrapeSettings.scrape_strategy,
+                        paginationLimit: scrapeSettings.scrape_pagination_limit || 0,
+                        smartFullFallback: !!scrapeSettings.scrape_smart_full_fallback,
+                     })}
+                  </span>
+               )}
                {lastUpdateError && lastUpdateError.date && (
                   <button className='ml-2 shrink-0' onClick={(e) => { e.stopPropagation(); setPositionError(true); }} title='Error al actualizar'>
                      <Icon type="error" size={16} color="#FF3672" />
@@ -227,6 +242,9 @@ const Keyword = (props: KeywordProps) => {
                   </li>}
                   {canManage && <li><a className={optionsButtonStyle} onClick={() => { manageTags(); setShowOptions(false); }}>
                      <span className=' bg-green-100 text-green-500 px-1 rounded'><Icon type="tags" size={14} /></span> Editar etiquetas</a>
+                  </li>}
+                  {canManage && manageScrape && <li><a className={optionsButtonStyle} onClick={() => { manageScrape(); setShowOptions(false); }}>
+                     <span className=' bg-slate-100 text-slate-500 px-1 rounded'><Icon type="search" size={14} /></span> Profundidad de búsqueda</a>
                   </li>}
                   {canManage && <li><a className={optionsButtonStyle} onClick={() => { removeKeyword([ID]); setShowOptions(false); }}>
                      <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Quitar keyword</a>

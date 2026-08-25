@@ -55,6 +55,8 @@ type KeywordType = {
    lastDepth?: number,
    /** PoloRank: precomputed stats (best, changes 7/30/60/90, results received) — see utils/history.ts */
    stats?: import('./utils/history').KeywordStats,
+   /** PoloRank: per-keyword scrape override (null = inherits from domain/global) — see utils/depth.ts */
+   scrapeSettings?: import('./utils/depth').KeywordScrapeSettings | null,
 }
 
 type KeywordLastResult = {

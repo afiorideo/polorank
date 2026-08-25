@@ -1,4 +1,5 @@
 import Keyword from '../database/models/keyword';
+import { parseKeywordScrape } from './depth';
 
 /** PoloRank: serp_features is a JSON string list; tolerate legacy rows without the column. */
 const parseFeatures = (raw: string | undefined | null): string[] => {
@@ -25,6 +26,7 @@ const parseKeywords = (allKeywords: Keyword[]) : KeywordType[] => {
          lastUpdateError: keywrd.lastUpdateError !== 'false' && keywrd.lastUpdateError.includes('{') ? JSON.parse(keywrd.lastUpdateError) : false,
          serpFeatures: parseFeatures(keywrd.serp_features),
          lastDepth: Number.isFinite(keywrd.last_depth) ? keywrd.last_depth : 0,
+         scrapeSettings: parseKeywordScrape(keywrd.settings),
       }));
    return parsedItems;
 };
