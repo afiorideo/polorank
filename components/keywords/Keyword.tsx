@@ -10,6 +10,7 @@ import SerpFeatures from './SerpFeatures';
 import { formattedNum } from '../../utils/client/helpers';
 import { chartSeries, historyPoints } from '../../utils/history';
 import { describeScrape } from '../../utils/depth';
+import { ranksOtherPage, targetPath } from '../../utils/targetUrl';
 import timeAgoFormatter from '../../utils/client/timeago';
 import type { KeywordChange } from '../../utils/history';
 
@@ -27,6 +28,10 @@ type KeywordProps = {
    showKeywordDetails: Function,
    /** PoloRank: open the per-keyword scrape depth dialog */
    manageScrape?: Function,
+   /** PoloRank: open the "URL objetivo" dialog */
+   manageTarget?: Function,
+   /** PoloRank: render the "Landing" column (the table enables it when any keyword of the view has a target URL) */
+   showLanding?: boolean,
    lastItem?:boolean,
    showSCData: boolean,
    scDataType: string,
@@ -66,6 +71,8 @@ const Keyword = (props: KeywordProps) => {
       showKeywordDetails,
       manageTags,
       manageScrape,
+      manageTarget,
+      showLanding = false,
       lastItem,
       showSCData = true,
       style,
@@ -77,7 +84,9 @@ const Keyword = (props: KeywordProps) => {
    const {
       keyword, domain, ID, city, position, url = '', lastUpdated, country, sticky, history = {}, updating = false, lastUpdateError = false, volume,
       tags = [], serpFeatures = [], lastDepth = 0, stats, scrapeSettings = null,
+      targetUrl = null, targetPosition = 0, targetStats,
    } = keywordData;
+   const otherPage = ranksOtherPage(targetUrl, url, position);
 
    const [showOptions, setShowOptions] = useState(false);
    const [showPositionError, setPositionError] = useState(false);
@@ -95,6 +104,11 @@ const Keyword = (props: KeywordProps) => {
    }, [stats, compareDays, history, position]);
 
    const bestPosition = stats?.best || null;
+   const targetChange: KeywordChange | undefined = useMemo(() => {
+      if (!targetUrl || !targetStats?.changes) { return undefined; }
+      const key = `d${compareDays}` as 'd7' | 'd30' | 'd60' | 'd90';
+      return targetStats.changes[key];
+   }, [targetUrl, targetStats, compareDays]);
    const show = (col: string) => tableColumns.includes(col);
    const cell = 'hidden lg:block text-center shrink-0';
    const optionsButtonStyle = 'block px-2 py-2 cursor-pointer hover:bg-indigo-50 hover:text-blue-700';
@@ -152,6 +166,11 @@ const Keyword = (props: KeywordProps) => {
                )}
             </a>
             <div className='keyword_meta text-[11px] font-normal text-gray-400 mt-0.5 whitespace-nowrap overflow-hidden text-ellipsis'>
+               {targetUrl && (
+                  <span className='keyword_target mr-2 text-indigo-400' title={`URL objetivo: ${targetUrl}`}>
+                     🎯 {targetPath(targetUrl, domain)}
+                  </span>
+               )}
                {tags.length > 0 && <span className='mr-2 text-indigo-400'>{tags.join(' · ')}</span>}
                <span title={dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')}>
                   actualizado <TimeAgo date={lastUpdated} formatter={timeAgoFormatter} title={dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')} />
@@ -190,11 +209,32 @@ const Keyword = (props: KeywordProps) => {
          <div className='keyword_url mt-2 pl-7 lg:pl-0 lg:mt-0 lg:flex-1 lg:min-w-[110px] text-gray-400 text-xs overflow-hidden text-ellipsis
          whitespace-nowrap'>
             {url ? (
-               <a href={url} target="_blank" rel="noreferrer" className='hover:text-indigo-600' title={url}>
-                  <span className='mr-1 lg:hidden'><Icon type="link-alt" size={12} color='currentColor' /></span>{turncatedURL || '/'}
+               <a href={url} target="_blank" rel="noreferrer" className={`hover:text-indigo-600 ${otherPage ? 'text-amber-600' : ''}`} title={url}>
+                  <span className='mr-1 lg:hidden'><Icon type="link-alt" size={12} color='currentColor' /></span>
+                  {otherPage && <span className='keyword_other_page mr-1' title='Rankea con una página distinta de la URL objetivo'>⚠</span>}
+                  {turncatedURL || '/'}
                </a>
             ) : <span>—</span>}
          </div>
+
+         {/* Landing (URL objetivo) */}
+         {showLanding && (
+            <div
+            className={`${cell} keyword_landing basis-[84px]`}
+            title={targetUrl ? `Posición de ${targetPath(targetUrl, domain)}` : 'Sin URL objetivo'}>
+               {targetUrl ? (
+                  <>
+                     <KeywordPosition
+                     position={targetPosition}
+                     updating={updating}
+                     badge
+                     lastDepth={lastDepth}
+                     resultsReceived={stats?.resultsReceived} />
+                     {!updating && targetChange && <PositionChange change={targetChange} arrow className='ml-1 text-xs' />}
+                  </>
+               ) : <span className='text-gray-300'>—</span>}
+            </div>
+         )}
 
          {/* Mejor */}
          {show('Best') && (
@@ -245,6 +285,9 @@ const Keyword = (props: KeywordProps) => {
                   </li>}
                   {canManage && manageScrape && <li><a className={optionsButtonStyle} onClick={() => { manageScrape(); setShowOptions(false); }}>
                      <span className=' bg-slate-100 text-slate-500 px-1 rounded'><Icon type="search" size={14} /></span> Profundidad de búsqueda</a>
+                  </li>}
+                  {canManage && manageTarget && <li><a className={optionsButtonStyle} onClick={() => { manageTarget(); setShowOptions(false); }}>
+                     <span className=' bg-indigo-100 text-indigo-600 px-1 rounded not-italic text-xs'>🎯</span> URL objetivo</a>
                   </li>}
                   {canManage && <li><a className={optionsButtonStyle} onClick={() => { removeKeyword([ID]); setShowOptions(false); }}>
                      <span className=' bg-red-100 text-red-600 px-1 rounded'><Icon type="trash" size={14} /></span> Quitar keyword</a>

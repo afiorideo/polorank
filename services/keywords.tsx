@@ -157,6 +157,30 @@ export function useUpdateKeywordScrape(onSuccess:Function) {
    });
 }
 
+/** PoloRank: set (string) or clear (null) the "URL objetivo" of one or several keywords. */
+export function useUpdateKeywordTarget(onSuccess:Function) {
+   const queryClient = useQueryClient();
+   return useMutation(async ({ ids, targetUrl }:{ ids: number[], targetUrl: string | null }) => {
+      const headers = new Headers({ 'Content-Type': 'application/json', Accept: 'application/json' });
+      const fetchOpts = { method: 'PUT', headers, body: JSON.stringify({ targetUrl }) };
+      const res = await fetch(`${window.location.origin}/api/keywords?id=${ids.join(',')}`, fetchOpts);
+      const data = await res.json();
+      if (res.status >= 400 && res.status < 600) {
+         throw new Error(data?.error || 'Bad response from server');
+      }
+      return data;
+   }, {
+      onSuccess: async () => {
+         onSuccess();
+         toast('URL objetivo actualizada', { icon: '✔️' });
+         queryClient.invalidateQueries(['keywords']);
+      },
+      onError: (error: Error) => {
+         toast(error?.message || 'No se pudo guardar la URL objetivo.', { icon: '⚠️' });
+      },
+   });
+}
+
 export function useRefreshKeywords(onSuccess:Function) {
    const queryClient = useQueryClient();
    return useMutation(async ({ ids = [], domain = '' } : {ids?: number[], domain?: string}) => {

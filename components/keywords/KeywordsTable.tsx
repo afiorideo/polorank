@@ -12,6 +12,7 @@ import { useDeleteKeywords, useFavKeywords, useRefreshKeywords } from '../../ser
 import KeywordTagManager from './KeywordTagManager';
 import AddTags from './AddTags';
 import KeywordScrapeSettings from './KeywordScrapeSettings';
+import KeywordTargetUrl from './KeywordTargetUrl';
 import useWindowResize from '../../hooks/useWindowResize';
 import useIsMobile from '../../hooks/useIsMobile';
 import { useUpdateSettings } from '../../services/settings';
@@ -58,6 +59,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
    const [showTagManager, setShowTagManager] = useState<null|number>(null);
    const [showAddTags, setShowAddTags] = useState<boolean>(false);
    const [scrapeTargets, setScrapeTargets] = useState<number[] | null>(null);
+   const [targetKeyword, setTargetKeyword] = useState<number | null>(null);
    const [SCListHeight, setSCListHeight] = useState(500);
    const [filterParams, setFilterParams] = useState<KeywordFilters>({
       countries: [], tags: [], search: '', trend: 'all', top: 'all', compare: 30, ...filtersFromQuery(router?.query || {}),
@@ -117,7 +119,9 @@ const KeywordsTable = (props: KeywordsTableProps) => {
       return keywordsByDevice(sortedKeywords, device);
    }, [keywords, device, sortBy, filterParams, scDataType, compareDays]);
 
-   const visibleKeywords = processedKeywords[device] || [];
+   const visibleKeywords = useMemo(() => processedKeywords[device] || [], [processedKeywords, device]);
+   // PoloRank: the "Landing" column appears only when some keyword of the view has a URL objetivo
+   const showLanding = useMemo(() => visibleKeywords.some((k) => !!k.targetUrl), [visibleKeywords]);
 
    const allDomainTags: string[] = useMemo(() => {
       const allTags = keywords.reduce((acc: string[], keyword) => [...acc, ...keyword.tags], []).filter((t) => t && t.trim() !== '');
@@ -168,6 +172,8 @@ const KeywordsTable = (props: KeywordsTableProps) => {
          favoriteKeyword={favoriteMutate}
          manageTags={() => setShowTagManager(keyword.ID)}
          manageScrape={() => setScrapeTargets([keyword.ID])}
+         manageTarget={() => setTargetKeyword(keyword.ID)}
+         showLanding={showLanding}
          removeKeyword={() => { setSelectedKeywords([keyword.ID]); setShowRemoveModal(true); }}
          showKeywordDetails={() => setShowKeyDetails(keyword)}
          lastItem={index === (visibleKeywords.length - 1)}
@@ -292,6 +298,12 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                         </span>
                      )}
                      <span className='domKeywords_head_url flex-1 min-w-[110px]'>URL posicionada</span>
+                     {showLanding && (
+                        <span className='domKeywords_head_landing basis-[84px] shrink-0 text-center'
+                        title='Posición de la URL objetivo de cada keyword (solo keywords con URL objetivo)'>
+                           Landing
+                        </span>
+                     )}
                      {show('Best') && (
                         <span
                            className={`domKeywords_head_best basis-[52px] text-center ${th}`}
@@ -396,6 +408,12 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                domain={props.domain}
                settings={settings}
                closeModal={() => { setScrapeTargets(null); setSelectedKeywords([]); }}
+               />
+         )}
+         {targetKeyword && keywords.find((k) => k.ID === targetKeyword) && (
+            <KeywordTargetUrl
+               keyword={keywords.find((k) => k.ID === targetKeyword) as KeywordType}
+               closeModal={() => setTargetKeyword(null)}
                />
          )}
          {showTagManager && (

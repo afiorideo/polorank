@@ -20,6 +20,7 @@ type KeywordsInput = {
    domain: string,
    tags: string,
    city?:string,
+   targetUrl?: string,
 }
 
 const AddKeywords = ({ closeModal, domain, keywords, scraperName = '', allowsCity = false }: AddKeywordsProps) => {
@@ -72,6 +73,7 @@ const AddKeywords = ({ closeModal, domain, keywords, scraperName = '', allowsCit
                  domain: nkwrds.domain,
                  tags: nkwrds.tags,
                  city: nkwrds.city,
+                 targetUrl: nkwrds.targetUrl ? nkwrds.targetUrl.trim() : undefined,
                })),
              );
             addMutate(newKeywords);
@@ -172,6 +174,16 @@ const AddKeywords = ({ closeModal, domain, keywords, scraperName = '', allowsCit
                      onChange={(e) => setNewKeywordsData({ ...newKeywordsData, city: e.target.value })}
                   />
                   <span className='absolute text-gray-400 top-2 left-2'><Icon type="city" size={16} /></span>
+               </div>
+               <div className='relative mt-2'>
+                  <input
+                     className='w-full border rounded border-gray-200 py-2 px-4 pl-8 outline-none focus:border-indigo-300'
+                     placeholder='URL objetivo (opcional): /ruta-de-la-landing/'
+                     title='La página que debería posicionar para estas keywords. Se aplica a todas las keywords de esta carga.'
+                     value={newKeywordsData.targetUrl || ''}
+                     onChange={(e) => setNewKeywordsData({ ...newKeywordsData, targetUrl: e.target.value })}
+                  />
+                  <span className='absolute text-gray-400 top-2 left-2 text-sm'>🎯</span>
                </div>
             </div>
             {error && <div className='w-full mt-4 p-3 text-sm bg-red-50 text-red-700'>{error}</div>}

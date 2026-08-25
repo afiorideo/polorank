@@ -57,6 +57,14 @@ type KeywordType = {
    stats?: import('./utils/history').KeywordStats,
    /** PoloRank: per-keyword scrape override (null = inherits from domain/global) — see utils/depth.ts */
    scrapeSettings?: import('./utils/depth').KeywordScrapeSettings | null,
+   /** PoloRank: optional landing that should rank for this keyword (null = feature off for this keyword) */
+   targetUrl?: string | null,
+   /** PoloRank: position of targetUrl in the last SERP (0 = not found) */
+   targetPosition?: number,
+   /** PoloRank: daily history of targetPosition */
+   targetHistory?: KeywordHistory,
+   /** PoloRank: stats of the target landing (same shape as `stats`) */
+   targetStats?: import('./utils/history').KeywordStats,
 }
 
 type KeywordLastResult = {
@@ -161,7 +169,9 @@ type KeywordAddPayload = {
    country: string,
    domain: string,
    tags?: string,
-   city?:string
+   city?:string,
+   /** PoloRank: optional target landing (full URL or path) */
+   targetUrl?: string,
 }
 
 type SearchAnalyticsRawItem = {

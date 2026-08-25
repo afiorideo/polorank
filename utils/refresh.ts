@@ -4,6 +4,7 @@ import { RefreshResult, removeFromRetryQueue, retryScrape, scrapeKeywordWithStra
 import parseKeywords from './parseKeywords';
 import Keyword from '../database/models/keyword';
 import { logUsage } from './usage';
+import { findTargetPosition } from './targetUrl';
 
 /**
  * Refreshes the Keywords position by Scraping Google Search Result by
@@ -102,9 +103,19 @@ export const updateKeywordPosition = async (
          const depthMeta = typeof updatedKeyword.depth === 'number'
             ? { serpFeatures: updatedKeyword.serpFeatures || [], lastDepth: updatedKeyword.depth }
             : {};
+         // PoloRank: "URL objetivo" — same SERP, second lookup (only when the keyword has a target and the scrape succeeded)
+         const targetMeta: { targetPosition?: number, targetHistory?: KeywordHistory } = {};
+         if (keyword.targetUrl && !updatedKeyword.error) {
+            const targetHistory: KeywordHistory = { ...(keyword.targetHistory || {}) };
+            const targetPos = findTargetPosition(keyword.targetUrl, updatedKeyword.result);
+            targetHistory[dateKey] = targetPos;
+            targetMeta.targetPosition = targetPos;
+            targetMeta.targetHistory = targetHistory;
+         }
          const updatedVal = {
             position: newPos,
             ...depthMeta,
+            ...targetMeta,
             updating: false,
             url: updatedKeyword.url,
             lastResult: updatedKeyword.result,
@@ -124,10 +135,13 @@ export const updateKeywordPosition = async (
 
          // Update the Keyword Position in Database
          try {
-            const { serpFeatures, lastDepth, ...dbVal } = updatedVal as typeof updatedVal & { serpFeatures?: string[], lastDepth?: number };
+            type ExtraVal = { serpFeatures?: string[], lastDepth?: number, targetPosition?: number, targetHistory?: KeywordHistory };
+            const { serpFeatures, lastDepth, targetPosition, targetHistory, ...dbVal } = updatedVal as typeof updatedVal & ExtraVal;
             await keywordRaw.update({
                ...dbVal,
                ...(typeof lastDepth === 'number' ? { serp_features: JSON.stringify(serpFeatures || []), last_depth: lastDepth } : {}),
+               ...(typeof targetPosition === 'number'
+                  ? { target_position: targetPosition, target_history: JSON.stringify(targetHistory || {}) } : {}),
                lastResult: Array.isArray(updatedKeyword.result) ? JSON.stringify(updatedKeyword.result) : updatedKeyword.result,
                history: JSON.stringify(history),
             });

@@ -17,6 +17,16 @@ const parseFeatures = (raw: string | undefined | null): string[] => {
  * @param {Keyword[]} allKeywords - Keywords to scrape
  * @returns {KeywordType[]}
  */
+const parseHistory = (raw: string | undefined | null): KeywordHistory => {
+   if (!raw) { return {}; }
+   try {
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+   } catch (error) {
+      return {};
+   }
+};
+
 const parseKeywords = (allKeywords: Keyword[]) : KeywordType[] => {
    const parsedItems = allKeywords.map((keywrd:Keyword) => ({
          ...keywrd,
@@ -27,6 +37,9 @@ const parseKeywords = (allKeywords: Keyword[]) : KeywordType[] => {
          serpFeatures: parseFeatures(keywrd.serp_features),
          lastDepth: Number.isFinite(keywrd.last_depth) ? keywrd.last_depth : 0,
          scrapeSettings: parseKeywordScrape(keywrd.settings),
+         targetUrl: keywrd.target_url || null,
+         targetPosition: Number.isFinite(keywrd.target_position) ? keywrd.target_position : 0,
+         targetHistory: parseHistory(keywrd.target_history),
       }));
    return parsedItems;
 };

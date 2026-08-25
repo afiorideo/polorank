@@ -80,4 +80,36 @@ describe('Keyword Component (PoloRank tracking row)', () => {
       expect(screen.queryByText('Quitar keyword')).not.toBeInTheDocument();
       expect(screen.getByText('Ver historial')).toBeInTheDocument();
    });
+
+   it('PoloRank: muestra la URL objetivo, la columna Landing y el aviso cuando rankea otra página', async () => {
+      const withTarget = {
+         ...dummyKeywords[0],
+         domain: 'compressimage.io',
+         url: 'https://compressimage.io/',
+         position: 2,
+         targetUrl: 'https://compressimage.io/compress-jpg/',
+         targetPosition: 14,
+         targetStats: {
+            best: null,
+            resultsReceived: 50,
+            historyDays: 2,
+            changes: {
+               d7: { change: 1, position: 15 },
+               d30: { change: 1, position: 15 },
+               d60: { change: null, position: null },
+               d90: { change: null, position: null },
+            },
+         },
+      } as unknown as KeywordType;
+      render(<Keyword {...keywordProps} keywordData={withTarget} showLanding />);
+      expect(document.querySelector('.keyword_target')?.textContent).toContain('/compress-jpg');
+      expect(document.querySelector('.keyword_landing span')?.textContent).toBe('14');
+      expect(document.querySelector('.keyword_other_page')).toBeInTheDocument();
+   });
+   it('PoloRank: sin URL objetivo no hay columna Landing ni aviso (comportamiento SerpBear)', async () => {
+      render(<Keyword {...keywordProps} />);
+      expect(document.querySelector('.keyword_target')).toBeNull();
+      expect(document.querySelector('.keyword_landing')).toBeNull();
+      expect(document.querySelector('.keyword_other_page')).toBeNull();
+   });
 });

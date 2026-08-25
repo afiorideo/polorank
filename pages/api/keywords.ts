@@ -9,6 +9,7 @@ import { canAccessDomain, canManageKeywords } from '../../utils/auth/guards';
 import parseKeywords from '../../utils/parseKeywords';
 import { sliceHistory, summarizeHistory } from '../../utils/history';
 import { parseKeywordScrape, serializeKeywordScrape } from '../../utils/depth';
+import { findTargetPosition, toTargetUrl } from '../../utils/targetUrl';
 import { integrateKeywordSCData, readLocalSCData } from '../../utils/searchConsole';
 import refreshAndUpdateKeywords from '../../utils/refresh';
 import { getKeywordsVolume, updateKeywordsVolumeData } from '../../utils/adwords';
@@ -74,7 +75,16 @@ const getKeywords = async (req: NextApiRequest, res: NextApiResponse<KeywordsGet
       const processedKeywords = keywords.map((keyword) => {
          // PoloRank: the list carries 30 days of history (sparkline) + precomputed stats (best, 7/30/60/90 changes, results received)
          const stats = summarizeHistory(keyword.history, keyword.position, keyword.lastResult);
-         const keywordWithSlimHistory = { ...keyword, lastResult: [], history: sliceHistory(keyword.history, 30), stats };
+         // PoloRank: same stats for the "URL objetivo" when the keyword has one
+         const targetStats = keyword.targetUrl ? summarizeHistory(keyword.targetHistory, keyword.targetPosition || 0, keyword.lastResult) : undefined;
+         const keywordWithSlimHistory = {
+            ...keyword,
+            lastResult: [],
+            history: sliceHistory(keyword.history, 30),
+            stats,
+            targetHistory: sliceHistory(keyword.targetHistory, 30),
+            targetStats,
+         };
          const finalKeyword = domainSCData ? integrateKeywordSCData(keywordWithSlimHistory, domainSCData) : keywordWithSlimHistory;
          return finalKeyword;
       });
@@ -92,8 +102,9 @@ const addKeywords = async (req: NextApiRequest, res: NextApiResponse<KeywordsGet
       const keywordsToAdd: any = []; // QuickFIX for bug: https://github.com/sequelize/sequelize-typescript/issues/936
 
       keywords.forEach((kwrd: KeywordAddPayload) => {
-         const { keyword, device, country, domain, tags, city } = kwrd;
+         const { keyword, device, country, domain, tags, city, targetUrl } = kwrd;
          const tagsArray = tags ? tags.split(',').map((item:string) => item.trim()) : [];
+         const target = targetUrl ? toTargetUrl(targetUrl, domain) : null;
          const newKeyword = {
             keyword,
             device,
@@ -105,6 +116,7 @@ const addKeywords = async (req: NextApiRequest, res: NextApiResponse<KeywordsGet
             history: JSON.stringify({}),
             url: '',
             tags: JSON.stringify(tagsArray),
+            target_url: target,
             sticky: false,
             lastUpdated: new Date().toJSON(),
             added: new Date().toJSON(),
@@ -169,14 +181,36 @@ const updateKeywords = async (req: NextApiRequest, res: NextApiResponse<Keywords
    if (!req.query.id && typeof req.query.id !== 'string') {
       return res.status(400).json({ error: 'keyword ID is Required!' });
    }
-   if (req.body.sticky === undefined && !req.body.tags === undefined && req.body.scrape === undefined) {
+   if (req.body.sticky === undefined && !req.body.tags === undefined && req.body.scrape === undefined && req.body.targetUrl === undefined) {
       return res.status(400).json({ error: 'keyword Payload Missing!' });
    }
    const keywordIDs = (req.query.id as string).split(',').map((item) => parseInt(item, 10));
-   const { sticky, tags, scrape } = req.body;
+   const { sticky, tags, scrape, targetUrl } = req.body;
 
    try {
       let keywords: KeywordType[] = [];
+      // PoloRank: "URL objetivo". `targetUrl: null` (or '') clears it; a string must be a page of the keyword's domain.
+      if (targetUrl !== undefined) {
+         const targets: Keyword[] = await Keyword.findAll({ where: { ID: { [Op.in]: keywordIDs } } });
+         const wantsClear = targetUrl === null || String(targetUrl).trim() === '';
+         for (const kw of targets) {
+            const resolved = wantsClear ? null : toTargetUrl(String(targetUrl), kw.domain);
+            if (!wantsClear && !resolved) {
+               return res.status(400).json({ error: `La URL objetivo debe ser una página de ${kw.domain} (URL completa o ruta que empiece con /).` });
+            }
+            // Recalculate against the last SERP so the value is useful immediately (no extra API call)
+            const lastResult: KeywordLastResult[] = kw.lastResult && kw.lastResult.includes('[') ? JSON.parse(kw.lastResult) : [];
+            const targetPosition = resolved ? findTargetPosition(resolved, lastResult) : 0;
+            const history = resolved && kw.lastUpdated ? (() => {
+               const d = new Date(kw.lastUpdated);
+               return { [`${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`]: targetPosition };
+            })() : {};
+            await kw.update({ target_url: resolved, target_position: targetPosition, target_history: JSON.stringify(history) });
+         }
+         const refreshed: Keyword[] = await Keyword.findAll({ where: { ID: { [Op.in]: keywordIDs } } });
+         keywords = parseKeywords(refreshed.map((el) => el.get({ plain: true })));
+         return res.status(200).json({ keywords });
+      }
       // PoloRank: per-keyword scrape depth. `scrape: null` clears the override (inherit from domain/global).
       if (scrape !== undefined) {
          const parsed = scrape === null ? null : parseKeywordScrape({ scrape });

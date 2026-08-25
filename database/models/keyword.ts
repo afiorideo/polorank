@@ -78,6 +78,18 @@ class Keyword extends Model {
    /** PoloRank: number of results requested in the last scrape (depth-based scrapers) */
    @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
    last_depth!: number;
+
+   /** PoloRank: optional "URL objetivo" — the landing this keyword should rank with (null = not configured) */
+   @Column({ type: DataType.STRING, allowNull: true })
+   target_url!: string | null;
+
+   /** PoloRank: position of target_url in the last SERP (0 = not found / no target) */
+   @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
+   target_position!: number;
+
+   /** PoloRank: daily history of target_position (JSON {date: position}) */
+   @Column({ type: DataType.STRING, allowNull: true, defaultValue: '{}' })
+   target_history!: string;
 }
 
 export default Keyword;

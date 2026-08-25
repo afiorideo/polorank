@@ -10,6 +10,7 @@ import { useFetchSingleKeyword } from '../../services/keywords';
 import useOnKey from '../../hooks/useOnKey';
 import { averagePosition, bestPosition, chartSeries, historyPoints, monthlySummary, rangeChange, resultsReceived } from '../../utils/history';
 import { describeScrape, resolveScrapeStrategy } from '../../utils/depth';
+import { ranksOtherPage, sameUrl, targetPath } from '../../utils/targetUrl';
 
 type KeywordDetailsProps = {
    keyword: KeywordType,
@@ -69,6 +70,10 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext, domain, setting
    const months = useMemo(() => monthlySummary(keywordHistory), [keywordHistory]);
    const received = useMemo(() => resultsReceived(keywordSearchResult), [keywordSearchResult]);
    const daysTracked = historyPoints(keywordHistory).length;
+   // PoloRank: URL objetivo
+   const targetUrl = keyword.targetUrl || null;
+   const targetPos = keyword.targetPosition || 0;
+   const otherPage = ranksOtherPage(targetUrl, keyword.url, keyword.position);
 
    // SERP result segments (consecutive skipped positions grouped)
    const { skippedCount, resultSegments } = useMemo(() => {
@@ -130,6 +135,19 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext, domain, setting
                         </>
                      )}
                   </p>
+                  {targetUrl && (
+                     <p className='text-xs mt-1 flex items-center gap-2 flex-wrap' data-testid='target_summary'>
+                        <span className='text-gray-400'>🎯 URL objetivo:</span>
+                        <a className='text-indigo-500 hover:underline' href={targetUrl} target='_blank' rel='noreferrer'>
+                           {targetPath(targetUrl, keyword.domain)}
+                        </a>
+                        <KeywordPosition position={targetPos} badge lastDepth={keyword.lastDepth} resultsReceived={received} />
+                        {otherPage && <span className='text-amber-600'>⚠ hoy rankea otra página del dominio</span>}
+                        {!otherPage && keyword.position > 0 && sameUrl(targetUrl, keyword.url) && (
+                           <span className='text-emerald-600'>✓ rankea con la landing correcta</span>
+                        )}
+                     </p>
+                  )}
                   <div className='absolute top-3 right-3 flex items-center gap-1'>
                      <button className={navBtn} title='Anterior (←)' disabled={!onPrev} onClick={() => onPrev && onPrev()}>
                         <Icon type='caret-left' size={14} />
@@ -262,12 +280,16 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext, domain, setting
                            }
                            const { position } = keyword;
                            const domainExist = position > 0 && seg.item.position === position;
+                           const isTarget = !!targetUrl && sameUrl(seg.item.url, targetUrl);
                            return (
                               <div
                               ref={domainExist ? searchResultFound : null}
                               className={`leading-5 mb-2 p-2 text-sm break-all rounded bg-surface border
-                              ${domainExist ? 'border-amber-300 bg-amber-50' : 'border-slate-100'}`}
+                              ${domainExist ? 'border-amber-300 bg-amber-50' : 'border-slate-100'} ${isTarget ? 'ring-1 ring-indigo-300' : ''}`}
                               key={seg.item.url + seg.item.position}>
+                                 {isTarget && (
+                                    <span className='text-[10px] font-semibold text-indigo-500 uppercase tracking-wide'>🎯 URL objetivo</span>
+                                 )}
                                  <h4 className='font-semibold text-blue-700 text-[13px]'>
                                     <a href={seg.item.url} target="_blank" rel='noreferrer'>{`${seg.item.position}. ${seg.item.title}`}</a>
                                  </h4>
