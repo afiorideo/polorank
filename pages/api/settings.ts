@@ -115,7 +115,7 @@ export const getAppSettings = async () : Promise<SettingsType> => {
       search_console_client_email: '',
       search_console_private_key: '',
       keywordsColumns: ['Best', 'History', 'Volume', 'Search Console'],
-      trackingColumns: ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console'],
+      trackingColumns: ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console', 'Updated'],
       scrape_strategy: 'basic',
       scrape_pagination_limit: 5,
       scrape_smart_full_fallback: false,

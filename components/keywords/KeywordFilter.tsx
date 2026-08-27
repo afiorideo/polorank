@@ -113,10 +113,11 @@ const KeywordFilters = (props: KeywordFilterProps) => {
       { value: 'URL', label: 'URL', locked: true },
       { value: 'Evol', label: 'Evolución (30 días)', locked: false },
       { value: 'Volume', label: 'Volumen', locked: false },
-      { value: 'Changes', label: '30d · 60d · 90d', locked: false },
+      { value: 'Changes', label: '7d · 30d · 60d · 90d', locked: false },
       { value: 'Snippets', label: 'Snippets', locked: false },
       { value: 'Best', label: 'Mejor', locked: false },
       { value: 'Search Console', label: 'Search Console', locked: false },
+      { value: 'Updated', label: 'Actualizado', locked: false },
    ];
    if (integratedConsole) {
       sortOptionChoices.push({ value: 'imp_desc', label: `Más impresiones${isConsole ? ' (por defecto)' : ''}` });
@@ -143,7 +144,7 @@ const KeywordFilters = (props: KeywordFilterProps) => {
 
    const trend = filterParams.trend || 'all';
    const top = filterParams.top || 'all';
-   const compare = filterParams.compare || 30;
+   const compare = filterParams.compare || 7;
 
    return (
       <div className='domKeywords_filters py-4 px-6 text-sm text-gray-500 font-semibold border-b-[1px] lg:border-0'>

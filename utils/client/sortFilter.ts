@@ -10,7 +10,7 @@ const changeOf = (k: KeywordType, compareDays: number): number => {
    return change === null || change === undefined ? -Infinity : change;
 };
 
-export const sortKeywords = (theKeywords:KeywordType[], sortBy:string, scDataType?: string, compareDays: number = 30) : KeywordType[] => {
+export const sortKeywords = (theKeywords:KeywordType[], sortBy:string, scDataType?: string, compareDays: number = 7) : KeywordType[] => {
    let sortedItems: KeywordType[] = [];
    const keywords = theKeywords.map((k) => ({ ...k, position: k.position === 0 ? 111 : k.position }));
    switch (sortBy) {
@@ -125,7 +125,7 @@ export const filterKeywords = (keywords: KeywordType[], filterParams: KeywordFil
        const tagsMatch = filterParams.tags.length === 0 ? true : filterParams.tags && keywrd.tags.find((x) => filterParams.tags.includes(x));
 
        // PoloRank: trend (vs. `compare` days ago) and top-N filters
-       const compareDays = filterParams.compare || 30;
+       const compareDays = filterParams.compare || 7;
        const changeKey = `d${compareDays}` as 'd7' | 'd30' | 'd60' | 'd90';
        const change = keywrd.stats?.changes?.[changeKey]?.change;
        const trendMatch = !filterParams.trend || filterParams.trend === 'all'

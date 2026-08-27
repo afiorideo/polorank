@@ -41,12 +41,25 @@ type KeywordProps = {
    canRefresh?: boolean,
    canManage?: boolean,
    tableColumns? : string[],
-   /** PoloRank: comparison window for the arrow next to the position (default 30 days) */
+   /** PoloRank: comparison window for the arrow next to the position (default 7 days) */
    compareDays?: CompareDays,
 }
 
 /** Column visibility keys (see KeywordFilter → columnOptionChoices). */
-export const DEFAULT_TRACKING_COLUMNS = ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console'];
+export const DEFAULT_TRACKING_COLUMNS = ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console', 'Updated'];
+
+const STALE_MS = 48 * 60 * 60 * 1000;
+
+/**
+ * Colour for the "Actualizado" cell: red when the last check failed, amber when the last successful check is older than 48 h
+ * (the scrape runs daily, so 48 h without data means the cron did not run).
+ */
+const freshnessClass = (lastUpdated: string, failed: boolean): string => {
+   if (failed) { return 'text-red-500'; }
+   const time = new Date(lastUpdated).getTime();
+   if (!Number.isFinite(time)) { return 'text-gray-400'; }
+   return Date.now() - time > STALE_MS ? 'text-amber-600' : 'text-gray-400';
+};
 
 /** Fallback when the API did not send stats: change vs. the previous data point (SerpBear's original arrow). */
 const changeVsPrevious = (history: KeywordHistory, position: number): KeywordChange => {
@@ -79,7 +92,7 @@ const Keyword = (props: KeywordProps) => {
       index,
       scDataType = 'threeDays',
       tableColumns = DEFAULT_TRACKING_COLUMNS,
-      compareDays = 30,
+      compareDays = 7,
    } = props;
    const {
       keyword, domain, ID, city, position, url = '', lastUpdated, country, sticky, history = {}, updating = false, lastUpdateError = false, volume,
@@ -172,7 +185,9 @@ const Keyword = (props: KeywordProps) => {
                   </span>
                )}
                {tags.length > 0 && <span className='mr-2 text-indigo-400'>{tags.join(' · ')}</span>}
-               <span title={dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')}>
+<span
+               className={show('Updated') ? 'lg:hidden' : ''}
+               title={dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')}>
                   actualizado <TimeAgo date={lastUpdated} formatter={timeAgoFormatter} title={dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')} />
                </span>
             </div>
@@ -191,9 +206,10 @@ const Keyword = (props: KeywordProps) => {
             {!updating && <PositionChange change={compareChange} arrow className='keyword_change ml-1 text-xs' />}
          </div>
 
-         {/* 30d · 60d · 90d */}
+         {/* 7d · 30d · 60d · 90d */}
          {show('Changes') && (
             <>
+               <div className={`${cell} keyword_d7 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d7} withPosition /></div>
                <div className={`${cell} keyword_d30 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d30} withPosition /></div>
                <div className={`${cell} keyword_d60 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d60} withPosition /></div>
                <div className={`${cell} keyword_d90 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d90} withPosition /></div>
@@ -255,6 +271,15 @@ const Keyword = (props: KeywordProps) => {
                   {keywordData?.scData?.impressions[scDataType as keyof KeywordSCDataChild] || 0}
                </span>
                <span className='min-w-[50px]' title='Clics'>{keywordData?.scData?.visits[scDataType as keyof KeywordSCDataChild] || 0}</span>
+            </div>
+         )}
+
+         {/* Actualizado */}
+         {show('Updated') && (
+            <div
+            className={`${cell} keyword_updated basis-[92px] text-xs ${freshnessClass(lastUpdated, !!(lastUpdateError && lastUpdateError.date))}`}
+            title={`Último chequeo: ${dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')}`}>
+               <TimeAgo date={lastUpdated} formatter={timeAgoFormatter} />
             </div>
          )}
 

@@ -112,4 +112,53 @@ describe('Keyword Component (PoloRank tracking row)', () => {
       expect(document.querySelector('.keyword_landing')).toBeNull();
       expect(document.querySelector('.keyword_other_page')).toBeNull();
    });
+
+   it('PoloRank: la flecha compara contra hace 7 días por defecto y la columna 7d muestra su propio cambio', async () => {
+      const withStats = {
+         ...dummyKeywords[0],
+         stats: {
+            best: { position: 3, date: '2022-11-11' },
+            changes: {
+               d7: { change: 4, position: 23 },
+               d30: { change: -2, position: 17 },
+               d60: { change: null, position: null },
+               d90: { change: null, position: null },
+            },
+            resultsReceived: 20,
+            historyDays: 5,
+         },
+      } as unknown as KeywordType;
+      render(<Keyword {...keywordProps} keywordData={withStats} />);
+      expect(document.querySelector('.keyword_change')?.textContent).toBe('▲ 4');
+      expect(document.querySelector('.keyword_d7')?.textContent).toBe('+4(23)');
+      expect(document.querySelector('.keyword_d30')?.textContent).toBe('−2(17)');
+   });
+
+   it('PoloRank: la columna Actualizado avisa en ámbar cuando el chequeo quedó viejo y en rojo cuando falló', async () => {
+      const fresh = { ...dummyKeywords[0], lastUpdated: new Date().toJSON() } as unknown as KeywordType;
+      const { unmount } = render(<Keyword {...keywordProps} keywordData={fresh} />);
+      expect(document.querySelector('.keyword_updated')).toBeInTheDocument();
+      expect(document.querySelector('.keyword_updated')?.className).toContain('text-gray-400');
+      unmount();
+
+      const threeDaysAgo = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toJSON();
+      const stale = { ...dummyKeywords[0], lastUpdated: threeDaysAgo } as unknown as KeywordType;
+      const staleRender = render(<Keyword {...keywordProps} keywordData={stale} />);
+      expect(document.querySelector('.keyword_updated')?.className).toContain('text-amber-600');
+      staleRender.unmount();
+
+      const failed = {
+         ...dummyKeywords[0],
+         lastUpdateError: { date: new Date().toJSON(), error: 'timeout', scraper: 'dataforseo' },
+      } as unknown as KeywordType;
+      render(<Keyword {...keywordProps} keywordData={failed} />);
+      expect(document.querySelector('.keyword_updated')?.className).toContain('text-red-500');
+   });
+
+   it('PoloRank: si la columna Actualizado está apagada, el dato vuelve a la línea bajo la keyword', async () => {
+      const columnas = ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console'];
+      render(<Keyword {...keywordProps} tableColumns={columnas} />);
+      expect(document.querySelector('.keyword_updated')).toBeNull();
+      expect(document.querySelector('.keyword_meta')?.textContent).toContain('actualizado');
+   });
 });

@@ -62,7 +62,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
    const [targetKeyword, setTargetKeyword] = useState<number | null>(null);
    const [SCListHeight, setSCListHeight] = useState(500);
    const [filterParams, setFilterParams] = useState<KeywordFilters>({
-      countries: [], tags: [], search: '', trend: 'all', top: 'all', compare: 30, ...filtersFromQuery(router?.query || {}),
+      countries: [], tags: [], search: '', trend: 'all', top: 'all', compare: 7, ...filtersFromQuery(router?.query || {}),
    });
    const [sortBy, setSortBy] = useState<string>('date_asc');
    const [scDataType, setScDataType] = useState<string>('threeDays');
@@ -92,7 +92,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
       Object.keys(router.query).forEach((k) => { if (!['trend', 'top', 'cmp'].includes(k)) { next[k] = String(router.query[k]); } });
       if (filterParams.trend && filterParams.trend !== 'all') { next.trend = filterParams.trend; }
       if (filterParams.top && filterParams.top !== 'all') { next.top = filterParams.top; }
-      if (filterParams.compare && filterParams.compare !== 30) { next.cmp = String(filterParams.compare); }
+      if (filterParams.compare && filterParams.compare !== 7) { next.cmp = String(filterParams.compare); }
       const current = { ...router.query } as { [k: string]: string };
       const same = Object.keys(next).length === Object.keys(current).length && Object.keys(next).every((k) => String(current[k]) === next[k]);
       if (!same) { router.replace({ pathname: router.pathname, query: next }, undefined, { shallow: true }); }
@@ -101,7 +101,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
 
    const tableColumns = settings?.trackingColumns || DEFAULT_TRACKING_COLUMNS;
    const { mutate: updateMutate } = useUpdateSettings(() => console.log(''));
-   const compareDays: CompareDays = filterParams.compare || 30;
+   const compareDays: CompareDays = filterParams.compare || 7;
 
    const scDataObject:{ [k:string] : string} = {
       threeDays: 'Últimos 3 días',
@@ -278,7 +278,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                      </span>
                      {show('Changes') && (
                         <>
-                           {[30, 60, 90].map((d) => (
+                           {[7, 30, 60, 90].map((d) => (
                               <span
                                  key={d}
                                  className={`domKeywords_head_d${d} basis-[64px] text-center ${th}`}
@@ -341,6 +341,13 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                               <span className='min-w-[50px]'>Clics</span>
                            </div>
                         </div>
+                     )}
+                     {show('Updated') && (
+                        <span
+                        className='domKeywords_head_updated basis-[92px] shrink-0 text-center'
+                        title='Cuándo se chequeó la posición por última vez'>
+                           Actualizado
+                        </span>
                      )}
                      <span className='basis-[28px] shrink-0' />
                   </div>

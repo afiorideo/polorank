@@ -35,7 +35,7 @@ export const defaultSettings: SettingsType = {
    search_console_client_email: '',
    search_console_private_key: '',
    keywordsColumns: ['Best', 'History', 'Volume', 'Search Console'],
-   trackingColumns: ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console'],
+   trackingColumns: ['Evol', 'Volume', 'Changes', 'Snippets', 'Best', 'Search Console', 'Updated'],
 };
 
 const Settings = ({ closeSettings }:SettingsProps) => {
