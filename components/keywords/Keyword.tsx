@@ -11,7 +11,7 @@ import { formattedNum } from '../../utils/client/helpers';
 import { chartSeries, historyPoints } from '../../utils/history';
 import { describeScrape } from '../../utils/depth';
 import { ranksOtherPage, targetPath } from '../../utils/targetUrl';
-import timeAgoFormatter from '../../utils/client/timeago';
+import timeAgoFormatter, { timeAgoCompact } from '../../utils/client/timeago';
 import type { KeywordChange } from '../../utils/history';
 
 export type CompareDays = 7 | 30 | 60 | 90;
@@ -206,14 +206,15 @@ const Keyword = (props: KeywordProps) => {
             {!updating && <PositionChange change={compareChange} arrow className='keyword_change ml-1 text-xs' />}
          </div>
 
-         {/* 7d · 30d · 60d · 90d */}
+         {/* 7d · 30d · 60d · 90d — un solo bloque para que las cuatro queden juntas */}
          {show('Changes') && (
-            <>
-               <div className={`${cell} keyword_d7 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d7} withPosition /></div>
-               <div className={`${cell} keyword_d30 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d30} withPosition /></div>
-               <div className={`${cell} keyword_d60 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d60} withPosition /></div>
-               <div className={`${cell} keyword_d90 basis-[64px] text-xs`}><PositionChange change={stats?.changes?.d90} withPosition /></div>
-            </>
+            <div className='keyword_changes hidden lg:flex shrink-0 basis-[196px] text-xs'>
+               {(['d7', 'd30', 'd60', 'd90'] as const).map((key) => (
+                  <span key={key} className={`keyword_${key} basis-[49px] shrink-0 text-center`}>
+                     <PositionChange change={stats?.changes?.[key]} withPosition />
+                  </span>
+               ))}
+            </div>
          )}
 
          {/* Snippets */}
@@ -279,7 +280,7 @@ const Keyword = (props: KeywordProps) => {
             <div
             className={`${cell} keyword_updated basis-[92px] text-xs ${freshnessClass(lastUpdated, !!(lastUpdateError && lastUpdateError.date))}`}
             title={`Último chequeo: ${dayjs(lastUpdated).format('DD-MMM-YYYY, HH:mm')}`}>
-               <TimeAgo date={lastUpdated} formatter={timeAgoFormatter} />
+               <TimeAgo date={lastUpdated} formatter={timeAgoCompact} />
             </div>
          )}
 

@@ -277,11 +277,11 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                         Posición{sortMark('pos_asc', 'pos_desc')}
                      </span>
                      {show('Changes') && (
-                        <>
+                        <span className='domKeywords_head_changes basis-[196px] shrink-0 flex'>
                            {[7, 30, 60, 90].map((d) => (
                               <span
                                  key={d}
-                                 className={`domKeywords_head_d${d} basis-[64px] text-center ${th}`}
+                                 className={`domKeywords_head_d${d} basis-[49px] shrink-0 text-center ${th}`}
                                  title={`Cambio vs. hace ${d} días (posición de entonces entre paréntesis)`}
                                  onClick={() => {
                                     setFilterParams({ ...filterParams, compare: d as CompareDays });
@@ -290,7 +290,7 @@ const KeywordsTable = (props: KeywordsTableProps) => {
                                  {d}d{compareDays === d ? sortMark('change_desc', 'change_asc') : null}
                               </span>
                            ))}
-                        </>
+                        </span>
                      )}
                      {show('Snippets') && (
                         <span className='domKeywords_head_snippets basis-[110px] shrink-0 text-center' title='Bloques especiales de la SERP'>
