@@ -259,6 +259,13 @@ const extractAdwordskeywordIdeas = (keywordIdeas:keywordIdeasResponseItem[], opt
  *  The `volumes` property which outputs `false` if the request fails and outputs the volume data in `{[keywordID]: volume}` object if succeeds.
  *  The `error` property that outputs the error message if any.
  */
+/**
+ * PoloRank — key used to match Google's answer to the stored keyword.
+ * Google Ads ALWAYS answers with the keyword lowercased, so both sides must be normalised: matching the raw text
+ * silently dropped the volume of every keyword saved with capitals ("Madera de Roble" → 720/month was shown as 0).
+ */
+export const volumeKey = (country: string, keyword: string): string => `${country}:${keyword}`.toLowerCase();
+
 export const getKeywordsVolume = async (keywords: KeywordType[]): Promise<{error?: string, volumes: false | Record<number, number>}> => {
    const credentials = await getAdwordsCredentials();
    if (!credentials) { return { error: 'Cannot Load Google Ads Credentials', volumes: false }; }
@@ -327,11 +334,11 @@ export const getKeywordsVolume = async (keywords: KeywordType[]): Promise<{error
                      const volumeDataObj:Map<string, number> = new Map();
                      ideaData.results.forEach((item:{ keywordMetrics: keywordIdeasMetrics, text: string }) => {
                         const kwVol = item?.keywordMetrics?.avgMonthlySearches;
-                        volumeDataObj.set(`${country}:${item.text}`, kwVol ? parseInt(kwVol, 10) : 0);
+                        volumeDataObj.set(volumeKey(country, item.text), kwVol ? parseInt(kwVol, 10) : 0);
                      });
 
                      keywordRequests[country].forEach((keyword) => {
-                        const keywordKey = `${keyword.country}:${keyword.keyword}`;
+                        const keywordKey = volumeKey(keyword.country, keyword.keyword);
                         if (volumeDataObj.has(keywordKey)) {
                            const volume = volumeDataObj.get(keywordKey);
                            if (volume !== undefined) {
