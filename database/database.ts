@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import sqlite3 from 'sqlite3';
+import { applyPragmas } from './pragmas';
 import Domain from './models/domain';
 import Keyword from './models/keyword';
 import ApiUsage from './models/apiUsage';
@@ -23,6 +24,10 @@ const connection = new Sequelize({
    logging: false,
    models: [Domain, Keyword, ApiUsage, User, LoginCode, KeywordDaily, KeywordVolume],
    storage: './data/database.sqlite',
+   hooks: {
+      // PoloRank: WAL + busy_timeout on every connection — see ./pragmas
+      afterConnect: applyPragmas,
+   },
 });
 
 export default connection;
