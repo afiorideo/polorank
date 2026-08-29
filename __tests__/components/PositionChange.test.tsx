@@ -8,11 +8,9 @@ describe('PositionChange Component', () => {
       expect(screen.getByText('−70')).toBeInTheDocument();
    });
 
-   it('omite el paréntesis cuando antes estaba fuera del top (posición 0)', async () => {
+   it('muestra (—) cuando antes estaba fuera del top revisado (posición 0)', async () => {
       const { container } = render(<PositionChange change={{ change: 53, position: 0 }} withPosition />);
-      expect(screen.getByText('+53')).toBeInTheDocument();
-      expect(container.querySelector('small')).toBeNull();
-      expect(container.textContent).toBe('+53');
+      expect(container.textContent).toBe('+53(—)');
       expect(screen.getByTitle('Entonces: posición fuera')).toBeInTheDocument();
    });
 
