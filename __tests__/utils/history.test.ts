@@ -1,6 +1,6 @@
 import {
    averagePosition, bestPosition, changeSince, historyKey, monthlySummary, notFoundLabel, positionAt, resultsReceived, sliceHistory,
-   summarizeHistory, trendOf, chartSeries, rangeChange,
+   summarizeHistory, trendOf, chartSeries, rangeChange, comparePositions,
 } from '../../utils/history';
 
 // "Today" fixed for deterministic tests
@@ -25,15 +25,28 @@ describe('utils/history (PoloRank)', () => {
       expect(positionAt({}, 7, NOW)).toBeNull();
    });
 
-   it('changeSince: positivo = mejoró, negativo = bajó, 0 = igual; fuera del top cuenta como 101', () => {
+   it('changeSince: solo calcula un número cuando las dos puntas tienen posición real', () => {
       const h = { '2026-7-25': 14, '2026-8-17': 2, '2026-8-24': 5 };
-      expect(changeSince(h, 5, 30, NOW)).toEqual({ change: 9, position: 14 });
-      expect(changeSince(h, 5, 7, NOW)).toEqual({ change: -3, position: 2 });
-      expect(changeSince(h, 5, 0, NOW)).toEqual({ change: 0, position: 5 });
-      expect(changeSince(h, 0, 30, NOW)).toEqual({ change: 14 - 101, position: 14 });
-      expect(changeSince({ '2026-7-25': 0 }, 12, 30, NOW)).toEqual({ change: 101 - 12, position: 0 });
-      expect(changeSince({ '2026-7-25': 0 }, 0, 30, NOW)).toEqual({ change: 0, position: 0 });
-      expect(changeSince(h, 5, 90, NOW)).toEqual({ change: null, position: null });
+      expect(changeSince(h, 5, 30, NOW)).toEqual({ change: 9, position: 14, state: 'ok' });
+      expect(changeSince(h, 5, 7, NOW)).toEqual({ change: -3, position: 2, state: 'ok' });
+      expect(changeSince(h, 5, 0, NOW)).toEqual({ change: 0, position: 5, state: 'ok' });
+      expect(changeSince(h, 5, 90, NOW)).toEqual({ change: null, position: null, state: 'nodata' });
+   });
+
+   it('changeSince: nunca inventa una magnitud cuando falta una posición', () => {
+      // estaba en la 14 y hoy no aparece → solo sabemos la dirección
+      expect(changeSince({ '2026-7-25': 14 }, 0, 30, NOW)).toEqual({ change: null, position: 14, state: 'left' });
+      // no aparecía y hoy está 12 → idem, y da igual si se revisaron 10 o 100 resultados
+      expect(changeSince({ '2026-7-25': 0 }, 12, 30, NOW)).toEqual({ change: null, position: 0, state: 'entered' });
+      // fuera entonces y fuera ahora → sin movimiento
+      expect(changeSince({ '2026-7-25': 0 }, 0, 30, NOW)).toEqual({ change: 0, position: 0, state: 'out' });
+   });
+
+   it('comparePositions es independiente de la profundidad revisada', () => {
+      // el mismo "entró en la 5" no puede valer +96 con 1 página y +6 con 5 páginas: no vale ningún número
+      expect(comparePositions(0, 5).change).toBeNull();
+      expect(comparePositions(0, 5).state).toBe('entered');
+      expect(comparePositions(0, 95).change).toBeNull();
    });
 
    it('bestPosition ignora los 0 y devuelve la primera fecha del mejor valor', () => {
@@ -63,6 +76,7 @@ describe('utils/history (PoloRank)', () => {
       expect(s.changes.d7.change).toBe(-2); // hace 7 días: 48 → hoy 50? no: hoy = 50 - 0 = 50; hace 7 = 50 - 2 = 48 → 48 - 50 = -2
       expect(s.changes.d90.position).toBe(20);
       expect(s.changes.d90.change).toBe(20 - 50);
+      expect(s.changes.d90.state).toBe('ok');
    });
 
    it('trendOf clasifica subiendo / bajando / igual / sin dato', () => {
@@ -72,6 +86,9 @@ describe('utils/history (PoloRank)', () => {
       const down = summarizeHistory({ '2026-7-25': 2, '2026-8-24': 5 }, 5, [], NOW);
       expect(trendOf(down, 30)).toBe('down');
       expect(trendOf(summarizeHistory({ '2026-7-25': 5, '2026-8-24': 5 }, 5, [], NOW), 30)).toBe('same');
+      // sin número pero con dirección conocida: entró = sube, salió = baja
+      expect(trendOf(summarizeHistory({ '2026-7-25': 0, '2026-8-24': 5 }, 5, [], NOW), 30)).toBe('up');
+      expect(trendOf(summarizeHistory({ '2026-7-25': 5, '2026-8-24': 0 }, 0, [], NOW), 30)).toBe('down');
    });
 
    it('sliceHistory conserva solo los últimos N días', () => {
@@ -115,8 +132,10 @@ describe('utils/history (PoloRank)', () => {
 
    it('rangeChange usa N días atrás si hay dato y, si no, el primer punto del historial', () => {
       const h = { '2026-8-12': 9, '2026-8-24': 2 };
-      expect(rangeChange(h, 2, 180, NOW)).toEqual({ change: 7, position: 9 });
-      expect(rangeChange({ '2026-7-25': 14, '2026-8-24': 5 }, 5, 30, NOW)).toEqual({ change: 9, position: 14 });
-      expect(rangeChange({ '2026-8-24': 5 }, 5, 30, NOW)).toEqual({ change: null, position: null });
+      expect(rangeChange(h, 2, 180, NOW)).toEqual({ change: 7, position: 9, state: 'ok' });
+      expect(rangeChange({ '2026-7-25': 14, '2026-8-24': 5 }, 5, 30, NOW)).toEqual({ change: 9, position: 14, state: 'ok' });
+      expect(rangeChange({ '2026-8-24': 5 }, 5, 30, NOW)).toEqual({ change: null, position: null, state: 'nodata' });
+      // el panel tampoco inventa: si el primer punto era "fuera", solo hay dirección
+      expect(rangeChange({ '2026-6-1': 0, '2026-8-24': 4 }, 4, 180, NOW)).toEqual({ change: null, position: 0, state: 'entered' });
    });
 });

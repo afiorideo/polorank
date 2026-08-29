@@ -8,7 +8,7 @@ import KeywordPosition from './KeywordPosition';
 import PositionChange from './PositionChange';
 import SerpFeatures from './SerpFeatures';
 import { formattedNum } from '../../utils/client/helpers';
-import { chartSeries, historyPoints } from '../../utils/history';
+import { chartSeries, comparePositions, historyPoints } from '../../utils/history';
 import { describeScrape } from '../../utils/depth';
 import { ranksOtherPage, targetPath } from '../../utils/targetUrl';
 import timeAgoFormatter, { timeAgoCompact } from '../../utils/client/timeago';
@@ -64,11 +64,8 @@ const freshnessClass = (lastUpdated: string, failed: boolean): string => {
 /** Fallback when the API did not send stats: change vs. the previous data point (SerpBear's original arrow). */
 const changeVsPrevious = (history: KeywordHistory, position: number): KeywordChange => {
    const points = historyPoints(history);
-   if (points.length < 2) { return { change: null, position: null }; }
-   const prev = points[points.length - 2].position;
-   if (prev === 0 && position === 0) { return { change: 0, position: 0 }; }
-   const norm = (p: number) => (p > 0 ? p : 101);
-   return { change: norm(prev) - norm(position), position: prev };
+   if (points.length < 2) { return { change: null, position: null, state: 'nodata' }; }
+   return comparePositions(points[points.length - 2].position, position);
 };
 
 const Keyword = (props: KeywordProps) => {

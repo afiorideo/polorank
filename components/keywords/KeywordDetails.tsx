@@ -229,7 +229,9 @@ const KeywordDetails = ({ keyword, closeDetails, onPrev, onNext, domain, setting
                                        <td className='py-2 px-2 text-center text-slate-600'>{m.avg !== null ? m.avg : '—'}</td>
                                        <td className='py-2 px-2 text-center text-slate-500'>{m.worst !== null ? m.worst : '—'}</td>
                                        <td className='py-2 px-2 text-center'>
-                                          <PositionChange change={{ change: m.change, position: null }} arrow />
+                                          <PositionChange
+                                          change={{ change: m.change, position: null, state: m.change === null ? 'nodata' : 'ok' }}
+                                          arrow />
                                        </td>
                                        <td className='py-2 px-2 text-center text-xs text-gray-400'>
                                           {m.days}{m.notFoundDays > 0 ? ` (${m.notFoundDays} sin aparecer)` : ''}

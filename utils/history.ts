@@ -3,17 +3,29 @@
  * No DB, no React: used by the API (stats per keyword) and by the UI (panel, monthly table). Fully unit-tested.
  *
  * Conventions:
- * - position 0 = not found in the scraped results. For change math it counts as OUT (worse than any real position).
- * - change = pastPosition − currentPosition → positive = improved (moved up), negative = dropped.
+ * - position 0 = not found in the scraped results. It is NOT a position: no arithmetic is done against it, because how far
+ *   past the checked depth the keyword actually was is unknowable (and the depth used on a past day is not even stored).
+ * - change = pastPosition − currentPosition → positive = improved (moved up), negative = dropped. Only when both ends are real.
  */
 
 export type HistoryPoint = { date: string, time: number, position: number };
 
+/**
+ * Why a change may have no number:
+ * - 'ok'      both ends have a real position → `change` is a number
+ * - 'entered' it was not found then, it is now → we only know the direction, never the size
+ * - 'left'    it was found then, not now → same, direction only
+ * - 'out'     not found on either end → no movement
+ * - 'nodata'  no data point around that day
+ */
+export type ChangeState = 'ok' | 'entered' | 'left' | 'out' | 'nodata';
+
 export type KeywordChange = {
-   /** pastPosition − currentPosition (positive = improved). null when there is no data point around that day. */
+   /** pastPosition − currentPosition (positive = improved). null whenever either end lacks a real position. */
    change: number | null,
    /** Position on that past day (0 = not found). null when no data. */
    position: number | null,
+   state: ChangeState,
 };
 
 export type KeywordStats = {
@@ -41,7 +53,6 @@ export type MonthSummary = {
    notFoundDays: number,
 };
 
-const OUT_OF_RANGE = 101;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const MONTHS_ES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
@@ -63,8 +74,6 @@ export const historyPoints = (history: KeywordHistory | undefined | null): Histo
       .filter((p) => Number.isFinite(p.time))
       .sort((a, b) => a.time - b.time);
 };
-
-const normalize = (position: number): number => (position > 0 ? position : OUT_OF_RANGE);
 
 /**
  * Position N days ago: the closest data point within ±tolerance days of the target day.
@@ -91,6 +100,14 @@ export const positionAt = (
    return bestPoint ? { position: bestPoint.position, date: bestPoint.date } : null;
 };
 
+/** Compare two positions (0 = not found). Never invents a number for a missing position. */
+export const comparePositions = (pastPosition: number, currentPosition: number): KeywordChange => {
+   if (pastPosition === 0 && currentPosition === 0) { return { change: 0, position: 0, state: 'out' }; }
+   if (pastPosition === 0) { return { change: null, position: 0, state: 'entered' }; }
+   if (currentPosition === 0) { return { change: null, position: pastPosition, state: 'left' }; }
+   return { change: pastPosition - currentPosition, position: pastPosition, state: 'ok' };
+};
+
 /** Change vs. N days ago. Requires the keyword to have a current position (0 = out) and a past point. */
 export const changeSince = (
    history: KeywordHistory | undefined | null,
@@ -99,9 +116,8 @@ export const changeSince = (
    now: Date = new Date(),
 ): KeywordChange => {
    const past = positionAt(history, daysAgo, now);
-   if (!past) { return { change: null, position: null }; }
-   if (past.position === 0 && currentPosition === 0) { return { change: 0, position: 0 }; }
-   return { change: normalize(past.position) - normalize(currentPosition), position: past.position };
+   if (!past) { return { change: null, position: null, state: 'nodata' }; }
+   return comparePositions(past.position, currentPosition);
 };
 
 /** Best (lowest, > 0) position ever, with the first date it was reached. */
@@ -158,7 +174,11 @@ export const sliceHistory = (history: KeywordHistory | undefined | null, days: n
 /** Trend of the keyword vs. N days ago: 'up' | 'down' | 'same' | 'none' (no data). */
 export const trendOf = (stats: KeywordStats | undefined | null, compareDays: 7 | 30 | 60 | 90): 'up' | 'down' | 'same' | 'none' => {
    const key = `d${compareDays}` as keyof KeywordStats['changes'];
-   const change = stats?.changes?.[key]?.change;
+   const entry = stats?.changes?.[key];
+   if (!entry || entry.state === 'nodata') { return 'none'; }
+   if (entry.state === 'entered') { return 'up'; }
+   if (entry.state === 'left') { return 'down'; }
+   const { change } = entry;
    if (change === null || change === undefined) { return 'none'; }
    if (change > 0) { return 'up'; }
    if (change < 0) { return 'down'; }
@@ -257,11 +277,9 @@ export const rangeChange = (
 ): KeywordChange => {
    if (days !== 'all') {
       const exact = changeSince(history, currentPosition, days, now);
-      if (exact.change !== null) { return exact; }
+      if (exact.state !== 'nodata') { return exact; }
    }
    const points = historyPoints(history);
-   if (points.length < 2) { return { change: null, position: null }; }
-   const first = points[0].position;
-   if (first === 0 && currentPosition === 0) { return { change: 0, position: 0 }; }
-   return { change: normalize(first) - normalize(currentPosition), position: first };
+   if (points.length < 2) { return { change: null, position: null, state: 'nodata' }; }
+   return comparePositions(points[0].position, currentPosition);
 };

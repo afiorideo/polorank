@@ -41,10 +41,10 @@ describe('Keyword Component (PoloRank tracking row)', () => {
          stats: {
             best: { position: 3, date: '2022-11-11' },
             changes: {
-               d7: { change: 4, position: 23 },
-               d30: { change: -2, position: 17 },
-               d60: { change: null, position: null },
-               d90: { change: null, position: null },
+               d7: { change: 4, position: 23, state: 'ok' as const },
+               d30: { change: -2, position: 17, state: 'ok' as const },
+               d60: { change: null, position: null, state: 'nodata' as const },
+               d90: { change: null, position: null, state: 'nodata' as const },
             },
             resultsReceived: 20,
             historyDays: 5,
@@ -94,10 +94,10 @@ describe('Keyword Component (PoloRank tracking row)', () => {
             resultsReceived: 50,
             historyDays: 2,
             changes: {
-               d7: { change: 1, position: 15 },
-               d30: { change: 1, position: 15 },
-               d60: { change: null, position: null },
-               d90: { change: null, position: null },
+               d7: { change: 1, position: 15, state: 'ok' as const },
+               d30: { change: 1, position: 15, state: 'ok' as const },
+               d60: { change: null, position: null, state: 'nodata' as const },
+               d90: { change: null, position: null, state: 'nodata' as const },
             },
          },
       } as unknown as KeywordType;
@@ -119,10 +119,10 @@ describe('Keyword Component (PoloRank tracking row)', () => {
          stats: {
             best: { position: 3, date: '2022-11-11' },
             changes: {
-               d7: { change: 4, position: 23 },
-               d30: { change: -2, position: 17 },
-               d60: { change: null, position: null },
-               d90: { change: null, position: null },
+               d7: { change: 4, position: 23, state: 'ok' as const },
+               d30: { change: -2, position: 17, state: 'ok' as const },
+               d60: { change: null, position: null, state: 'nodata' as const },
+               d90: { change: null, position: null, state: 'nodata' as const },
             },
             resultsReceived: 20,
             historyDays: 5,

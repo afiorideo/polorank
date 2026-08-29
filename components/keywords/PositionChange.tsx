@@ -10,27 +10,41 @@ type PositionChangeProps = {
    className?: string,
 }
 
-/** PoloRank: renders a change vs. N days ago — green when improved, red when dropped, grey when equal, "—" when no data. */
+/**
+ * PoloRank: renders a change vs. N days ago.
+ * A number is only ever shown when BOTH ends have a real position. When the keyword entered or left the checked results
+ * there is no magnitude to show — how far beyond the checked depth it sat is unknowable — so only the direction is drawn.
+ */
 const PositionChange = ({ change, withPosition = false, arrow = false, className = '' }: PositionChangeProps) => {
-   if (!change || change.change === null || change.change === undefined) {
+   if (!change || change.state === 'nodata') {
       return <span className={`text-gray-300 ${className}`} title='Sin datos para ese período'>—</span>;
    }
-   if (change.change === 0 && change.position === 0) {
-      // estaba fuera y sigue fuera → mismo símbolo que "sin cambio", solo cambia el detalle al pasar el mouse
+   if (change.state === 'out') {
       return <span className={`text-gray-400 ${className}`} title='Sigue fuera de los resultados revisados'>=</span>;
    }
-   const value = change.change;
+   if (change.state === 'entered') {
+      return (
+         <span className={`font-semibold ${className} text-emerald-600`} title='Entró: entonces no aparecía entre los resultados revisados'>
+            ▲
+         </span>
+      );
+   }
+   if (change.state === 'left') {
+      return (
+         <span className={`font-semibold ${className} text-rose-500`} title={`Salió: entonces estaba en la posición ${change.position}`}>
+            ▼
+         </span>
+      );
+   }
+   const value = change.change || 0;
    let tone = 'text-gray-400';
    let text = '=';
    if (value > 0) { tone = 'text-emerald-600'; text = arrow ? `▲ ${value}` : `+${value}`; }
    if (value < 0) { tone = 'text-rose-500'; text = arrow ? `▼ ${Math.abs(value)}` : `−${Math.abs(value)}`; }
-   const past = change.position === 0 ? 'fuera' : change.position;
    return (
-      <span className={`font-semibold whitespace-nowrap ${tone} ${className}`} title={`Entonces: posición ${past}`}>
+      <span className={`font-semibold whitespace-nowrap ${tone} ${className}`} title={`Entonces: posición ${change.position}`}>
          {text}
-         {withPosition && change.position !== null && (
-            <small className='ml-1 font-normal text-gray-400'>({change.position === 0 ? '—' : change.position})</small>
-         )}
+         {withPosition && change.position !== null && <small className='ml-1 font-normal text-gray-400'>({change.position})</small>}
       </span>
    );
 };

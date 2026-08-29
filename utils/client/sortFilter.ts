@@ -4,10 +4,23 @@
  * @param {string} sortBy - The sort method.
  * @returns {KeywordType[]}
  */
-const changeOf = (k: KeywordType, compareDays: number): number => {
+const changeOf = (k: KeywordType, compareDays: number): number | null => {
    const key = `d${compareDays}` as 'd7' | 'd30' | 'd60' | 'd90';
    const change = k.stats?.changes?.[key]?.change;
-   return change === null || change === undefined ? -Infinity : change;
+   return change === null || change === undefined ? null : change;
+};
+
+/**
+ * Sort by change. Keywords without a number (entered / left / no data) always go last, whichever direction is asked,
+ * because they have no magnitude to rank — among themselves the current position breaks the tie.
+ */
+const byChange = (compareDays: number, dir: 1 | -1) => (a: KeywordType, b: KeywordType): number => {
+   const ca = changeOf(a, compareDays);
+   const cb = changeOf(b, compareDays);
+   if (ca === null && cb === null) { return (a.position || 111) - (b.position || 111); }
+   if (ca === null) { return 1; }
+   if (cb === null) { return -1; }
+   return dir * (cb - ca);
 };
 
 export const sortKeywords = (theKeywords:KeywordType[], sortBy:string, scDataType?: string, compareDays: number = 7) : KeywordType[] => {
@@ -16,10 +29,10 @@ export const sortKeywords = (theKeywords:KeywordType[], sortBy:string, scDataTyp
    switch (sortBy) {
       // PoloRank: change vs. N days ago (positive = improved) and best position
       case 'change_desc':
-            sortedItems = theKeywords.sort((a, b) => changeOf(b, compareDays) - changeOf(a, compareDays));
+            sortedItems = theKeywords.sort(byChange(compareDays, 1));
             break;
       case 'change_asc':
-            sortedItems = theKeywords.sort((a, b) => changeOf(a, compareDays) - changeOf(b, compareDays));
+            sortedItems = theKeywords.sort(byChange(compareDays, -1));
             break;
       case 'best_asc':
             sortedItems = theKeywords.sort((a, b) => (a.stats?.best?.position || 111) - (b.stats?.best?.position || 111));
@@ -127,10 +140,12 @@ export const filterKeywords = (keywords: KeywordType[], filterParams: KeywordFil
        // PoloRank: trend (vs. `compare` days ago) and top-N filters
        const compareDays = filterParams.compare || 7;
        const changeKey = `d${compareDays}` as 'd7' | 'd30' | 'd60' | 'd90';
-       const change = keywrd.stats?.changes?.[changeKey]?.change;
-       const trendMatch = !filterParams.trend || filterParams.trend === 'all'
-          ? true
-          : (typeof change === 'number' && (filterParams.trend === 'up' ? change > 0 : change < 0));
+       const entry = keywrd.stats?.changes?.[changeKey];
+       // "entered"/"left" have no number but they are unambiguously up/down, so they must pass the trend filter too
+       const goingUp = entry?.state === 'entered' || (typeof entry?.change === 'number' && entry.change > 0);
+       const goingDown = entry?.state === 'left' || (typeof entry?.change === 'number' && entry.change < 0);
+       const wantedTrend = filterParams.trend === 'up' ? goingUp : goingDown;
+       const trendMatch = !filterParams.trend || filterParams.trend === 'all' ? true : wantedTrend;
        const topMatch = !filterParams.top || filterParams.top === 'all'
           ? true
           : (keywrd.position > 0 && keywrd.position <= parseInt(filterParams.top, 10));
