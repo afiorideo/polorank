@@ -4,6 +4,7 @@ import { RefreshResult, removeFromRetryQueue, retryScrape, scrapeKeywordWithStra
 import parseKeywords from './parseKeywords';
 import Keyword from '../database/models/keyword';
 import { logUsage } from './usage';
+import { recordDailySnapshot, recordMonthlyVolume } from './dailySnapshot';
 import { findTargetPosition } from './targetUrl';
 
 /**
@@ -112,6 +113,21 @@ export const updateKeywordPosition = async (
             targetMeta.targetPosition = targetPos;
             targetMeta.targetHistory = targetHistory;
          }
+         // PoloRank: full context of this day's check. `measured` is false when the scrape failed — in that case the
+         // scraper returns the PREVIOUS position, so the history point is carried over, not measured, and must be flagged.
+         await recordDailySnapshot({
+            keywordID: keyword.ID,
+            date: dateKey,
+            position: newPos,
+            targetPosition: targetMeta.targetPosition ?? keyword.targetPosition ?? 0,
+            url: updatedKeyword.url,
+            serpFeatures: updatedKeyword.serpFeatures || [],
+            depth: typeof updatedKeyword.depth === 'number' ? updatedKeyword.depth : 0,
+            measured: !updatedKeyword.error,
+            serpTop: updatedKeyword.result,
+         });
+         await recordMonthlyVolume(keyword.ID, dateKey, keyword.volume);
+
          const updatedVal = {
             position: newPos,
             ...depthMeta,
