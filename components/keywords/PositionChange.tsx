@@ -3,7 +3,7 @@ import type { KeywordChange } from '../../utils/history';
 
 type PositionChangeProps = {
    change?: KeywordChange | null,
-   /** show the past position in parentheses, e.g. "+3 (5)" */
+   /** show the past position in parentheses, e.g. "+3 (5)". Omitted when there was no real position (0 = fuera del top). */
    withPosition?: boolean,
    /** arrow style (▲ 3) instead of signed number (+3) */
    arrow?: boolean,
@@ -28,8 +28,8 @@ const PositionChange = ({ change, withPosition = false, arrow = false, className
    return (
       <span className={`font-semibold whitespace-nowrap ${tone} ${className}`} title={`Entonces: posición ${past}`}>
          {text}
-         {withPosition && change.position !== null && (
-            <small className='ml-1 font-normal text-gray-400'>({change.position === 0 ? '—' : change.position})</small>
+         {withPosition && change.position !== null && change.position > 0 && (
+            <small className='ml-1 font-normal text-gray-400'>({change.position})</small>
          )}
       </span>
    );
