@@ -24,10 +24,9 @@ const connection = new Sequelize({
    logging: false,
    models: [Domain, Keyword, ApiUsage, User, LoginCode, KeywordDaily, KeywordVolume],
    storage: './data/database.sqlite',
-   hooks: {
-      // PoloRank: WAL + busy_timeout on every connection — see ./pragmas
-      afterConnect: applyPragmas,
-   },
 });
+
+// PoloRank: WAL + busy_timeout, issued before any handler runs. Fire and forget — applyPragmas never rejects.
+applyPragmas(connection);
 
 export default connection;

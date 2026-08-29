@@ -1,38 +1,34 @@
-import { applyPragmas } from '../../database/pragmas';
+import { applyPragmas, PRAGMAS, BUSY_TIMEOUT_MS } from '../../database/pragmas';
 
-/** Conexión sqlite falsa que registra las sentencias recibidas. */
-const fakeConn = (behaviour: 'ok' | 'error' | 'throw' = 'ok') => {
+const fakeDb = (behaviour: 'ok' | 'reject' | 'throw' = 'ok') => {
    const sqls: string[] = [];
-   const run = (sql: string, cb: (err: Error | null) => void) => {
+   const query = jest.fn(async (sql: string) => {
       sqls.push(sql);
-      if (behaviour === 'throw') { throw new Error('conexión rota'); }
-      cb(behaviour === 'error' ? new Error('no soportado') : null);
-   };
-   return { sqls, run };
+      if (behaviour === 'throw') { throw new Error('base caída'); }
+      if (behaviour === 'reject') { return Promise.reject(new Error('pragma no soportado')); }
+      return [[], []] as unknown;
+   });
+   return { sqls, query };
 };
 
 describe('database/pragmas (PoloRank)', () => {
    beforeEach(() => { jest.spyOn(console, 'log').mockImplementation(() => {}); });
    afterEach(() => { jest.restoreAllMocks(); });
 
-   it('activa WAL y fija el busy_timeout en cada conexión', async () => {
-      const conn = fakeConn();
-      await applyPragmas(conn);
-      expect(conn.sqls).toEqual(['PRAGMA journal_mode = WAL;', 'PRAGMA busy_timeout = 5000;']);
+   it('activa WAL y fija el busy_timeout, en ese orden', async () => {
+      const db = fakeDb();
+      await applyPragmas(db as never);
+      expect(db.sqls).toEqual(['PRAGMA journal_mode = WAL;', `PRAGMA busy_timeout = ${BUSY_TIMEOUT_MS};`]);
+      expect(PRAGMAS[0]).toContain('journal_mode');
    });
 
-   it('no rompe la conexión si el motor rechaza un pragma', async () => {
-      const conn = fakeConn('error');
-      await expect(applyPragmas(conn)).resolves.toBeUndefined();
-      expect(conn.sqls).toHaveLength(2);
+   it('sigue con el segundo pragma aunque el primero falle', async () => {
+      const db = fakeDb('reject');
+      await expect(applyPragmas(db as never)).resolves.toBeUndefined();
+      expect(db.sqls).toHaveLength(2);
    });
 
-   it('no rompe la conexión si el driver lanza', async () => {
-      await expect(applyPragmas(fakeConn('throw'))).resolves.toBeUndefined();
-   });
-
-   it('ignora una conexión que no sabe ejecutar sentencias', async () => {
-      await expect(applyPragmas({})).resolves.toBeUndefined();
-      await expect(applyPragmas(null)).resolves.toBeUndefined();
+   it('nunca rechaza: un pragma rechazado no puede impedir que la app arranque', async () => {
+      await expect(applyPragmas(fakeDb('throw') as never)).resolves.toBeUndefined();
    });
 });
