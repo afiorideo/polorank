@@ -36,6 +36,7 @@ const allowedApiRoutes = [
    'POST:/api/searchconsole',
    'GET:/api/searchconsole',
    'GET:/api/insight',
+   'POST:/api/audit',
 ];
 
 const loadSessionUser = async (uid: number): Promise<SessionUser | null> => {

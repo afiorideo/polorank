@@ -12,6 +12,7 @@ import Settings from '../../../components/settings/Settings';
 import { useFetchSettings } from '../../../services/settings';
 import { useFetchDomains } from '../../../services/domains';
 import AuditPanel from '../../../components/audit/AuditPanel';
+import { useFetchAudits } from '../../../services/audit';
 import Icon from '../../../components/common/Icon';
 import Footer from '../../../components/common/Footer';
 
@@ -23,6 +24,7 @@ const AuditDetail: NextPage = () => {
    const [showAddDomain, setShowAddDomain] = useState(false);
    const { data: appSettingsData } = useFetchSettings();
    const { data: domainsData } = useFetchDomains(router);
+   const { data: auditsData } = useFetchAudits();
    const domains: DomainType[] = domainsData?.domains || [];
 
    const activeDomain: DomainType | null = useMemo(() => {
@@ -56,7 +58,11 @@ const AuditDetail: NextPage = () => {
                )}
             </div>
 
-            <AuditPanel domain={activeDomain} />
+            <AuditPanel
+            domain={activeDomain}
+            run={activeDomain ? auditsData?.runs?.[activeDomain.domain] : undefined}
+            canRun={auth.user?.role === 'superadmin'}
+            />
          </div>
 
          <CSSTransition in={showAddDomain} timeout={300} classNames="modal_anim" unmountOnExit mountOnEnter>

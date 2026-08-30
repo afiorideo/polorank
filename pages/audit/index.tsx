@@ -11,6 +11,7 @@ import Settings from '../../components/settings/Settings';
 import { useFetchSettings } from '../../services/settings';
 import { useFetchDomains } from '../../services/domains';
 import AuditDomainItem from '../../components/audit/AuditDomainItem';
+import { useFetchAudits } from '../../services/audit';
 import Icon from '../../components/common/Icon';
 import Footer from '../../components/common/Footer';
 
@@ -22,7 +23,9 @@ const AuditIndex: NextPage = () => {
    const [showAddDomain, setShowAddDomain] = useState(false);
    const { data: appSettingsData } = useFetchSettings();
    const { data: domainsData, isLoading } = useFetchDomains(router, true);
+   const { data: auditsData } = useFetchAudits();
    const domains: DomainType[] = domainsData?.domains || [];
+   const runs = auditsData?.runs || {};
 
    return (
       <div data-testid="audit" className="Audit flex flex-col min-h-screen">
@@ -40,7 +43,7 @@ const AuditIndex: NextPage = () => {
             </div>
 
             <div className='flex w-full flex-col mb-8'>
-               {domains.map((domain: DomainType) => <AuditDomainItem key={domain.ID} domain={domain} />)}
+               {domains.map((domain: DomainType) => <AuditDomainItem key={domain.ID} domain={domain} run={runs[domain.domain]} />)}
                {isLoading && (
                   <div className='mt-4 p-5 py-12 rounded border text-center bg-surface text-sm'>
                      <Icon type="loading" /> Cargando dominios...
