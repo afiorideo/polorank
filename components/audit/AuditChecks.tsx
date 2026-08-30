@@ -11,12 +11,17 @@ type AuditChecksProps = {
    onBlock: (block: string) => void,
 }
 
+/**
+ * Same palette the position badges already use (`KeywordPosition`), so the audit table reads as part of the
+ * product instead of a bolt-on. The pass tone was `emerald-50`, which on a white surface looked like an empty
+ * box repeated down the whole table.
+ */
 const PILL: Record<string, { label: string, className: string }> = {
-   fail: { label: 'Falla', className: 'bg-red-50 text-red-700' },
-   partial: { label: 'Parcial', className: 'bg-amber-50 text-amber-700' },
-   pass: { label: 'Pasa', className: 'bg-emerald-50 text-emerald-700' },
-   na: { label: 'No medible', className: 'bg-gray-100 text-gray-500' },
-   pending_review: { label: 'Revisión', className: 'bg-indigo-50 text-indigo-600' },
+   fail: { label: 'Falla', className: 'bg-rose-100 text-rose-700' },
+   partial: { label: 'Parcial', className: 'bg-amber-100 text-amber-700' },
+   pass: { label: 'Pasa', className: 'bg-emerald-100 text-emerald-700' },
+   na: { label: 'No medible', className: 'bg-slate-100 text-slate-500' },
+   pending_review: { label: 'Revisión', className: 'bg-indigo-100 text-indigo-700' },
 };
 
 const shortUrl = (url: string, domain: string): string => {
