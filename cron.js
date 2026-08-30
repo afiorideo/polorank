@@ -106,6 +106,26 @@ const runAppCronJobs = () => {
          }, { scheduled: true });
       }
 
+      // RUN SEO Audit CRON. Weekly by default: these sites do not change daily, and a noisy dashboard trains
+      // the user to ignore it. Like every other interval here, it is read once at startup (decisión de Fabián,
+      // 2026-08-30: preferir consistencia con el resto del proyecto antes que arreglar la trampa heredada).
+      const audit_interval = settings.audit_interval || 'weekly';
+      if (audit_interval !== 'never') {
+         const auditCronTime = generateCronTime(audit_interval);
+         if (auditCronTime) {
+            new Cron(auditCronTime, () => {
+               const fetchOpts = { method: 'POST', headers: { Authorization: `Bearer ${process.env.APIKEY}` } };
+               fetch(`${INTERNAL_BASE_URL}/api/audit/cron`, fetchOpts)
+               .then((res) => res.json())
+               .then((data) => console.log('[AUDITORÍA] Corrida semanal:', JSON.stringify(data)))
+               .catch((err) => {
+                  console.log('ERROR Making SEO Audit Cron Request..');
+                  console.log(err);
+               });
+            }, { scheduled: true });
+         }
+      }
+
       // RUN Email Notification CRON
       const notif_interval = (!settings.notification_interval || settings.notification_interval === 'never') ? false : settings.notification_interval;
       if (notif_interval) {

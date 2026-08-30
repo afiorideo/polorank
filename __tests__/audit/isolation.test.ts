@@ -28,6 +28,12 @@ describe('auditoría · aislamiento del seguimiento de posiciones', () => {
       expect(src).toContain('models/keywordDaily');
    });
 
+   it('el cron dispara la auditoría por HTTP, nunca importándola: un fallo del auditor no puede tumbar el cron', () => {
+      const src = leer('cron.js');
+      expect(src).toContain('/api/audit/cron');
+      expect(src).not.toMatch(/(from|require\()\s*['"][^'"]*utils\/audit/);
+   });
+
    it('los checks son puros: no tocan la base ni la red', () => {
       ['utils/audit/checks/page.ts', 'utils/audit/checks/tracking.ts', 'utils/audit/scoring.ts', 'utils/audit/engine.ts'].forEach((archivo) => {
          const src = leer(archivo);
