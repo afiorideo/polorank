@@ -35,7 +35,7 @@ const evidenceText = (evidence: Record<string, unknown>): string => Object.entri
  * and a checklist that paints a red circle every time a fetch fails.
  */
 const AuditChecks = ({ checks, catalog, domain, block, onBlock }: AuditChecksProps) => {
-   const [onlyProblems, setOnlyProblems] = useState(true);
+   const [status, setStatus] = useState('');
    const byId = useMemo(() => new Map(catalog.map((c) => [c.id, c])), [catalog]);
 
    const blocks = useMemo(() => {
@@ -44,10 +44,17 @@ const AuditChecks = ({ checks, catalog, domain, block, onBlock }: AuditChecksPro
       return [...new Set(checks.map((c) => c.block))].map((b) => ({ block: b, fails: counts.get(b) || 0 }));
    }, [checks]);
 
-   const visible = useMemo(() => checks
-      .filter((c) => (block ? c.block === block : true))
-      .filter((c) => (onlyProblems ? c.status === 'fail' || c.status === 'partial' : true)),
-   [checks, block, onlyProblems]);
+   /** Everything in the chosen block, whatever its verdict. Filtering by status happens after this. */
+   const inBlock = useMemo(() => checks.filter((c) => (block ? c.block === block : true)), [checks, block]);
+
+   /** Counts per verdict, so the transparency is visible before clicking anything. */
+   const counts = useMemo(() => {
+      const acc: Record<string, number> = {};
+      inBlock.forEach((c) => { acc[c.status] = (acc[c.status] || 0) + 1; });
+      return acc;
+   }, [inBlock]);
+
+   const visible = useMemo(() => (status ? inBlock.filter((c) => c.status === status) : inBlock), [inBlock, status]);
 
    const tabStyle = (on: boolean): string => (on
       ? 'text-xs px-2.5 py-1 rounded border bg-indigo-50 text-blue-700 border-indigo-200'
@@ -66,10 +73,18 @@ const AuditChecks = ({ checks, catalog, domain, block, onBlock }: AuditChecksPro
                   </button>
                ))}
             </div>
-            <label className='text-xs text-gray-500 cursor-pointer select-none'>
-               <input type='checkbox' className='mr-1.5 align-middle' checked={onlyProblems} onChange={(e) => setOnlyProblems(e.target.checked)} />
-               Solo lo que falla
-            </label>
+            <div className='flex gap-1 flex-wrap'>
+               <button className={tabStyle(status === '')} onClick={() => setStatus('')}>
+                  Todo ({inBlock.length})
+               </button>
+               {(['fail', 'partial', 'pass', 'na', 'pending_review'] as const)
+                  .filter((st) => (counts[st] || 0) > 0)
+                  .map((st) => (
+                     <button key={st} className={tabStyle(status === st)} onClick={() => setStatus(st)}>
+                        {PILL[st].label} ({counts[st]})
+                     </button>
+                  ))}
+            </div>
          </div>
 
          <div className='overflow-x-auto border rounded-md bg-surface'>
@@ -108,14 +123,15 @@ const AuditChecks = ({ checks, catalog, domain, block, onBlock }: AuditChecksPro
                   })}
                   {visible.length === 0 && (
                      <tr><td colSpan={5} className='px-4 py-8 text-center text-sm text-gray-500'>
-                        {onlyProblems ? 'Nada que arreglar en esta selección.' : 'Sin verificaciones para esta selección.'}
+                        Sin verificaciones para esta selección.
                      </td></tr>
                   )}
                </tbody>
             </table>
          </div>
          <p className='text-[11px] text-gray-400 mt-2'>
-            {visible.length} de {checks.length} verificaciones · <strong>No medible</strong> no es un fallo: sale del cálculo y baja la cobertura.
+            Mostrando {visible.length} de {checks.length} verificaciones de esta auditoría.
+            {' '}<strong>No medible</strong> no es un fallo: sale del cálculo del cumplimiento y baja la cobertura.
          </p>
       </div>
    );
