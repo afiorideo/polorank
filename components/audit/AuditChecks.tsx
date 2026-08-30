@@ -69,16 +69,20 @@ const AuditChecks = ({ checks, catalog, domain, block, onBlock }: AuditChecksPro
 
    return (
       <div className='audit_checks mt-8'>
-         <div className='flex items-center justify-between flex-wrap gap-3 mb-3'>
-            <div className='flex gap-1 flex-wrap'>
+         {/* dos filas fijas: el bloque manda, el estado afina. En una sola fila el segundo grupo caía
+             a veces a la derecha y a veces debajo, según el ancho disponible. */}
+         <div className='flex flex-col gap-2 mb-3'>
+            <div className='flex gap-1 flex-wrap items-center'>
                <button className={tabStyle(block === '')} onClick={() => onBlock('')}>Todos</button>
                {blocks.map(({ block: b, fails }) => (
                   <button key={b} className={tabStyle(block === b)} onClick={() => onBlock(b)}>
-                     {BLOCK_LABELS[b] || b}{fails > 0 && <span className='ml-1 text-red-600'>{fails}</span>}
+                     {BLOCK_LABELS[b] || b}
+                     {fails > 0 && <span className='ml-1.5 text-rose-600 font-semibold'>({fails})</span>}
                   </button>
                ))}
             </div>
-            <div className='flex gap-1 flex-wrap'>
+            <div className='flex gap-1 flex-wrap items-center'>
+               <span className='text-[11px] text-gray-400 mr-1'>Estado:</span>
                <button className={tabStyle(status === '')} onClick={() => setStatus('')}>
                   Todo ({inBlock.length})
                </button>
