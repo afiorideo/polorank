@@ -11,8 +11,9 @@
 import type { AuditCheck } from './types';
 import pageChecks from './checks/page';
 import trackingChecks from './checks/tracking';
+import localChecks from './checks/local';
 
-export const CATALOG: AuditCheck[] = [...pageChecks, ...trackingChecks];
+export const CATALOG: AuditCheck[] = [...pageChecks, ...trackingChecks, ...localChecks];
 
 export const checkById = (id: string): AuditCheck | undefined => CATALOG.find((c) => c.id === id);
 

@@ -14,9 +14,9 @@ import { runAudit } from './engine';
 import { startRun, saveReport, failRun } from './store';
 import type { AuditInput, AuditKeyword, BusinessProfile } from './types';
 
-export type AuditSettings = { profile: BusinessProfile, maxPages: number };
+export type AuditSettings = { profile: BusinessProfile, maxPages: number, cities: string[] };
 
-export const DEFAULT_AUDIT_SETTINGS: AuditSettings = { profile: 'local_national', maxPages: 60 };
+export const DEFAULT_AUDIT_SETTINGS: AuditSettings = { profile: 'local_national', maxPages: 60, cities: [] };
 
 export const settingsOf = (domain: Domain): AuditSettings => {
    try {
@@ -79,6 +79,7 @@ export const auditDomain = async (domainRow: Domain, triggeredBy: string): Promi
          pages: crawl.pages,
          home: crawl.pages[0],
          keywords,
+         cities: settings.cities,
       };
       const report = runAudit(input);
       await saveReport(handle, report, crawl.pages, crawl.stoppedBy);

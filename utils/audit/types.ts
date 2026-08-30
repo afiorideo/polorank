@@ -44,6 +44,11 @@ export type AuditInput = {
    home?: CrawledPage,
    /** Tracked keywords with what PoloRank already knows: target URL, real ranking URL, volume, SERP blocks. */
    keywords: AuditKeyword[],
+   /**
+    * Cities the business serves, from the domain's audit settings. Empty means nobody said where this business
+    * operates — the local checks then report `na`, which is both honest and actionable: it tells you to set it.
+    */
+   cities?: string[],
 };
 
 export type CrawledPage = {
