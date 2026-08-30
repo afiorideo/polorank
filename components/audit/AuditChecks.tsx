@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { BLOCK_LABELS } from '../../utils/audit/engine';
+import { BLOCK_LABELS, BLOCKS } from '../../utils/audit/engine';
 import type { AuditCheckRow, AuditCatalogEntry } from '../../services/audit';
 
 type AuditChecksProps = {
@@ -43,10 +43,17 @@ const AuditChecks = ({ checks, catalog, domain, block, onBlock }: AuditChecksPro
    const [status, setStatus] = useState('');
    const byId = useMemo(() => new Map(catalog.map((c) => [c.id, c])), [catalog]);
 
+   /**
+    * Same order as the donuts above. The verdicts arrive sorted by severity, so deriving the order from them
+    * put the filters in a different sequence than the circles they belong to.
+    */
    const blocks = useMemo(() => {
       const counts = new Map<string, number>();
       checks.forEach((c) => counts.set(c.block, (counts.get(c.block) || 0) + (c.status === 'fail' ? 1 : 0)));
-      return [...new Set(checks.map((c) => c.block))].map((b) => ({ block: b, fails: counts.get(b) || 0 }));
+      const present = new Set(checks.map((c) => c.block));
+      const canonical = (BLOCKS as string[]).filter((b) => present.has(b));
+      const extras = [...present].filter((b) => !(BLOCKS as string[]).includes(b)).sort();
+      return [...canonical, ...extras].map((b) => ({ block: b, fails: counts.get(b) || 0 }));
    }, [checks]);
 
    /** Everything in the chosen block, whatever its verdict. Filtering by status happens after this. */
