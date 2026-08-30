@@ -1,23 +1,23 @@
 /**
  * @jest-environment node
  */
-import { fetchPage, toCrawledPage, crawlSite, DEFAULT_LIMITS, CRAWLER_HEADERS } from '../../utils/audit/crawler';
+import { fetchPage, toCrawledPage, crawlSite, isAuditable, DEFAULT_LIMITS, CRAWLER_HEADERS } from '../../utils/audit/crawler';
 import type { FetchFn } from '../../utils/audit/crawler';
 
 const html = (body: string, head = ''): string => `<html><head>${head}</head><body>${body}${'<!-- '.padEnd(2200, 'x')}--></body></html>`;
 
 /** Fake fetch driven by a URL → response map. Honra la señal de aborto, como el fetch real. */
-const fakeFetch = (map: Record<string, { status?: number, body?: string, delayMs?: number }>): FetchFn => (
+const fakeFetch = (map: Record<string, { status?: number, body?: string, delayMs?: number, type?: string }>): FetchFn => (
    (url, init) => new Promise((resolve, reject) => {
       const entry = map[url.replace(/\/+$/, '')] || map[url];
       if (!entry) { reject(new Error('ENOTFOUND')); return; }
-      const timer = setTimeout(() => resolve(new Response(entry.body ?? '', { status: entry.status ?? 200 })), entry.delayMs || 0);
+      const opts = { status: entry.status ?? 200, headers: { 'Content-Type': entry.type ?? 'text/html; charset=UTF-8' } };
+      const timer = setTimeout(() => resolve(new Response(entry.body ?? '', opts)), entry.delayMs || 0);
       init.signal.addEventListener('abort', () => { clearTimeout(timer); reject(new Error('The operation was aborted.')); });
    })
 );
 
 describe('auditoría · crawler', () => {
-
    it('manda cabeceras de navegador completas — sin Accept/Accept-Language un WAF rechaza la request', () => {
       expect(CRAWLER_HEADERS.Accept).toContain('text/html');
       expect(CRAWLER_HEADERS['Accept-Language']).toContain('es');
@@ -30,7 +30,7 @@ describe('auditoría · crawler', () => {
       expect(res.error).toBe('HTTP 406');
       const page = toCrawledPage(res, 0);
       expect(page.fetchedOk).toBe(false);
-      expect(page.wordCount).toBe(0);   // no se inventa contenido
+      expect(page.wordCount).toBe(0); // no se inventa contenido
       expect(page.title).toBe('');
    });
 
@@ -38,6 +38,42 @@ describe('auditoría · crawler', () => {
       const res = await fetchPage('https://x.cl/', DEFAULT_LIMITS, fakeFetch({ 'https://x.cl': { body: '<html></html>' } }));
       expect(res.ok).toBe(false);
       expect(res.error).toContain('demasiado corta');
+   });
+
+   it('lo que no es HTML no se audita, aunque responda 200', async () => {
+      const res = await fetchPage(
+         'https://x.cl/archivo',
+         DEFAULT_LIMITS,
+         fakeFetch({ 'https://x.cl/archivo': { body: html('<p>x</p>'), type: 'application/pdf' } }),
+      );
+      expect(res.ok).toBe(false);
+      expect(res.error).toContain('No es HTML');
+   });
+
+   describe('isAuditable — qué URLs son páginas y cuáles no', () => {
+      it('descarta archivos: un canonical "roto" en un .jpg es ruido que tapa los hallazgos reales', () => {
+         expect(isAuditable('https://x.cl/wp-content/uploads/2024/10/foto.jpg')).toBe(false);
+         expect(isAuditable('https://x.cl/doc.pdf')).toBe(false);
+         expect(isAuditable('https://x.cl/style.css')).toBe(false);
+      });
+
+      it('descarta rutas de sistema y de carrito', () => {
+         expect(isAuditable('https://x.cl/wp-admin/')).toBe(false);
+         expect(isAuditable('https://x.cl/wp-json/wp/v2/posts')).toBe(false);
+         expect(isAuditable('https://x.cl/feed/')).toBe(false);
+         expect(isAuditable('https://x.cl/carrito/')).toBe(false);
+      });
+
+      it('descarta URLs con parámetros que generan infinitas variantes', () => {
+         expect(isAuditable('https://x.cl/tienda/?orderby=price')).toBe(false);
+         expect(isAuditable('https://x.cl/?add-to-cart=99')).toBe(false);
+      });
+
+      it('acepta páginas normales', () => {
+         expect(isAuditable('https://x.cl/')).toBe(true);
+         expect(isAuditable('https://x.cl/producto/coihue/')).toBe(true);
+         expect(isAuditable('https://x.cl/servicios')).toBe(true);
+      });
    });
 
    it('corta por tiempo agotado en vez de colgarse', async () => {
@@ -100,6 +136,15 @@ describe('auditoría · crawler', () => {
       const r = await crawlSite({ seeds: ['https://x.cl/'], limits: { courtesyMs: 0 }, doFetch: spy });
       expect(r.pages).toHaveLength(3);
       expect(visitas).toHaveLength(3);
+   });
+
+   it('no sigue enlaces a archivos: el crawler no gasta requests en imágenes', async () => {
+      const map: Record<string, { body: string }> = {
+         'https://x.cl': { body: html('<a href="/a">a</a><a href="/wp-content/uploads/f.jpg">img</a><a href="/doc.pdf">pdf</a>') },
+         'https://x.cl/a': { body: html('<p>a</p>') },
+      };
+      const r = await crawlSite({ seeds: ['https://x.cl/'], limits: { courtesyMs: 0 }, doFetch: fakeFetch(map) });
+      expect(r.pages.map((p) => p.url)).toEqual(['https://x.cl/', 'https://x.cl/a']);
    });
 
    it('corta por tiempo total y lo informa', async () => {

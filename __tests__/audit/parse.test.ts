@@ -10,7 +10,6 @@ import { parsePage, schemaTypesOf } from '../../utils/audit/parse';
 const fresard = fs.readFileSync(path.join(__dirname, 'fixtures/fresard-home.html'), 'utf8');
 
 describe('auditoría · análisis del HTML', () => {
-
    describe('schemaTypesOf', () => {
       it('lee @type cuando es un array — el caso que hace fallar al análisis ingenuo', () => {
          const json = { '@type': ['LocalBusiness', 'Organization'], name: 'X' };

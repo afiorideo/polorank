@@ -13,6 +13,8 @@
  */
 
 /** The six donuts. `strategy` scores nothing: it modulates the weights and heads the report. */
+import type { ParsedPage } from './parse';
+
 export type AuditBlock = 'strategy' | 'indexing' | 'technical' | 'architecture' | 'onpage' | 'content' | 'local';
 
 /** How the verdict is produced. See the rules above. */
@@ -57,7 +59,11 @@ export type CrawledPage = {
    sizeBytes: number,
    /** Internal links found on the page, absolute. */
    internalLinks: string[],
-   html?: string,
+   /**
+    * Everything else the parser extracted. The raw HTML is deliberately NOT kept: with a 300-page cap and a
+    * 2 MB ceiling per page it would be up to 600 MB in memory, on a VPS that also runs the position scraper.
+    */
+   parsed?: ParsedPage,
 };
 
 /** What the tracker already knows about a keyword — the part no bought tool can replicate. */

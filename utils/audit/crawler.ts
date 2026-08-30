@@ -47,6 +47,32 @@ export const CRAWLER_HEADERS: Record<string, string> = {
    'Cache-Control': 'no-cache',
 };
 
+/**
+ * URLs that are not pages and must never be audited. Without this the crawler follows WordPress upload links
+ * and reports "broken canonical" and "title too short" on image files — noise that buries the real findings.
+ */
+const SKIP_EXTENSIONS = new RegExp(
+   '\\.(jpe?g|png|gif|webp|avif|svg|ico|bmp|tiff?|mp4|webm|mov|avi|mp3|wav|ogg|pdf'
+   + '|docx?|xlsx?|pptx?|zip|rar|gz|tar|css|js|json|xml|txt|woff2?|ttf|eot)(\\?|$)',
+   'i',
+);
+const SKIP_PATHS = [
+   '/wp-content/', '/wp-admin/', '/wp-json/', '/wp-includes/', '/feed/', '/xmlrpc.php',
+   '/cart/', '/checkout/', '/mi-cuenta/', '/my-account/', '/carrito/',
+];
+const SKIP_QUERY = ['add-to-cart=', 'replytocom=', 'orderby=', 'paged=', 's='];
+
+/** Should this URL be fetched at all? */
+export const isAuditable = (url: string): boolean => {
+   let u: URL;
+   try { u = new URL(url); } catch { return false; }
+   const path = u.pathname.toLowerCase();
+   if (SKIP_EXTENSIONS.test(path)) { return false; }
+   if (SKIP_PATHS.some((p) => path.includes(p))) { return false; }
+   if (SKIP_QUERY.some((q) => u.search.includes(q))) { return false; }
+   return true;
+};
+
 export type FetchResult = {
    url: string,
    statusCode: number,
@@ -93,9 +119,19 @@ export const fetchPage = async (
       const html = await readCapped(res, limits.maxBytes);
       const sizeBytes = html.length;
       const tooSmall = sizeBytes < limits.minBytes;
+      // the URL filter can be fooled (an extensionless file, a redirect); the content type cannot
+      const contentType = (res.headers.get('content-type') || '').toLowerCase();
+      const isHtml = contentType === '' || contentType.includes('text/html') || contentType.includes('application/xhtml');
       let error = '';
-      if (res.status !== 200) { error = `HTTP ${res.status}`; } else if (tooSmall) { error = `Respuesta demasiado corta (${sizeBytes} bytes)`; }
-      return { url, statusCode: res.status, ok: res.status === 200 && !tooSmall, html, sizeBytes, error };
+      if (res.status !== 200) {
+         error = `HTTP ${res.status}`;
+      } else if (!isHtml) {
+         error = `No es HTML (${contentType})`;
+      } else if (tooSmall) {
+         error = `Respuesta demasiado corta (${sizeBytes} bytes)`;
+      }
+      const ok = res.status === 200 && isHtml && !tooSmall;
+      return { url, statusCode: res.status, ok, html, sizeBytes, error };
    } catch (error) {
       const msg = error instanceof Error ? error.message : String(error);
       return { url, statusCode: 0, ok: false, html: '', sizeBytes: 0, error: msg === 'The operation was aborted.' ? 'Tiempo agotado' : msg };
@@ -132,7 +168,7 @@ export const toCrawledPage = (res: FetchResult, clickDepth: number): CrawledPage
       indexable: p.indexable,
       sizeBytes: res.sizeBytes,
       internalLinks: p.internalLinks,
-      html: res.html,
+      parsed: p,
    };
 };
 
@@ -186,7 +222,7 @@ export const crawlSite = async (options: CrawlOptions): Promise<CrawlResult> => 
          // eslint-disable-next-line no-await-in-loop
          if (options.onPage) { await options.onPage(page); }
          const depth = page.clickDepth + 1;
-         page.internalLinks.forEach((link) => {
+         page.internalLinks.filter(isAuditable).forEach((link) => {
             const key = stripHash(link);
             if (!seen.has(key) && seen.size < limits.maxPages * 3) { seen.add(key); queue.push({ url: link, depth }); }
          });
