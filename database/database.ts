@@ -8,6 +8,10 @@ import User from './models/user';
 import LoginCode from './models/loginCode';
 import KeywordDaily from './models/keywordDaily';
 import KeywordVolume from './models/keywordVolume';
+import AuditRun from './models/auditRun';
+import AuditCheckResult from './models/auditCheckResult';
+import AuditBlockScore from './models/auditBlockScore';
+import AuditPage from './models/auditPage';
 
 const connection = new Sequelize({
    dialect: 'sqlite',
@@ -22,7 +26,8 @@ const connection = new Sequelize({
       idle: 10000,
    },
    logging: false,
-   models: [Domain, Keyword, ApiUsage, User, LoginCode, KeywordDaily, KeywordVolume],
+   models: [Domain, Keyword, ApiUsage, User, LoginCode, KeywordDaily, KeywordVolume,
+      AuditRun, AuditCheckResult, AuditBlockScore, AuditPage],
    storage: './data/database.sqlite',
 });
 
