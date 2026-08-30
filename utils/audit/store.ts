@@ -148,3 +148,41 @@ export const latestRunPerDomain = async (domains: string[]): Promise<Record<stri
    }
    return out;
 };
+
+export type CheckRow = {
+   checkId: string,
+   block: string,
+   url: string,
+   status: string,
+   score: number,
+   weight: number,
+   evidence: Record<string, unknown>,
+   reviewedAt: string | null,
+   reviewNote: string,
+};
+
+/**
+ * Every verdict of a run, worst first: what failed, heaviest first, then everything else.
+ * The evidence travels with each row — a verdict you cannot argue with is a verdict you cannot trust.
+ */
+export const runChecks = async (runId: number): Promise<CheckRow[]> => {
+   const rows = await AuditCheckResult.findAll({ where: { run_id: runId } });
+   const orden: Record<string, number> = { fail: 0, partial: 1, pending_review: 2, pass: 3, na: 4 };
+   return rows
+      .map((r) => {
+         let evidence: Record<string, unknown> = {};
+         try { evidence = JSON.parse((r.get('evidence') as string) || '{}'); } catch { evidence = {}; }
+         return {
+            checkId: r.get('check_id') as string,
+            block: r.get('block') as string,
+            url: r.get('url') as string,
+            status: r.get('status') as string,
+            score: r.get('score') as number,
+            weight: r.get('weight') as number,
+            evidence,
+            reviewedAt: r.get('reviewed_at') as string | null,
+            reviewNote: r.get('review_note') as string,
+         };
+      })
+      .sort((a, b) => (orden[a.status] - orden[b.status]) || (b.weight - a.weight) || a.checkId.localeCompare(b.checkId));
+};

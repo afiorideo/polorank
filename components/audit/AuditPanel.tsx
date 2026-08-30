@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from '../common/Icon';
 import DonutScore from './DonutScore';
-import { useRunAudit } from '../../services/audit';
+import AuditChecks from './AuditChecks';
+import { useRunAudit, useFetchAuditDetail } from '../../services/audit';
 import type { AuditRunSummary } from '../../services/audit';
 import { BLOCK_LABELS, BLOCKS } from '../../utils/audit/engine';
 
@@ -19,6 +20,8 @@ const fecha = (iso: string | null): string => (iso ? new Date(iso).toLocaleStrin
  */
 const AuditPanel = ({ domain, run, canRun = false }: AuditPanelProps) => {
    const { mutate: runAudit, isLoading } = useRunAudit();
+   const [block, setBlock] = useState('');
+   const { data: detail } = useFetchAuditDetail(domain?.domain);
    if (!domain) { return <div className='w-full h-40' />; }
 
    const byBlock = new Map((run?.blocks || []).map((b) => [b.block, b]));
@@ -46,17 +49,19 @@ const AuditPanel = ({ domain, run, canRun = false }: AuditPanelProps) => {
 
          {run ? (
             <div className='grid gap-3' style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))' }}>
-               {BLOCKS.map((block) => {
-                  const b = byBlock.get(block);
+               {BLOCKS.map((blockId) => {
+                  const b = byBlock.get(blockId);
                   return <DonutScore
-                     key={block}
-                     label={BLOCK_LABELS[block]}
+                     key={blockId}
+                     label={BLOCK_LABELS[blockId]}
                      compliance={b?.compliance || 0}
                      coverage={b?.coverage || 0}
                      weight={b?.weight}
                      cappedBy={b?.cappedBy || ''}
                      checksMeasured={b?.checksMeasured || 0}
                      checksTotal={b?.checksTotal || 0}
+                     selected={block === blockId}
+                     onClick={() => setBlock(block === blockId ? '' : blockId)}
                      />;
                })}
             </div>
@@ -68,6 +73,16 @@ const AuditPanel = ({ domain, run, canRun = false }: AuditPanelProps) => {
                   La auditoría recorre el sitio y revisa cada página. Recién después de la primera corrida hay algo que mostrar.
                </p>
             </div>
+         )}
+
+         {run && detail && (
+            <AuditChecks
+            checks={detail.checks}
+            catalog={detail.catalog}
+            domain={domain.domain}
+            block={block}
+            onBlock={setBlock}
+            />
          )}
 
          {run && (

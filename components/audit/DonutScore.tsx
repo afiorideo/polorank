@@ -11,6 +11,8 @@ type DonutScoreProps = {
    checksMeasured?: number,
    checksTotal?: number,
    size?: number,
+   selected?: boolean,
+   onClick?: () => void,
 }
 
 /** Green from 80, amber from 50, red below. Grey when nothing could be measured. */
@@ -30,6 +32,7 @@ const toneOf = (compliance: number, measurable: boolean): string => {
  */
 const DonutScore = ({
    label, compliance, coverage, weight, cappedBy = '', checksMeasured = 0, checksTotal = 0, size = 84,
+   selected = false, onClick,
 }: DonutScoreProps) => {
    const measurable = checksTotal === 0 ? coverage > 0 : checksMeasured > 0;
    const tone = toneOf(compliance, measurable);
@@ -39,7 +42,13 @@ const DonutScore = ({
       : `${label}: todavía no hay nada medido en este bloque`;
 
    return (
-      <div className='audit_donut flex flex-col items-center text-center gap-2 p-4 rounded-md border bg-surface' title={title}>
+      <button
+      type='button'
+      onClick={onClick}
+      disabled={!onClick}
+      className={`audit_donut flex flex-col items-center text-center gap-2 p-4 rounded-md border bg-surface w-full
+      ${onClick ? 'cursor-pointer hover:border-indigo-300' : 'cursor-default'} ${selected ? 'border-indigo-400 ring-1 ring-indigo-200' : ''}`}
+      title={title}>
          <div className='relative rounded-full grid place-items-center' style={ring}>
             <div className='absolute rounded-full bg-surface' style={{ inset: 9 }} />
             <span className='relative font-bold text-lg tabular-nums' style={{ color: measurable ? tone : '#94a3b8' }}>
@@ -56,7 +65,7 @@ const DonutScore = ({
             </span>
          </div>
          {cappedBy && <span className='text-[10px] text-red-600 bg-red-50 px-1.5 py-0.5 rounded'>{cappedBy}</span>}
-      </div>
+      </button>
    );
 };
 

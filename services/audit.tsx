@@ -22,6 +22,29 @@ export type AuditRunSummary = {
    blocks: AuditBlockSummary[],
 };
 
+export type AuditCheckRow = {
+   checkId: string,
+   block: string,
+   url: string,
+   status: string,
+   score: number,
+   weight: number,
+   evidence: Record<string, unknown>,
+   reviewedAt: string | null,
+   reviewNote: string,
+};
+
+export type AuditCatalogEntry = { id: string, title: string, help: string, block: string, kind: string };
+
+/** Every verdict of a domain's latest audit, with its evidence. */
+export function useFetchAuditDetail(domain: string | undefined) {
+   return useQuery(['auditDetail', domain], async () => {
+      const res = await fetch(`${window.location.origin}/api/audit/detail?domain=${encodeURIComponent(domain || '')}`);
+      if (res.status >= 400) { throw new Error('No se pudo cargar el detalle'); }
+      return res.json() as Promise<{ run: AuditRunSummary | null, checks: AuditCheckRow[], catalog: AuditCatalogEntry[] }>;
+   }, { enabled: !!domain });
+}
+
 /** Latest audit of every domain. */
 export function useFetchAudits() {
    return useQuery('audits', async () => {
@@ -47,6 +70,7 @@ export function useRunAudit(onDone?: () => void) {
       onSuccess: () => {
          toast('Auditoría completada', { icon: '✔️' });
          client.invalidateQueries('audits');
+         client.invalidateQueries('auditDetail');
          if (onDone) { onDone(); }
       },
       onError: (error: Error) => {
