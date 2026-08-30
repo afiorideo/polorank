@@ -66,6 +66,13 @@ const TopBar = ({ showSettings, showAddModal, user }:TopbarProps) => {
                      </a>
                   </Link>
                </li>
+               <li className={`block lg:inline-block lg:ml-5 ${(router.asPath || '').startsWith('/audit') ? ' text-blue-700' : ''}`}>
+                  <Link href={'/audit'} passHref={true}>
+                     <a className='block px-3 py-2 cursor-pointer'>
+                        <Icon type="research" size={14} /> Auditoría
+                     </a>
+                  </Link>
+               </li>
                {isAdmin && <li className={`block lg:inline-block lg:ml-5 ${router.asPath === '/research' ? ' text-blue-700' : ''}`}>
                   <Link href={'/research'} passHref={true}>
                      <a className='block px-3 py-2 cursor-pointer'>

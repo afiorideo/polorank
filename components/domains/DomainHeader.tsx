@@ -81,20 +81,6 @@ const DomainHeader = (
                   </a>
                </Link>
             </li>
-            <li className={`${tabStyle} ${router.pathname === '/domain/audit/[slug]' ? 'bg-surface border border-b-0 font-semibold' : ''}`}>
-               <Link href={`/domain/audit/${domain.slug}`} passHref={true}>
-                  <a className='px-4 py-2 inline-block'><Icon type="research" size={13} classes='hidden lg:inline-block' />
-                     <span className='text-xs lg:text-sm lg:ml-2'>Auditoría</span>
-                     <Icon
-                     type='help'
-                     size={14}
-                     color="#aaa"
-                     classes="ml-2 hidden lg:inline-block"
-                     title='Qué tan optimizado está el sitio, bloque por bloque'
-                     />
-                  </a>
-               </Link>
-            </li>
             <li className={`${tabStyle} ${router.pathname === '/domain/ideas/[slug]' ? 'bg-surface border border-b-0 font-semibold' : ''}`}>
                <Link href={`/domain/ideas/${domain.slug}`} passHref={true}>
                   <a className='px-4 py-2 inline-block'><Icon type="adwords" size={13} classes='hidden lg:inline-block' />
