@@ -15,10 +15,17 @@ describe('PositionChange Component', () => {
       expect(screen.getByTitle('Entró: entonces no aparecía entre los resultados revisados')).toBeInTheDocument();
    });
 
-   it('cuando salió del rango revisado muestra solo la flecha, con la posición que tenía en el tooltip', async () => {
+   it('cuando salió del rango muestra la flecha Y desde qué posición cayó: ese dato sí se midió', async () => {
       const { container } = render(<PositionChange change={{ change: null, position: 12, state: 'left' }} withPosition />);
-      expect(container.textContent).toBe('▼');
+      expect(container.textContent).toBe('▼(12)');
       expect(screen.getByTitle('Salió: entonces estaba en la posición 12')).toBeInTheDocument();
+   });
+
+   it('caso real de mavae: estaba en 21 hace 7 días y hoy no aparece', async () => {
+      const { container } = render(<PositionChange change={{ change: null, position: 21, state: 'left' }} withPosition />);
+      expect(container.textContent).toBe('▼(21)');
+      // no inventa cuánto cayó: no hay número de cambio, solo el punto de partida
+      expect(container.textContent).not.toMatch(/−|\+/);
    });
 
    it('muestra "=" cuando estaba fuera y sigue fuera', async () => {

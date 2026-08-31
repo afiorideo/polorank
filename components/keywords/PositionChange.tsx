@@ -30,9 +30,15 @@ const PositionChange = ({ change, withPosition = false, arrow = false, className
       );
    }
    if (change.state === 'left') {
+      // the position it fell FROM is a measured fact and belongs on screen; only the size of the fall is unknowable
       return (
-         <span className={`font-semibold ${className} text-rose-500`} title={`Salió: entonces estaba en la posición ${change.position}`}>
+         <span
+         className={`font-semibold whitespace-nowrap ${className} text-rose-500`}
+         title={`Salió: entonces estaba en la posición ${change.position}`}>
             ▼
+            {withPosition && change.position !== null && change.position > 0 && (
+               <small className='ml-1 font-normal text-gray-400'>({change.position})</small>
+            )}
          </span>
       );
    }
