@@ -8,7 +8,6 @@ const real = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/serp-con-
 const respuesta = (items: unknown[]) => ({ status_code: 20000, tasks: [{ status_code: 20000, result: [{ items }] }] });
 
 describe('DataForSEO · resumen con IA', () => {
-
    describe('extractAiOverview', () => {
       it('lee el bloque real de "madera de roble": texto y 6 fuentes', () => {
          const aio = extractAiOverview(real);

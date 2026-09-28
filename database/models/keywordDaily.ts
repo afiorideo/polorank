@@ -50,6 +50,25 @@ class KeywordDaily extends Model {
    /** JSON array of the top 20: [{ position, url, title }]. */
    @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '[]' })
    serp_top!: string;
+
+   /**
+    * Google's AI summary: 1 = the domain was cited · 0 = there was a summary and it was not cited ·
+    * -1 = there was no summary, or it could not be read.
+    *
+    * The -1 is not a failure and must never be shown as one. It is what lets the screen count
+    * OPPORTUNITIES (days with a summary) instead of calendar days: a domain cited 18 times out of the
+    * 22 days a summary appeared is doing well, and "18 of 30" would say the opposite.
+    */
+   @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: -1 })
+   ai_cited!: number;
+
+   /** JSON array of the cited sources: [{ position, source, domain, url, title }]. */
+   @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '[]' })
+   ai_references!: string;
+
+   /** The summary text, for the detail panel. */
+   @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
+   ai_text!: string;
 }
 
 export default KeywordDaily;

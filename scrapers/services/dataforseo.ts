@@ -111,7 +111,6 @@ export const extractCost = (content: unknown): number | undefined => {
    return task && typeof task.cost === 'number' ? task.cost : undefined;
 };
 
-
 export type AiReference = { position: number, source: string, domain: string, url: string, title: string };
 export type AiOverview = { text: string, references: AiReference[] };
 
