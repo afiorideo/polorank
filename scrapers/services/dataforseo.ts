@@ -36,6 +36,10 @@ type DfsItem = {
    rank_absolute?: number,
    title?: string,
    url?: string,
+   // bloque ai_overview
+   asynchronous_ai_overview?: boolean,
+   markdown?: string,
+   references?: { source?: string, domain?: string, url?: string, title?: string }[],
 };
 
 type DfsResponse = {
@@ -105,6 +109,53 @@ export const extractCost = (content: unknown): number | undefined => {
    if (typeof res.cost === 'number') { return res.cost; }
    const task = res.tasks && res.tasks[0];
    return task && typeof task.cost === 'number' ? task.cost : undefined;
+};
+
+
+export type AiReference = { position: number, source: string, domain: string, url: string, title: string };
+export type AiOverview = { text: string, references: AiReference[] };
+
+/** Dominio comparable: sin protocolo, sin www, en minúscula. Mismo criterio que el resto del sistema. */
+const normDomain = (d: string): string => (d || '').replace(/^https?:\/\//, '').replace(/^www\./i, '').replace(/\/.*$/, '').toLowerCase();
+
+/**
+ * PoloRank — el resumen con IA de Google, si vino en esta respuesta.
+ *
+ * Devuelve `null` en tres casos que significan lo mismo para quien llama: **no se pudo medir**.
+ * - la SERP no trajo bloque `ai_overview`
+ * - el bloque carga de forma asíncrona (`asynchronous_ai_overview`), así que sus fuentes no están acá
+ * - la respuesta es ilegible
+ *
+ * Esa distinción es el corazón de la funcionalidad: "no hay resumen" NO es "no te citan", y confundirlos
+ * llenaría la pantalla de cruces rojas sobre búsquedas donde Google ni siquiera respondió con IA.
+ */
+export const extractAiOverview = (content: unknown): AiOverview | null => {
+   let res: DfsResponse;
+   try {
+      res = typeof content === 'string' ? JSON.parse(content) : content as DfsResponse;
+   } catch {
+      return null;
+   }
+   const items = (res && res.tasks && res.tasks[0] && res.tasks[0].result && res.tasks[0].result[0]
+      && res.tasks[0].result[0].items) || [];
+   const block = items.find((i) => i.type === 'ai_overview');
+   if (!block || block.asynchronous_ai_overview === true) { return null; }
+   const references: AiReference[] = (block.references || []).map((r, i) => ({
+      position: i + 1,
+      source: r.source || '',
+      domain: r.domain || '',
+      url: r.url || '',
+      title: r.title || '',
+   }));
+   return { text: block.markdown || '', references };
+};
+
+/** Puesto (empezando en 1) del dominio entre las fuentes citadas, o 0 si no está. */
+export const citedPosition = (references: AiReference[], domain: string): number => {
+   const target = normDomain(domain);
+   if (!target) { return 0; }
+   const found = references.find((r) => normDomain(r.domain) === target);
+   return found ? found.position : 0;
 };
 
 const dataforseo: ScraperSettings = {
