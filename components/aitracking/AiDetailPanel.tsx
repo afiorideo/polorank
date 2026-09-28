@@ -44,9 +44,14 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                      </div>
                   )}
 
-                  <h4 className='text-[11px] uppercase tracking-wide text-gray-400 mb-2'>
-                     Quién está citado ({row.references.length})
+                  <h4 className='text-[11px] uppercase tracking-wide text-gray-400 mb-1'>
+                     Quién aparece ({row.references.length})
                   </h4>
+                  <div className='flex text-[10px] uppercase tracking-wide text-gray-400 px-3 pb-1'>
+                     <span className='flex-1'>fuente</span>
+                     <span className='w-12 text-center'>cita</span>
+                     <span className='w-14 text-center'>nombre</span>
+                  </div>
                   <ul className='flex flex-col gap-1'>
                      {row.references.map((r) => {
                         const esMio = norm(r.domain) === mine;
@@ -66,7 +71,12 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                                     {r.domain}
                                  </a>
                               </span>
-                              {esMio && <span className='text-[11px] text-emerald-700 shrink-0'>sos vos</span>}
+                              <span className='w-12 text-center shrink-0 text-emerald-600' title='Citada como fuente'>✓</span>
+                              <span
+                              className={`w-14 text-center shrink-0 ${r.mentioned ? 'text-emerald-600' : 'text-gray-300'}`}
+                              title={r.mentioned ? 'El texto la nombra' : 'El texto no la nombra'}>
+                                 {r.mentioned ? '✓' : '✗'}
+                              </span>
                            </li>
                         );
                      })}
@@ -74,7 +84,15 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
 
                   {row.cited === 0 && (
                      <p className='mt-4 px-3 py-2 rounded bg-rose-50 text-rose-700 text-xs'>
-                        {domain} no aparece entre las fuentes de este resumen.
+                        {domain} no aparece entre las fuentes
+                        {row.mentioned === 1
+                           ? ', pero el texto sí nombra tu marca: Google te conoce y manda el clic a otro.'
+                           : ' ni el texto nombra tu marca.'}
+                     </p>
+                  )}
+                  {row.cited === 1 && row.mentioned === 0 && (
+                     <p className='mt-4 px-3 py-2 rounded bg-amber-50 text-amber-700 text-xs'>
+                        Te cita como fuente pero no te nombra: aportás el contenido y el lector no se entera de quién sos.
                      </p>
                   )}
                </>

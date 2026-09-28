@@ -10,11 +10,12 @@ type AiTrackingTableProps = {
    isLoading: boolean,
 }
 
-/** `18/22` = te citaron 18 de las 22 veces que hubo resumen. `—` = no hubo ninguna oportunidad. */
-const ratio = (r: CitationRatio): string => (r ? `${r.cited}/${r.chances}` : '—');
+/** `5/7` = visible en la respuesta de IA 5 de los últimos 7 días. `—` = la serie no cubre el período. */
+const ratio = (r: CitationRatio): string => (r ? `${r.cited}/${r.days}` : '—');
 
 const ratioTitle = (r: CitationRatio): string => (r
-   ? `${r.cited} DÍAS citado, de los ${r.chances} días que Google respondió con IA en ese período`
+   ? `Visible ${r.cited} de los últimos ${r.days} días. Google respondió con IA en ${r.withAi} de ellos`
+      + ` y se midieron ${r.measured} de ${r.days} días.`
    : 'Todavía no hay mediciones que cubran ese período');
 
 const shortUrl = (url: string, domain: string): string => {
@@ -55,12 +56,13 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                : `${rows.filter((r) => r.cited === 1).length} de ${conResumen} búsquedas con resumen te citan.`}
          </p>
          <div className='overflow-x-auto border rounded-md bg-surface inline-block max-w-full align-top'>
-            <table className='w-full text-sm' style={{ minWidth: 700, maxWidth: 880 }}>
+            <table className='w-full text-sm' style={{ minWidth: 780, maxWidth: 940 }}>
                <thead>
                   <tr className='text-left border-b'>
                      <th className={`${th} pl-3`}>Keyword</th>
                      <th className={`${th} text-right w-[58px]`}>Vol.</th>
-                     <th className={`${th} w-[76px]`}>¿Te cita?</th>
+                     <th className={`${th} w-[70px]`}>¿Te cita?</th>
+                     <th className={`${th} w-[80px]`}>¿Te nombra?</th>
                      <th className={`${th} text-right w-[52px]`}>Puesto</th>
                      <th className={`${th} w-[150px]`}>URL citada</th>
                      <th className={`${th} text-right w-[46px]`}>7d</th>
@@ -81,6 +83,7 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                         </td>
                         <td className={`${td} text-right text-gray-500 tabular-nums`}>{r.volume || '—'}</td>
                         <td className={td}><AiCitedBadge cited={r.cited} /></td>
+                        <td className={td}><AiCitedBadge cited={r.mentioned} kind='mention' /></td>
                         <td className={`${td} text-right tabular-nums text-gray-600`}>{r.position || '—'}</td>
                         <td className={`${td} text-xs text-gray-500 max-w-[150px] truncate`} title={r.citedUrl}>
                            {shortUrl(r.citedUrl, domain)}
@@ -99,10 +102,11 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
             </table>
          </div>
          <p className='text-[11px] text-gray-400 mt-2'>
-            Los períodos se cuentan en <strong>días</strong>, no en fuentes: <code>18/22</code> significa que en ese
-            período Google respondió con IA durante 22 días y te citó en 18. Un período muestra <code>—</code> hasta que
-            haya mediciones de esa antigüedad, igual que en Tracking. Y <strong>N/A</strong> no es que no te citen: es que
-            Google no respondió con IA.
+            <strong>Te cita</strong> = tu sitio aparece como fuente del resumen. <strong>Te nombra</strong> = el texto
+            menciona tu marca, aunque no te enlace. Los períodos se cuentan en <strong>días</strong>: <code>5/7</code>
+            significa que fuiste visible 5 de los últimos 7 días, y muestran <code>—</code> hasta que haya mediciones de
+            esa antigüedad, igual que en Tracking. <strong>N/A</strong> no es que no aparezcas: es que Google no respondió
+            con IA en esa búsqueda.
          </p>
          {selected && <AiDetailPanel row={selected} domain={domain} closePanel={() => setSelected(null)} />}
       </>

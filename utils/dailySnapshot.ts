@@ -1,4 +1,5 @@
 import KeywordDaily from '../database/models/keywordDaily';
+import { brandOf, mentionState } from './aiTracking';
 import KeywordVolume from '../database/models/keywordVolume';
 
 /** How many SERP results are kept per day. Two pages: our keywords live around the top-10 border. */
@@ -20,6 +21,8 @@ export type DailySnapshot = {
    aiOverview?: AiOverviewData | null,
    /** Needed to decide whether the domain is among the cited sources. */
    domain?: string,
+   /** Brand to look for in the summary text. Defaults to the domain's own name. */
+   brand?: string,
 };
 
 /** Same comparison the rest of the system uses: no protocol, no www, lowercase. */
@@ -75,6 +78,7 @@ export const recordDailySnapshot = async (snap: DailySnapshot): Promise<void> =>
          measured: snap.measured,
          serp_top: JSON.stringify(topOfSerp(snap.serpTop)),
          ai_cited: aiCitedState(snap.aiOverview, snap.domain || ''),
+         ai_mentioned: mentionState(snap.aiOverview ? snap.aiOverview.text : null, brandOf(snap.domain || '', snap.brand)),
          ai_references: JSON.stringify(snap.aiOverview?.references || []),
          ai_text: snap.aiOverview?.text || '',
       };

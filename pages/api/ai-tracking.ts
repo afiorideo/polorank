@@ -5,7 +5,7 @@ import Keyword from '../../database/models/keyword';
 import KeywordDaily from '../../database/models/keywordDaily';
 import { authenticate } from '../../utils/verifyUser';
 import { canAccessDomain } from '../../utils/auth/guards';
-import { citationPeriods, parseKey } from '../../utils/aiTracking';
+import { citationPeriods, parseKey, brandOf, mentionState } from '../../utils/aiTracking';
 import type { CitationRatio } from '../../utils/aiTracking';
 
 /** Una fila de la tabla de Tracking IA. */
@@ -16,11 +16,14 @@ export type AiTrackingRow = {
    volume: number,
    /** 1 citado · 0 hubo resumen y no te citó · -1 no hubo resumen */
    cited: number,
+   /** 1 te nombra en el texto · 0 hubo resumen y no te nombra · -1 no hubo resumen */
+   mentioned: number,
    /** Puesto entre las fuentes citadas, 0 si no está. */
    position: number,
    /** Qué página propia citó el resumen. */
    citedUrl: string,
-   references: AiOverviewReference[],
+   /** Cada fuente citada, con si además la nombra en el texto. */
+   references: (AiOverviewReference & { mentioned: boolean })[],
    text: string,
    /** Fecha del último día con dato de IA. */
    lastDate: string,
@@ -66,6 +69,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             .map((d) => ({
                date: d.get('date') as string,
                ai_cited: d.get('ai_cited') as number,
+               ai_mentioned: d.get('ai_mentioned') as number,
                refs: d.get('ai_references') as string,
                text: d.get('ai_text') as string,
             }))
@@ -74,7 +78,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          // el último día que tuvo resumen manda lo que se muestra arriba; si nunca hubo, la fila queda en -1
          const lastWithAi = [...days].reverse().find((d) => d.ai_cited !== -1);
          const latest = lastWithAi || days[days.length - 1];
-         const references = parseJson<AiOverviewReference[]>(latest?.refs, []);
+         const crudas = parseJson<AiOverviewReference[]>(latest?.refs, []);
+         const texto = latest?.text || '';
+         // de cada fuente: si además de citarla, el resumen la nombra por su nombre
+         const references = crudas.map((r) => ({ ...r, mentioned: mentionState(texto, brandOf(r.domain)) === 1 }));
          const mine = references.find((r) => norm(r.domain) === norm(domain));
 
          return {
@@ -83,10 +90,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             country: k.get('country') as string,
             volume: (k.get('volume') as number) || 0,
             cited: latest ? latest.ai_cited : -1,
+            mentioned: latest ? latest.ai_mentioned : -1,
             position: mine ? mine.position : 0,
             citedUrl: mine ? mine.url : '',
             references,
-            text: latest?.text || '',
+            text: texto,
             lastDate: latest?.date || '',
             periods: citationPeriods(days),
          };

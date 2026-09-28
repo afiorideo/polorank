@@ -7,8 +7,14 @@
  * (`ai_cited = -1`) no cuenta ni a favor ni en contra: sale del cálculo, igual que el `na` de la auditoría.
  */
 
-/** Citas conseguidas sobre oportunidades que hubo. `null` cuando no hubo ninguna oportunidad. */
-export type CitationRatio = { cited: number, chances: number } | null;
+/**
+ * Días visible sobre días del período. `null` cuando la serie todavía no llega a cubrir el período.
+ *
+ * El denominador son los DÍAS DEL PERÍODO (7, 30, 60, 90), fijo para todas las filas, para poder
+ * compararlas de un vistazo. `measured` y `withAi` no se muestran en la celda: viajan para el texto
+ * emergente, que es donde se explica sobre qué se midió.
+ */
+export type CitationRatio = { cited: number, days: number, measured: number, withAi: number } | null;
 
 export type DailyCite = { date: string, ai_cited: number };
 
@@ -50,6 +56,7 @@ export const citationRatio = (rows: DailyCite[], days: number, now: Date = new D
    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
    const from = windowStart(now, days);
 
+   // "medidos" = días en que hubo resumen con IA; los demás no dicen nada sobre la cita
    const medidos = rows
       .map((r) => ({ t: parseKey(r.date), cited: r.ai_cited }))
       .filter((r) => Number.isFinite(r.t) && r.cited !== -1);
@@ -61,7 +68,12 @@ export const citationRatio = (rows: DailyCite[], days: number, now: Date = new D
 
    const inRange = medidos.filter((r) => r.t >= from && r.t <= today);
    if (inRange.length === 0) { return null; }
-   return { cited: inRange.filter((r) => r.cited === 1).length, chances: inRange.length };
+   return {
+      cited: inRange.filter((r) => r.cited === 1).length,
+      days,
+      measured: rows.filter((r) => { const t = parseKey(r.date); return Number.isFinite(t) && t >= from && t <= today; }).length,
+      withAi: inRange.length,
+   };
 };
 
 /** Los cuatro períodos que muestra la tabla. */
@@ -73,3 +85,27 @@ export const citationPeriods = (rows: DailyCite[], now: Date = new Date()) => ({
 });
 
 export default citationRatio;
+
+/** Nombre de marca a buscar en el texto del resumen. Configurable por dominio; si no, sale del dominio. */
+export const brandOf = (domain: string, configured?: string): string => {
+   const manual = (configured || '').trim();
+   if (manual) { return manual.toLowerCase(); }
+   // maderasfresard.com -> maderasfresard   ·   www.ammo.cl -> ammo
+   return (domain || '').replace(/^https?:\/\//, '').replace(/^www\./i, '').split('.')[0].toLowerCase();
+};
+
+/** Marcas demasiado cortas dan falsos positivos dentro de otras palabras. */
+export const MIN_BRAND_LENGTH = 4;
+
+/**
+ * ¿El resumen NOMBRA a la marca en su texto? Distinto de citarla como fuente.
+ *   1 la nombra · 0 hubo resumen y no la nombra · -1 no hubo resumen, o la marca es muy corta para buscarla
+ *
+ * Un dominio cuya marca tiene menos de 4 letras no se busca: aparecería dentro de otras palabras y
+ * daría un sí falso, que es peor que no medir.
+ */
+export const mentionState = (text: string | null | undefined, brand: string): number => {
+   if (text === null || text === undefined) { return -1; }
+   if (!brand || brand.length < MIN_BRAND_LENGTH) { return -1; }
+   return text.toLowerCase().includes(brand) ? 1 : 0;
+};

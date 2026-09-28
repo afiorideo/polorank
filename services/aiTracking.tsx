@@ -1,8 +1,8 @@
 import { useQuery } from 'react-query';
 
-export type CitationRatio = { cited: number, chances: number } | null;
+export type CitationRatio = { cited: number, days: number, measured: number, withAi: number } | null;
 
-export type AiReference = { position: number, source: string, domain: string, url: string, title: string };
+export type AiReference = { position: number, source: string, domain: string, url: string, title: string, mentioned: boolean };
 
 export type AiTrackingRow = {
    keywordID: number,
@@ -11,6 +11,8 @@ export type AiTrackingRow = {
    volume: number,
    /** 1 citado · 0 hubo resumen y no te citó · -1 no hubo resumen */
    cited: number,
+   /** 1 te nombra · 0 no te nombra · -1 no hubo resumen */
+   mentioned: number,
    position: number,
    citedUrl: string,
    references: AiReference[],

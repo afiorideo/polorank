@@ -33,7 +33,8 @@ const refreshAndUpdateKeywords = async (
          for (const keyword of rawKeyword) {
             const refreshedKeywordData = refreshedResults.find((k) => k && k.ID === keyword.ID);
             if (refreshedKeywordData) {
-               const updatedKeyword = await updateKeywordPosition(keyword, refreshedKeywordData, settings, triggeredBy);
+               const domSettings = domains?.find((d) => d.domain === (keyword.get('domain') as string));
+               const updatedKeyword = await updateKeywordPosition(keyword, refreshedKeywordData, settings, domSettings, triggeredBy);
                updatedKeywords.push(updatedKeyword);
             }
          }
@@ -71,7 +72,9 @@ const refreshAndUpdateKeyword = async (
 ): Promise<KeywordType> => {
    const currentKeyword = keyword.get({ plain: true });
    const refreshedKeywordData = await scrapeKeywordWithStrategy(currentKeyword, settings, domainSettings);
-   const updatedKeyword = refreshedKeywordData ? await updateKeywordPosition(keyword, refreshedKeywordData, settings, triggeredBy) : currentKeyword;
+   const updatedKeyword = refreshedKeywordData
+      ? await updateKeywordPosition(keyword, refreshedKeywordData, settings, domainSettings, triggeredBy)
+      : currentKeyword;
    return updatedKeyword;
 };
 
@@ -82,11 +85,17 @@ const refreshAndUpdateKeyword = async (
  * @param {SettingsType} settings - The App Settings that contain the Scraper settings
  * @returns {Promise<KeywordType>}
  */
+/** Marca configurada para el dominio, si la hay; si no, se deduce del dominio. */
+const brandFromSettings = (domainSettings?: DomainType): string => {
+   try { return JSON.parse((domainSettings as unknown as { audit_settings?: string })?.audit_settings || '{}').brand || ''; } catch { return ''; }
+};
+
 export const updateKeywordPosition = async (
    keywordRaw:Keyword,
    updatedKeyword: RefreshResult,
    settings: SettingsType,
-   triggeredBy: string = 'cron',
+   domainSettings?: DomainType,
+   triggeredBy = 'cron',
 ): Promise<KeywordType> => {
    const keywordParsed = parseKeywords([keywordRaw.get({ plain: true })]);
       const keyword = keywordParsed[0];
@@ -127,6 +136,7 @@ export const updateKeywordPosition = async (
             serpTop: updatedKeyword.result,
             aiOverview: updatedKeyword.error ? null : (updatedKeyword.aiOverview ?? null),
             domain: keyword.domain,
+            brand: brandFromSettings(domainSettings),
          });
          await recordMonthlyVolume(keyword.ID, dateKey, keyword.volume);
 

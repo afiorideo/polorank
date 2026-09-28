@@ -69,6 +69,17 @@ class KeywordDaily extends Model {
    /** The summary text, for the detail panel. */
    @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '' })
    ai_text!: string;
+
+   /**
+    * Whether the summary NAMES the brand in its text — a different fact from citing it as a source.
+    * 1 names it · 0 there was a summary and it does not · -1 there was no summary.
+    *
+    * The two together tell four different stories, and only one of them used to be visible: a brand that
+    * is cited but not named gets the traffic without the recognition; one that is named but not cited gets
+    * the opposite. They need different work, and a single flag showed them as the same thing.
+    */
+   @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: -1 })
+   ai_mentioned!: number;
 }
 
 export default KeywordDaily;
