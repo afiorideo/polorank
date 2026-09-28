@@ -135,4 +135,26 @@ describe('Tracking IA · menciones en el texto', () => {
    it('un resumen vacío es 0: hubo resumen y no nombra a nadie', () => {
       expect(mentionState('', 'fresard')).toBe(0);
    });
+
+   /**
+    * El bug que Fabián encontró mirando la pantalla el 2026-09-28: "pacote pucon chile" marcaba
+    * las dos columnas en verde, pero en el texto la marca aparecía una sola vez — dentro del enlace
+    * de su propia cita. Buscar en el texto crudo convertía a "¿Te nombra?" en una copia de "¿Te cita?".
+    */
+   it('REGRESIÓN: la marca dentro del enlace de su cita NO cuenta como mención', () => {
+      const real = 'Um pacote de viagem para Pucón custa a partir de R$ 5.795,00 por pessoa.'
+         + ' [[1]](https://thetravellab.com.br/pacotes/pucon)[[2]](https://desviantes.com.br/pacote/chile/pucon/)';
+      expect(mentionState(real, 'thetravellab')).toBe(0);
+      expect(mentionState(real, 'desviantes')).toBe(0);
+   });
+
+   it('una URL suelta en el texto tampoco cuenta como mención', () => {
+      expect(mentionState('Más información en https://maderasfresard.com/roble hoy', 'maderasfresard')).toBe(0);
+   });
+
+   it('la marca escrita en prosa sí cuenta, aunque el dominio la lleve pegada', () => {
+      expect(mentionState('Agencias como The Travel Lab arman el paquete.', 'thetravellab')).toBe(1);
+      expect(mentionState('Operadores locales como Go Araucanía ofrecen traslados.', 'goaraucania')).toBe(1);
+      expect(mentionState('Maderas Fresard vende roble en Temuco.', 'maderasfresard')).toBe(1);
+   });
 });

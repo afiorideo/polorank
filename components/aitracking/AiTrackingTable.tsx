@@ -103,7 +103,8 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
          </div>
          <p className='text-[11px] text-gray-400 mt-2'>
             <strong>Te cita</strong> = tu sitio aparece como fuente del resumen. <strong>Te nombra</strong> = el texto
-            menciona tu marca, aunque no te enlace. Los períodos se cuentan en <strong>días</strong>: <code>5/7</code>
+            escribe tu marca; la etiqueta de la cita no cuenta, tiene que estar en la redacción.
+            Los períodos se cuentan en <strong>días</strong>: <code>5/7</code>
             significa que fuiste visible 5 de los últimos 7 días, y muestran <code>—</code> hasta que haya mediciones de
             esa antigüedad, igual que en Tracking. <strong>N/A</strong> no es que no aparezcas: es que Google no respondió
             con IA en esa búsqueda.

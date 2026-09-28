@@ -98,14 +98,43 @@ export const brandOf = (domain: string, configured?: string): string => {
 export const MIN_BRAND_LENGTH = 4;
 
 /**
+ * El texto del resumen sin lo que NO es prosa: los marcadores de cita `[[n]](url)` y las URLs sueltas.
+ *
+ * Esto es lo que hacía que "¿Te nombra?" fuera una copia de "¿Te cita?": el marcador lleva adentro la
+ * URL de la fuente, así que buscar `thetravellab` encontraba `https://thetravellab.com.br/...` y todo
+ * dominio citado quedaba automáticamente "nombrado". Verificado el 2026-09-28 con `pacote pucon chile`:
+ * la marca aparecía 1 vez en el texto crudo y 0 veces al quitar los marcadores.
+ */
+export const prose = (text: string): string => (text || '')
+   .replace(/\[\[\d+\]\]\([^)]*\)/g, ' ')
+   .replace(/https?:\/\/\S+/g, ' ');
+
+/**
+ * Forma comparable de un texto: sin mayúsculas, sin acentos y sin separadores.
+ *
+ * Sin esto la columna no sirve para marcas de varias palabras, que son casi todas: el dominio
+ * `thetravellab.com.br` da la marca pegada `thetravellab`, pero el resumen la escribe "The Travel Lab".
+ * Lo mismo con los acentos: `goaraucania` contra "Go Araucanía".
+ */
+const flat = (text: string): string => (text || '')
+   .toLowerCase()
+   .normalize('NFD')
+   .replace(/[̀-ͯ]/g, '')
+   .replace(/[^a-z0-9]+/g, '');
+
+/**
  * ¿El resumen NOMBRA a la marca en su texto? Distinto de citarla como fuente.
  *   1 la nombra · 0 hubo resumen y no la nombra · -1 no hubo resumen, o la marca es muy corta para buscarla
+ *
+ * Se busca solo en la prosa: una marca que aparece únicamente dentro del enlace de su propia cita no
+ * está nombrada, está citada — y para eso ya existe la otra columna.
  *
  * Un dominio cuya marca tiene menos de 4 letras no se busca: aparecería dentro de otras palabras y
  * daría un sí falso, que es peor que no medir.
  */
 export const mentionState = (text: string | null | undefined, brand: string): number => {
    if (text === null || text === undefined) { return -1; }
-   if (!brand || brand.length < MIN_BRAND_LENGTH) { return -1; }
-   return text.toLowerCase().includes(brand) ? 1 : 0;
+   const aguja = flat(brand);
+   if (aguja.length < MIN_BRAND_LENGTH) { return -1; }
+   return flat(prose(text)).includes(aguja) ? 1 : 0;
 };

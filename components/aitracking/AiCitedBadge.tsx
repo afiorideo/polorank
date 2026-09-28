@@ -16,7 +16,10 @@ type AiCitedBadgeProps = {
  */
 const TITULOS = {
    citation: { si: 'Google te cita como fuente de su resumen', no: 'Hubo resumen con IA y no te citó como fuente' },
-   mention: { si: 'El texto del resumen nombra tu marca', no: 'Hubo resumen con IA y no nombra tu marca' },
+   mention: {
+      si: 'El texto del resumen escribe tu marca',
+      no: 'Hubo resumen con IA y su texto no escribe tu marca (la etiqueta de la cita no cuenta)',
+   },
 };
 
 const AiCitedBadge = ({ cited, kind = 'citation' }: AiCitedBadgeProps) => {
