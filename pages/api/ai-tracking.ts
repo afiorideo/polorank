@@ -5,7 +5,7 @@ import Keyword from '../../database/models/keyword';
 import KeywordDaily from '../../database/models/keywordDaily';
 import { authenticate } from '../../utils/verifyUser';
 import { canAccessDomain } from '../../utils/auth/guards';
-import { citationPeriods } from '../../utils/aiTracking';
+import { citationPeriods, parseKey } from '../../utils/aiTracking';
 import type { CitationRatio } from '../../utils/aiTracking';
 
 /** Una fila de la tabla de Tracking IA. */
@@ -69,7 +69,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                refs: d.get('ai_references') as string,
                text: d.get('ai_text') as string,
             }))
-            .sort((a, b) => a.date.localeCompare(b.date));
+            // por fecha real: ordenar estas claves como texto pone '2026-9-9' después de '2026-9-28'
+            .sort((a, b) => parseKey(a.date) - parseKey(b.date));
          // el último día que tuvo resumen manda lo que se muestra arriba; si nunca hubo, la fila queda en -1
          const lastWithAi = [...days].reverse().find((d) => d.ai_cited !== -1);
          const latest = lastWithAi || days[days.length - 1];

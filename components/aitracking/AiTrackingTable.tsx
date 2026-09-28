@@ -28,7 +28,10 @@ const shortUrl = (url: string, domain: string): string => {
  */
 const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
    const [selected, setSelected] = useState<AiTrackingRow | null>(null);
-   const th = 'px-3 py-2.5 font-medium text-[11px] uppercase tracking-wide text-gray-400';
+   // La keyword se queda con el ancho sobrante; el resto va en columnas angostas y pegadas entre sí:
+   // ninguna lleva más de 5 o 6 caracteres, y separarlas hacía que la fila se leyera como cinco tablas.
+   const th = 'py-2.5 px-2 font-medium text-[11px] uppercase tracking-wide text-gray-400 whitespace-nowrap';
+   const td = 'py-3 px-2';
 
    if (isLoading) {
       return <div className='mt-4 p-5 py-12 rounded border text-center bg-surface text-sm'><Icon type='loading' /> Cargando…</div>;
@@ -51,18 +54,18 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                : `${rows.filter((r) => r.cited === 1).length} de ${conResumen} búsquedas con resumen te citan.`}
          </p>
          <div className='overflow-x-auto border rounded-md bg-surface'>
-            <table className='w-full text-sm' style={{ minWidth: 760 }}>
+            <table className='w-full text-sm' style={{ minWidth: 700 }}>
                <thead>
                   <tr className='text-left border-b'>
-                     <th className={th}>Keyword</th>
-                     <th className={`${th} text-right`}>Vol.</th>
-                     <th className={th}>¿Te cita?</th>
-                     <th className={`${th} text-right`}>Puesto</th>
-                     <th className={th}>URL citada</th>
-                     <th className={`${th} text-right`}>7d</th>
-                     <th className={`${th} text-right`}>30d</th>
-                     <th className={`${th} text-right`}>60d</th>
-                     <th className={`${th} text-right`}>90d</th>
+                     <th className={`${th} pl-3 w-full`}>Keyword</th>
+                     <th className={`${th} text-right w-[58px]`}>Vol.</th>
+                     <th className={`${th} w-[76px]`}>¿Te cita?</th>
+                     <th className={`${th} text-right w-[52px]`}>Puesto</th>
+                     <th className={`${th} w-[150px]`}>URL citada</th>
+                     <th className={`${th} text-right w-[46px]`}>7d</th>
+                     <th className={`${th} text-right w-[46px]`}>30d</th>
+                     <th className={`${th} text-right w-[46px]`}>60d</th>
+                     <th className={`${th} text-right pr-3 w-[46px]`}>90d</th>
                   </tr>
                </thead>
                <tbody>
@@ -71,18 +74,21 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                      key={r.keywordID}
                      className='border-b last:border-0 hover:bg-indigo-50 cursor-pointer'
                      onClick={() => setSelected(r)}>
-                        <td className='px-3 py-3 font-semibold text-gray-700'>
+                        <td className={`${td} pl-3 font-semibold text-gray-700`}>
                            <span className={`fflag fflag-${r.country} w-[18px] h-[12px] mr-2 inline-block align-middle`} />
                            {r.keyword}
                         </td>
-                        <td className='px-3 py-3 text-right text-gray-500 tabular-nums'>{r.volume || '—'}</td>
-                        <td className='px-3 py-3'><AiCitedBadge cited={r.cited} /></td>
-                        <td className='px-3 py-3 text-right tabular-nums text-gray-600'>{r.position || '—'}</td>
-                        <td className='px-3 py-3 text-xs text-gray-500 max-w-[170px] truncate' title={r.citedUrl}>
+                        <td className={`${td} text-right text-gray-500 tabular-nums`}>{r.volume || '—'}</td>
+                        <td className={td}><AiCitedBadge cited={r.cited} /></td>
+                        <td className={`${td} text-right tabular-nums text-gray-600`}>{r.position || '—'}</td>
+                        <td className={`${td} text-xs text-gray-500 max-w-[150px] truncate`} title={r.citedUrl}>
                            {shortUrl(r.citedUrl, domain)}
                         </td>
                         {(['d7', 'd30', 'd60', 'd90'] as const).map((p) => (
-                           <td key={p} className='px-3 py-3 text-right text-xs text-gray-500 tabular-nums' title={ratioTitle(r.periods[p])}>
+                           <td
+                           key={p}
+                           className={`${td} text-right text-xs text-gray-500 tabular-nums ${p === 'd90' ? 'pr-3' : ''}`}
+                           title={ratioTitle(r.periods[p])}>
                               {ratio(r.periods[p])}
                            </td>
                         ))}

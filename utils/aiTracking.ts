@@ -14,8 +14,14 @@ export type DailyCite = { date: string, ai_cited: number };
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
-/** Parse de la clave 'YYYY-M-D' a medianoche local. Igual que utils/history.ts. */
-const parseKey = (key: string): number => {
+/**
+ * Parse de la clave 'YYYY-M-D' a medianoche local. Igual que utils/history.ts.
+ *
+ * Se exporta porque ordenar estas claves COMO TEXTO está mal y es fácil de hacer sin darse cuenta:
+ * '2026-9-9' queda después de '2026-9-28' al comparar carácter por carácter, porque el mes y el día
+ * no llevan cero adelante. Cualquiera que necesite ordenar por fecha debe usar esto.
+ */
+export const parseKey = (key: string): number => {
    const parts = (key || '').split('-').map((p) => parseInt(p, 10));
    if (parts.length !== 3 || parts.some((p) => !Number.isFinite(p))) { return NaN; }
    return new Date(parts[0], parts[1] - 1, parts[2]).getTime();

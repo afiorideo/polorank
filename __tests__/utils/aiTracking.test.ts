@@ -1,4 +1,4 @@
-import { citationRatio, citationPeriods } from '../../utils/aiTracking';
+import { citationRatio, citationPeriods, parseKey } from '../../utils/aiTracking';
 import type { DailyCite } from '../../utils/aiTracking';
 
 const HOY = new Date(2026, 8, 28); // 28 de septiembre de 2026
@@ -50,5 +50,20 @@ describe('Tracking IA · proporción de citas', () => {
    it('caso real: sin datos hacia atrás, 90d queda en null hasta que se acumulen', () => {
       expect(citationPeriods([dia(28, 1)], HOY).d90).toEqual({ cited: 1, chances: 1 });
       expect(citationPeriods([], HOY).d90).toBeNull();
+   });
+});
+
+describe('Tracking IA · orden de fechas', () => {
+   it('REGLA: las claves YYYY-M-D no se ordenan como texto', () => {
+      // sin cero adelante, '2026-9-9' > '2026-9-28' al comparar caracteres
+      expect('2026-9-9'.localeCompare('2026-9-28')).toBeGreaterThan(0);
+      // con el parseo real, el 28 es posterior
+      expect(parseKey('2026-9-28')).toBeGreaterThan(parseKey('2026-9-9'));
+   });
+
+   it('ordena correctamente un mes con días de uno y dos dígitos', () => {
+      const fechas = ['2026-9-9', '2026-9-28', '2026-9-1', '2026-10-2'];
+      const ordenadas = [...fechas].sort((a, b) => parseKey(a) - parseKey(b));
+      expect(ordenadas).toEqual(['2026-9-1', '2026-9-9', '2026-9-28', '2026-10-2']);
    });
 });
