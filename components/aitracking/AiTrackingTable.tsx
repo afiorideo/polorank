@@ -28,8 +28,9 @@ const shortUrl = (url: string, domain: string): string => {
  */
 const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
    const [selected, setSelected] = useState<AiTrackingRow | null>(null);
-   // La keyword se queda con el ancho sobrante; el resto va en columnas angostas y pegadas entre sí:
-   // ninguna lleva más de 5 o 6 caracteres, y separarlas hacía que la fila se leyera como cinco tablas.
+   // Las columnas de dato llevan ancho fijo (ninguna pasa de 6 caracteres) y Keyword se queda con el resto,
+   // pero la tabla está topada a 880 px. Sin ese tope, en un monitor ancho el sobrante iba entero a Keyword
+   // —el resto suma apenas ~520 px— y quedaba media pantalla en blanco entre la keyword y el volumen.
    const th = 'py-2.5 px-2 font-medium text-[11px] uppercase tracking-wide text-gray-400 whitespace-nowrap';
    const td = 'py-3 px-2';
 
@@ -53,11 +54,11 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                ? 'Todavía no hay mediciones de IA. La primera llega con el próximo chequeo de posiciones.'
                : `${rows.filter((r) => r.cited === 1).length} de ${conResumen} búsquedas con resumen te citan.`}
          </p>
-         <div className='overflow-x-auto border rounded-md bg-surface'>
-            <table className='w-full text-sm' style={{ minWidth: 700 }}>
+         <div className='overflow-x-auto border rounded-md bg-surface inline-block max-w-full align-top'>
+            <table className='w-full text-sm' style={{ minWidth: 700, maxWidth: 880 }}>
                <thead>
                   <tr className='text-left border-b'>
-                     <th className={`${th} pl-3 w-full`}>Keyword</th>
+                     <th className={`${th} pl-3`}>Keyword</th>
                      <th className={`${th} text-right w-[58px]`}>Vol.</th>
                      <th className={`${th} w-[76px]`}>¿Te cita?</th>
                      <th className={`${th} text-right w-[52px]`}>Puesto</th>
