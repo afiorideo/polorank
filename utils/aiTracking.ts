@@ -16,6 +16,15 @@
  */
 export type CitationRatio = { cited: number, days: number, measured: number, withAi: number } | null;
 
+/**
+ * Estados de las columnas de IA. Los dos negativos significan "no se pudo medir" y NO cuentan en los
+ * períodos, pero dicen cosas distintas en pantalla y por eso son dos:
+ *   -1  Google no respondió con IA en esa búsqueda
+ *   -2  respondió, pero entregó el contenido de forma diferida y no lo leímos
+ */
+export const AI_NO_SUMMARY = -1;
+export const AI_DEFERRED = -2;
+
 export type DailyCite = { date: string, ai_cited: number };
 
 /**
@@ -56,10 +65,10 @@ export const citationRatio = (rows: DailyCite[], days: number, now: Date = new D
    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
    const from = windowStart(now, days);
 
-   // "medidos" = días en que hubo resumen con IA; los demás no dicen nada sobre la cita
+   // "medidos" = días en que hubo resumen con IA Y pudimos leerlo; los negativos no dicen nada sobre la cita
    const medidos = rows
       .map((r) => ({ t: parseKey(r.date), cited: r.ai_cited }))
-      .filter((r) => Number.isFinite(r.t) && r.cited !== -1);
+      .filter((r) => Number.isFinite(r.t) && r.cited >= 0);
    if (medidos.length === 0) { return null; }
 
    // la ventana solo cuenta cuando la serie llega hasta su comienzo

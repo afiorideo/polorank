@@ -68,10 +68,10 @@ type KeywordType = {
 }
 
 /** PoloRank: one source cited by Google's AI summary. */
-type AiOverviewReference = { position: number, source: string, domain: string, url: string, title: string };
+type AiOverviewReference = { position: number, source: string, domain: string, url: string, title: string, text?: string };
 
 /** PoloRank: Google's AI summary for a search — its text and the sources it cites. */
-type AiOverviewData = { text: string, references: AiOverviewReference[] };
+type AiOverviewData = { text: string, references: AiOverviewReference[], deferred?: boolean };
 
 type KeywordLastResult = {
    position: number,

@@ -29,8 +29,20 @@ describe('AiCitedBadge', () => {
    it('en modo mención cambia la ayuda, no el estado dibujado', () => {
       const { container, rerender } = render(<AiCitedBadge cited={1} kind='mention' />);
       expect(container.textContent).toBe('✓ Sí');
-      expect(screen.getByTitle('El texto del resumen nombra tu marca')).toBeInTheDocument();
+      expect(screen.getByTitle('El texto del resumen escribe tu marca')).toBeInTheDocument();
       rerender(<AiCitedBadge cited={0} kind='mention' />);
-      expect(screen.getByTitle('Hubo resumen con IA y no nombra tu marca')).toBeInTheDocument();
+      expect(screen.getByTitle(/no escribe tu marca/)).toBeInTheDocument();
+   });
+
+   /**
+    * -2 es "Google respondió con IA y no leímos el contenido". Dibujarlo como el N/A normal hacía que la
+    * pantalla afirmara algo falso ("Google no respondió con IA para esta búsqueda").
+    */
+   it('REGLA: el resumen diferido se distingue del N/A y no dice que Google no respondió', () => {
+      const { container } = render(<AiCitedBadge cited={-2} />);
+      expect(container.textContent).toBe('— sin leer');
+      const badge = screen.getByTitle(/entrega el contenido en una segunda consulta/);
+      expect(badge).toBeInTheDocument();
+      expect(badge.getAttribute('title')).not.toContain('no respondió con IA');
    });
 });

@@ -1,5 +1,5 @@
 import KeywordDaily from '../database/models/keywordDaily';
-import { brandOf, mentionState } from './aiTracking';
+import { brandOf, mentionState, AI_NO_SUMMARY, AI_DEFERRED } from './aiTracking';
 import KeywordVolume from '../database/models/keywordVolume';
 
 /** How many SERP results are kept per day. Two pages: our keywords live around the top-10 border. */
@@ -32,17 +32,19 @@ const sameDomain = (a: string, b: string): boolean => {
 };
 
 /**
- * The three states of the AI summary, and why there are three and not two:
+ * The states of the AI summary, and why there are four and not two:
  *   1  the domain is among the cited sources
  *   0  there WAS a summary and the domain is not in it
- *  -1  there was no summary, or it could not be read
+ *  -1  there was no summary at all
+ *  -2  Google DID answer with AI but deferred the content, so we could not read it
  *
  * A -1 is not a failure and must never be drawn as one. It is also what lets the screen count
  * OPPORTUNITIES instead of calendar days: cited 18 times out of the 22 days a summary appeared reads
  * very differently from "18 of 30".
  */
 export const aiCitedState = (aiOverview: AiOverviewData | null | undefined, domain: string): number => {
-   if (!aiOverview) { return -1; }
+   if (!aiOverview) { return AI_NO_SUMMARY; }
+   if (aiOverview.deferred) { return AI_DEFERRED; }
    return aiOverview.references.some((r) => sameDomain(r.domain, domain)) ? 1 : 0;
 };
 
@@ -78,7 +80,10 @@ export const recordDailySnapshot = async (snap: DailySnapshot): Promise<void> =>
          measured: snap.measured,
          serp_top: JSON.stringify(topOfSerp(snap.serpTop)),
          ai_cited: aiCitedState(snap.aiOverview, snap.domain || ''),
-         ai_mentioned: mentionState(snap.aiOverview ? snap.aiOverview.text : null, brandOf(snap.domain || '', snap.brand)),
+         // un resumen diferido llega con el texto vacío: buscar la marca ahí diría "no te nombra", que es mentira
+         ai_mentioned: snap.aiOverview?.deferred
+            ? AI_DEFERRED
+            : mentionState(snap.aiOverview ? snap.aiOverview.text : null, brandOf(snap.domain || '', snap.brand)),
          ai_references: JSON.stringify(snap.aiOverview?.references || []),
          ai_text: snap.aiOverview?.text || '',
       };

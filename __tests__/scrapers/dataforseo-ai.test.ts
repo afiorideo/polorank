@@ -22,9 +22,27 @@ describe('DataForSEO · resumen con IA', () => {
          expect(extractAiOverview(respuesta([{ type: 'organic', url: 'https://x.cl/', title: 'x' }]))).toBeNull();
       });
 
-      it('REGLA: un resumen que carga aparte NO es "no te citan" — devuelve null para que quede sin medir', () => {
-         const async = respuesta([{ type: 'ai_overview', asynchronous_ai_overview: true, references: [] }]);
-         expect(extractAiOverview(async)).toBeNull();
+      it('guarda el fragmento que Google tomó de cada página', () => {
+         const aio = extractAiOverview(real);
+         expect(aio?.references[0].text).toContain('Características Físicas Distintivas');
+         expect(aio?.references.every((r) => typeof r.text === 'string')).toBe(true);
+      });
+
+      /**
+       * Antes devolvía null y la pantalla decía "Google no respondió con IA", que es falso: sí respondió,
+       * el contenido viene en una segunda consulta que no hacemos. Ahora se distingue para poder decirlo.
+       */
+      it('REGLA: un resumen diferido NO es "no hubo resumen" — lo marca como deferred', () => {
+         const diferido = respuesta([{ type: 'ai_overview', asynchronous_ai_overview: true, references: [] }]);
+         const aio = extractAiOverview(diferido);
+         expect(aio).not.toBeNull();
+         expect(aio?.deferred).toBe(true);
+         expect(aio?.references).toHaveLength(0);
+         expect(aio?.text).toBe('');
+      });
+
+      it('un resumen normal no viene marcado como diferido', () => {
+         expect(extractAiOverview(real)?.deferred).toBeUndefined();
       });
 
       it('tolera un bloque sin referencias sin romperse', () => {

@@ -2,6 +2,7 @@ import React from 'react';
 import SidePanel from '../common/SidePanel';
 import AiSummaryText from './AiSummaryText';
 import type { AiTrackingRow } from '../../services/aiTracking';
+import { AI_NO_SUMMARY, AI_DEFERRED } from '../../utils/aiTracking';
 
 type AiDetailPanelProps = {
    row: AiTrackingRow,
@@ -27,14 +28,24 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                {row.lastDate ? ` · último dato: ${row.lastDate}` : ''}
             </p>
 
-            {row.cited === -1 && (
+            {row.cited === AI_NO_SUMMARY && (
                <div className='p-4 rounded bg-slate-50 text-gray-600'>
                   Google no respondió con IA para esta búsqueda en la última medición.
                   <span className='block text-xs text-gray-400 mt-1'>No es que no te citen: no hubo resumen que citara a nadie.</span>
                </div>
             )}
 
-            {row.cited !== -1 && (
+            {row.cited === AI_DEFERRED && (
+               <div className='p-4 rounded bg-slate-50 text-gray-600'>
+                  Google sí respondió con IA, pero entregó el resumen de forma diferida.
+                  <span className='block text-xs text-gray-400 mt-1'>
+                     Su contenido llega en una segunda consulta que PoloRank no hace, así que no sabemos a quién cita.
+                     No cuenta como día medido en los períodos.
+                  </span>
+               </div>
+            )}
+
+            {row.cited >= 0 && (
                <>
                   {row.text && (
                      <div className='mb-6'>
@@ -74,6 +85,13 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                                  onClick={(e) => e.stopPropagation()}>
                                     {r.domain}
                                  </a>
+                                 {r.text && (
+                                    <span
+                                    className={`block text-[11px] mt-1 leading-snug ${esMio ? 'text-emerald-700' : 'text-gray-400'}`}
+                                    title='El fragmento de esa página que Google tomó para armar su respuesta'>
+                                       “{r.text}”
+                                    </span>
+                                 )}
                               </span>
                               <span className='w-12 text-center shrink-0 text-emerald-600' title='Citada como fuente'>✓</span>
                               <span
@@ -85,6 +103,13 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                         );
                      })}
                   </ul>
+
+                  {row.references.some((r) => r.text) && (
+                     <p className='text-[11px] text-gray-400 mt-2'>
+                        El texto en cursiva bajo cada fuente es el fragmento que Google tomó de esa página. Solo aparece en
+                        mediciones nuevas: las guardadas antes del 28-09-2026 no lo tienen.
+                     </p>
+                  )}
 
                   {row.cited === 0 && (
                      <p className='mt-4 px-3 py-2 rounded bg-rose-50 text-rose-700 text-xs'>

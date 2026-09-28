@@ -2,7 +2,10 @@ import { useQuery } from 'react-query';
 
 export type CitationRatio = { cited: number, days: number, measured: number, withAi: number } | null;
 
-export type AiReference = { position: number, source: string, domain: string, url: string, title: string, mentioned: boolean };
+/** `text`: el fragmento de esa página que Google usó. Falta en las mediciones guardadas antes del 28-09-2026. */
+export type AiReference = {
+   position: number, source: string, domain: string, url: string, title: string, text?: string, mentioned: boolean,
+};
 
 export type AiTrackingRow = {
    keywordID: number,

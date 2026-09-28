@@ -39,7 +39,7 @@ type DfsItem = {
    // bloque ai_overview
    asynchronous_ai_overview?: boolean,
    markdown?: string,
-   references?: { source?: string, domain?: string, url?: string, title?: string }[],
+   references?: { source?: string, domain?: string, url?: string, title?: string, text?: string }[],
 };
 
 type DfsResponse = {
@@ -111,8 +111,11 @@ export const extractCost = (content: unknown): number | undefined => {
    return task && typeof task.cost === 'number' ? task.cost : undefined;
 };
 
-export type AiReference = { position: number, source: string, domain: string, url: string, title: string };
-export type AiOverview = { text: string, references: AiReference[] };
+/** `text` es el fragmento de ESA página que Google usó para armar su respuesta. Viene gratis en la misma consulta. */
+export type AiReference = { position: number, source: string, domain: string, url: string, title: string, text: string };
+
+/** `deferred`: Google SÍ respondió con IA, pero entrega el contenido en una segunda consulta que no hacemos. */
+export type AiOverview = { text: string, references: AiReference[], deferred?: boolean };
 
 /** Dominio comparable: sin protocolo, sin www, en minúscula. Mismo criterio que el resto del sistema. */
 const normDomain = (d: string): string => (d || '').replace(/^https?:\/\//, '').replace(/^www\./i, '').replace(/\/.*$/, '').toLowerCase();
@@ -120,10 +123,12 @@ const normDomain = (d: string): string => (d || '').replace(/^https?:\/\//, '').
 /**
  * PoloRank — el resumen con IA de Google, si vino en esta respuesta.
  *
- * Devuelve `null` en tres casos que significan lo mismo para quien llama: **no se pudo medir**.
- * - la SERP no trajo bloque `ai_overview`
- * - el bloque carga de forma asíncrona (`asynchronous_ai_overview`), así que sus fuentes no están acá
- * - la respuesta es ilegible
+ * Devuelve `null` cuando NO hubo resumen: la SERP no trajo bloque `ai_overview`, o la respuesta es ilegible.
+ *
+ * Distinto es el bloque `asynchronous_ai_overview`: ahí Google **sí** respondió con IA, pero manda el
+ * contenido en una segunda consulta que no hacemos. Antes también devolvía `null` y la pantalla decía
+ * "Google no respondió con IA para esta búsqueda", que es falso. Ahora devuelve `deferred: true` para que
+ * se pueda decir la verdad: hubo resumen y no lo leímos.
  *
  * Esa distinción es el corazón de la funcionalidad: "no hay resumen" NO es "no te citan", y confundirlos
  * llenaría la pantalla de cruces rojas sobre búsquedas donde Google ni siquiera respondió con IA.
@@ -138,13 +143,15 @@ export const extractAiOverview = (content: unknown): AiOverview | null => {
    const items = (res && res.tasks && res.tasks[0] && res.tasks[0].result && res.tasks[0].result[0]
       && res.tasks[0].result[0].items) || [];
    const block = items.find((i) => i.type === 'ai_overview');
-   if (!block || block.asynchronous_ai_overview === true) { return null; }
+   if (!block) { return null; }
+   if (block.asynchronous_ai_overview === true) { return { text: '', references: [], deferred: true }; }
    const references: AiReference[] = (block.references || []).map((r, i) => ({
       position: i + 1,
       source: r.source || '',
       domain: r.domain || '',
       url: r.url || '',
       title: r.title || '',
+      text: r.text || '',
    }));
    return { text: block.markdown || '', references };
 };

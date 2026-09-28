@@ -1,7 +1,8 @@
 import React from 'react';
+import { AI_DEFERRED } from '../../utils/aiTracking';
 
 type AiCitedBadgeProps = {
-   /** 1 sí · 0 hubo resumen y no · -1 no hubo resumen */
+   /** 1 sí · 0 hubo resumen y no · -1 no hubo resumen · -2 hubo resumen pero Google lo entregó diferido */
    cited: number,
    /** Cambia solo los textos de ayuda: el estado se dibuja igual en los dos casos. */
    kind?: 'citation' | 'mention',
@@ -39,6 +40,15 @@ const AiCitedBadge = ({ cited, kind = 'citation' }: AiCitedBadgeProps) => {
          className='inline-block text-xs px-2 py-0.5 rounded bg-rose-100 text-rose-700 font-semibold'
          title={t.no}>
             ✗ No
+         </span>
+      );
+   }
+   if (cited === AI_DEFERRED) {
+      return (
+         <span
+         className='inline-block text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-500 italic'
+         title='Google SÍ respondió con IA, pero entrega el contenido en una segunda consulta que no hacemos. No sabemos si te cita.'>
+            — sin leer
          </span>
       );
    }

@@ -100,6 +100,30 @@ describe('Tracking IA · orden de fechas', () => {
    });
 });
 
+describe('Tracking IA · resumen diferido (-2)', () => {
+   /**
+    * El -2 significa "hubo resumen y no lo leímos". No sabemos si citó, así que no puede contar
+    * como día medido: sumarlo al denominador inventaría un día en que "no te citaron".
+    */
+   it('REGLA: un día con resumen diferido no cuenta como medido', () => {
+      const hoy = new Date(2026, 8, 28);
+      const filas = [
+         { date: '2026-9-22', ai_cited: 1 },
+         { date: '2026-9-23', ai_cited: -2 },
+         { date: '2026-9-24', ai_cited: -2 },
+      ];
+      const r = citationRatio(filas, 7, hoy);
+      expect(r).not.toBeNull();
+      expect(r?.cited).toBe(1);
+      expect(r?.withAi).toBe(1);
+   });
+
+   it('un período con solo días diferidos no tiene nada que mostrar', () => {
+      const hoy = new Date(2026, 8, 28);
+      expect(citationRatio([{ date: '2026-9-27', ai_cited: -2 }], 7, hoy)).toBeNull();
+   });
+});
+
 describe('Tracking IA · menciones en el texto', () => {
    it('la marca sale del dominio cuando no hay una configurada', () => {
       expect(brandOf('maderasfresard.com')).toBe('maderasfresard');
