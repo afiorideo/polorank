@@ -31,6 +31,8 @@ export type RefreshResult = false | {
    error?: boolean | string,
    /** PoloRank: SERP feature types found (depth-based scrapers only) */
    serpFeatures?: string[],
+   /** PoloRank: Google's AI summary and its cited sources. null = there was none, or it could not be read. */
+   aiOverview?: AiOverviewData | null,
    /** PoloRank: number of results requested (depth-based scrapers only) */
    depth?: number,
    /** PoloRank: real cost in USD reported by the API, when available */
@@ -116,7 +118,7 @@ export const getScraperClient = (
    return client;
 };
 
-type DepthAttempt = { results: SearchResult[], features: string[], depth: number, error?: string };
+type DepthAttempt = { results: SearchResult[], features: string[], aiOverview: AiOverviewData | null, depth: number, error?: string };
 
 /**
  * PoloRank: scrape a keyword with a depth-based scraper (DataForSEO): one request with the depth
@@ -138,18 +140,19 @@ const scrapeDepthBased = async (
    const request = async (depth: number): Promise<DepthAttempt> => {
       const pagination: ScraperPagination = { start: 0, num: depth, page: 1 };
       const client = getScraperClient(keyword, settings, scraperObj, pagination);
-      if (!client) { return { results: [], features: [], depth, error: 'No scraper client available' }; }
+      if (!client) { return { results: [], features: [], aiOverview: null, depth, error: 'No scraper client available' }; }
       try {
          const res: any = await client.then((result: any) => result.json());
          const cost = scraperObj.costExtractor ? scraperObj.costExtractor(res) : undefined;
          if (typeof cost === 'number') { totalCost += cost; costKnown = true; }
          const extracted = scraperObj.serpExtractor ? scraperObj.serpExtractor(res) : [];
          const features = scraperObj.featuresExtractor ? scraperObj.featuresExtractor(res) : [];
-         return { results: extracted.map((item, i) => ({ ...item, position: i + 1 })), features, depth };
+         const aiOverview = scraperObj.aiOverviewExtractor ? scraperObj.aiOverviewExtractor(res) : null;
+         return { results: extracted.map((item, i) => ({ ...item, position: i + 1 })), features, aiOverview, depth };
       } catch (error: any) {
          const msg = error?.message || 'Unknown scraping error';
          console.log('[ERROR] Scraping (depth', depth, ') for keyword:', keyword.keyword, msg);
-         return { results: [], features: [], depth, error: msg };
+         return { results: [], features: [], aiOverview: null, depth, error: msg };
       }
    };
 
@@ -165,7 +168,12 @@ const scrapeDepthBased = async (
       }
    }
 
-   const meta = { depth: attempt.depth, cost: costKnown ? totalCost : undefined, serpFeatures: attempt.features };
+   const meta = {
+      depth: attempt.depth,
+      cost: costKnown ? totalCost : undefined,
+      serpFeatures: attempt.features,
+      aiOverview: attempt.aiOverview,
+   };
    if (attempt.error) { return { ...errorResult, ...meta, error: attempt.error }; }
    if (attempt.results.length === 0) { return { ...errorResult, ...meta, error: `No search results found (depth ${attempt.depth})` }; }
 

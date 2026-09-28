@@ -196,6 +196,7 @@ const dataforseo: ScraperSettings = {
    },
    serpExtractor: (content) => extractOrganic(content),
    featuresExtractor: (response) => extractFeatures(response),
+   aiOverviewExtractor: (response) => extractAiOverview(response),
    costExtractor: (response) => extractCost(response),
 };
 

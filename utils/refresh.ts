@@ -125,6 +125,8 @@ export const updateKeywordPosition = async (
             depth: typeof updatedKeyword.depth === 'number' ? updatedKeyword.depth : 0,
             measured: !updatedKeyword.error,
             serpTop: updatedKeyword.result,
+            aiOverview: updatedKeyword.error ? null : (updatedKeyword.aiOverview ?? null),
+            domain: keyword.domain,
          });
          await recordMonthlyVolume(keyword.ID, dateKey, keyword.volume);
 

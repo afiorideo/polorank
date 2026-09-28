@@ -67,6 +67,12 @@ type KeywordType = {
    targetStats?: import('./utils/history').KeywordStats,
 }
 
+/** PoloRank: one source cited by Google's AI summary. */
+type AiOverviewReference = { position: number, source: string, domain: string, url: string, title: string };
+
+/** PoloRank: Google's AI summary for a search — its text and the sources it cites. */
+type AiOverviewData = { text: string, references: AiOverviewReference[] };
+
 type KeywordLastResult = {
    position: number,
    url: string,
@@ -299,6 +305,12 @@ interface ScraperSettings {
    body?(keyword:KeywordType, settings:SettingsType, countries:countryData, pagination?: ScraperPagination): string,
    /** PoloRank: extract the SERP feature types (featured_snippet, people_also_ask, local_pack...) from the raw API response. */
    featuresExtractor?(response: any): string[],
+   /**
+    * PoloRank: extract Google's AI summary and the sources it cites.
+    * Returns null when there was no summary, or when it could not be read — which is NOT the same as
+    * "the domain was not cited", and must never be recorded as such.
+    */
+   aiOverviewExtractor?(response: any): AiOverviewData | null,
    /** PoloRank: extract the real cost (USD) of the request from the raw API response, when the API reports it. */
    costExtractor?(response: any): number | undefined,
    /** Set your own custom HTTP header properties when making the scraper API request.

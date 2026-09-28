@@ -16,6 +16,31 @@ export type DailySnapshot = {
    /** false when the scrape failed: the position was carried over, not measured */
    measured: boolean,
    serpTop: KeywordLastResult[],
+   /** Google's AI summary. null = there was none, or it could not be read. */
+   aiOverview?: AiOverviewData | null,
+   /** Needed to decide whether the domain is among the cited sources. */
+   domain?: string,
+};
+
+/** Same comparison the rest of the system uses: no protocol, no www, lowercase. */
+const sameDomain = (a: string, b: string): boolean => {
+   const norm = (d: string): string => (d || '').replace(/^https?:\/\//, '').replace(/^www\./i, '').replace(/\/.*$/, '').toLowerCase();
+   return !!norm(a) && norm(a) === norm(b);
+};
+
+/**
+ * The three states of the AI summary, and why there are three and not two:
+ *   1  the domain is among the cited sources
+ *   0  there WAS a summary and the domain is not in it
+ *  -1  there was no summary, or it could not be read
+ *
+ * A -1 is not a failure and must never be drawn as one. It is also what lets the screen count
+ * OPPORTUNITIES instead of calendar days: cited 18 times out of the 22 days a summary appeared reads
+ * very differently from "18 of 30".
+ */
+export const aiCitedState = (aiOverview: AiOverviewData | null | undefined, domain: string): number => {
+   if (!aiOverview) { return -1; }
+   return aiOverview.references.some((r) => sameDomain(r.domain, domain)) ? 1 : 0;
 };
 
 /** 'YYYY-MM' for the month a history key belongs to. */
@@ -49,6 +74,9 @@ export const recordDailySnapshot = async (snap: DailySnapshot): Promise<void> =>
          depth: snap.depth || 0,
          measured: snap.measured,
          serp_top: JSON.stringify(topOfSerp(snap.serpTop)),
+         ai_cited: aiCitedState(snap.aiOverview, snap.domain || ''),
+         ai_references: JSON.stringify(snap.aiOverview?.references || []),
+         ai_text: snap.aiOverview?.text || '',
       };
       const existing = await KeywordDaily.findOne({ where });
       if (existing) { await existing.update(values); } else { await KeywordDaily.create(values); }

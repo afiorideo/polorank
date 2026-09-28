@@ -1,4 +1,4 @@
-import { monthOf, topOfSerp, SERP_TOP_N, recordDailySnapshot, recordMonthlyVolume } from '../../utils/dailySnapshot';
+import { monthOf, topOfSerp, SERP_TOP_N, recordDailySnapshot, recordMonthlyVolume, aiCitedState } from '../../utils/dailySnapshot';
 import KeywordDaily from '../../database/models/keywordDaily';
 import KeywordVolume from '../../database/models/keywordVolume';
 
@@ -75,6 +75,74 @@ describe('utils/dailySnapshot (PoloRank)', () => {
       await expect(recordDailySnapshot({
          keywordID: 7, date: '2026-8-29', position: 8, targetPosition: 0, url: '', serpFeatures: [], depth: 20, measured: true, serpTop: [],
       })).resolves.toBeUndefined();
+   });
+
+   describe('resumen con IA', () => {
+      const conFuentes = (...dominios: string[]) => ({
+         text: 'texto del resumen',
+         references: dominios.map((d, i) => ({ position: i + 1, source: d, domain: d, url: `https://${d}`, title: d })),
+      });
+
+      it('1 cuando el dominio está entre las fuentes citadas', () => {
+         expect(aiCitedState(conFuentes('sodimac.cl', 'maderasfresard.com'), 'maderasfresard.com')).toBe(1);
+      });
+
+      it('0 cuando hubo resumen y el dominio no está', () => {
+         expect(aiCitedState(conFuentes('sodimac.cl', 'maderastranapuente.cl'), 'maderasfresard.com')).toBe(0);
+      });
+
+      it('REGLA: -1 cuando no hubo resumen — nunca 0, porque no se midió nada', () => {
+         expect(aiCitedState(null, 'maderasfresard.com')).toBe(-1);
+         expect(aiCitedState(undefined, 'maderasfresard.com')).toBe(-1);
+      });
+
+      it('un resumen sin fuentes es 0, no -1: sí hubo resumen y no te citó', () => {
+         expect(aiCitedState({ text: 'x', references: [] }, 'maderasfresard.com')).toBe(0);
+      });
+
+      it('compara dominios ignorando www y mayúsculas', () => {
+         expect(aiCitedState(conFuentes('www.MaderasFresard.com'), 'maderasfresard.com')).toBe(1);
+      });
+
+      it('guarda el estado, las fuentes y el texto en la fila del día', async () => {
+         daily.findOne.mockResolvedValue(null);
+         await recordDailySnapshot({
+            keywordID: 3,
+            date: '2026-9-28',
+            position: 5,
+            targetPosition: 0,
+            url: '',
+            serpFeatures: ['ai_overview'],
+            depth: 10,
+            measured: true,
+            serpTop: [],
+            domain: 'maderasfresard.com',
+            aiOverview: conFuentes('sodimac.cl', 'maderasfresard.com'),
+         });
+         const saved = daily.create.mock.calls[0][0];
+         expect(saved.ai_cited).toBe(1);
+         expect(JSON.parse(saved.ai_references)).toHaveLength(2);
+         expect(saved.ai_text).toBe('texto del resumen');
+      });
+
+      it('sin resumen guarda -1 y deja las fuentes vacías', async () => {
+         daily.findOne.mockResolvedValue(null);
+         await recordDailySnapshot({
+            keywordID: 3,
+            date: '2026-9-28',
+            position: 5,
+            targetPosition: 0,
+            url: '',
+            serpFeatures: [],
+            depth: 10,
+            measured: true,
+            serpTop: [],
+            domain: 'maderasfresard.com',
+         });
+         const saved = daily.create.mock.calls[0][0];
+         expect(saved.ai_cited).toBe(-1);
+         expect(saved.ai_references).toBe('[]');
+      });
    });
 
    it('recordMonthlyVolume guarda el volumen del mes e ignora el volumen desconocido', async () => {
