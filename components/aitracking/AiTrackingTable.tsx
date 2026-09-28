@@ -14,8 +14,8 @@ type AiTrackingTableProps = {
 const ratio = (r: CitationRatio): string => (r ? `${r.cited}/${r.chances}` : '—');
 
 const ratioTitle = (r: CitationRatio): string => (r
-   ? `Te citaron ${r.cited} de las ${r.chances} veces que Google respondió con IA en ese período`
-   : 'Google no respondió con IA ninguna vez en ese período');
+   ? `${r.cited} DÍAS citado, de los ${r.chances} días que Google respondió con IA en ese período`
+   : 'Todavía no hay mediciones que cubran ese período');
 
 const shortUrl = (url: string, domain: string): string => {
    if (!url) { return '—'; }
@@ -99,8 +99,10 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
             </table>
          </div>
          <p className='text-[11px] text-gray-400 mt-2'>
-            Los períodos cuentan <strong>oportunidades</strong>, no días: <code>18/22</code> significa que hubo resumen 22
-            veces y te citaron en 18. <strong>N/A</strong> no es que no te citen — es que Google no respondió con IA.
+            Los períodos se cuentan en <strong>días</strong>, no en fuentes: <code>18/22</code> significa que en ese
+            período Google respondió con IA durante 22 días y te citó en 18. Un período muestra <code>—</code> hasta que
+            haya mediciones de esa antigüedad, igual que en Tracking. Y <strong>N/A</strong> no es que no te citen: es que
+            Google no respondió con IA.
          </p>
          {selected && <AiDetailPanel row={selected} domain={domain} closePanel={() => setSelected(null)} />}
       </>

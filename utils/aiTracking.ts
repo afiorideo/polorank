@@ -12,7 +12,16 @@ export type CitationRatio = { cited: number, chances: number } | null;
 
 export type DailyCite = { date: string, ai_cited: number };
 
-const DAY_MS = 24 * 60 * 60 * 1000;
+/**
+ * Comienzo de la ventana de N días, contando hoy como el primero.
+ *
+ * Se calcula con aritmética de CALENDARIO y no restando milisegundos: en Chile el horario de verano
+ * cambia en septiembre, así que `hoy − 30 × 24 h` cae a las 23:00 del día anterior al esperado y las
+ * comparaciones de borde fallan por una hora. Verificado el 2026-09-28.
+ */
+const windowStart = (now: Date, days: number): number => (
+   new Date(now.getFullYear(), now.getMonth(), now.getDate() - (days - 1)).getTime()
+);
 
 /**
  * Parse de la clave 'YYYY-M-D' a medianoche local. Igual que utils/history.ts.
@@ -29,18 +38,30 @@ export const parseKey = (key: string): number => {
 
 /**
  * Cuántas veces citaron al dominio en los últimos N días, sobre cuántas veces hubo resumen con IA.
- * Devuelve null cuando en ese período no hubo ni una sola oportunidad: no es 0 de algo, es que no hubo nada.
+ *
+ * Devuelve null en dos casos, y el segundo es el que evita mentir:
+ * - no hubo ni una oportunidad en la ventana: no es "0 de algo", es que no hubo nada
+ * - **la serie todavía no llega tan atrás**: con un solo día medido, las cuatro ventanas contienen ese
+ *   mismo día y las cuatro columnas dirían lo mismo. Cuatro números idénticos parecen información y no lo
+ *   son — es el mismo error que las columnas de cambio cometían en agosto. Igual que en Tracking, un
+ *   período sin datos de esa antigüedad muestra un guion hasta que los tenga.
  */
 export const citationRatio = (rows: DailyCite[], days: number, now: Date = new Date()): CitationRatio => {
    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-   const from = today - (days - 1) * DAY_MS;
-   const inRange = rows.filter((r) => {
-      const t = parseKey(r.date);
-      return Number.isFinite(t) && t >= from && t <= today;
-   });
-   const chances = inRange.filter((r) => r.ai_cited !== -1).length;
-   if (chances === 0) { return null; }
-   return { cited: inRange.filter((r) => r.ai_cited === 1).length, chances };
+   const from = windowStart(now, days);
+
+   const medidos = rows
+      .map((r) => ({ t: parseKey(r.date), cited: r.ai_cited }))
+      .filter((r) => Number.isFinite(r.t) && r.cited !== -1);
+   if (medidos.length === 0) { return null; }
+
+   // la ventana solo cuenta cuando la serie llega hasta su comienzo
+   const masViejo = Math.min(...medidos.map((r) => r.t));
+   if (masViejo > from) { return null; }
+
+   const inRange = medidos.filter((r) => r.t >= from && r.t <= today);
+   if (inRange.length === 0) { return null; }
+   return { cited: inRange.filter((r) => r.cited === 1).length, chances: inRange.length };
 };
 
 /** Los cuatro períodos que muestra la tabla. */

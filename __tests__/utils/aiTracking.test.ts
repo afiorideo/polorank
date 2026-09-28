@@ -6,14 +6,29 @@ const dia = (d: number, estado: number): DailyCite => ({ date: `2026-9-${d}`, ai
 
 describe('Tracking IA · proporción de citas', () => {
    it('cuenta citas sobre oportunidades, no sobre días del calendario', () => {
-      // 5 días: 3 con resumen (2 citado, 1 no) y 2 sin resumen
-      const rows = [dia(28, 1), dia(27, 1), dia(26, 0), dia(25, -1), dia(24, -1)];
-      expect(citationRatio(rows, 7, HOY)).toEqual({ cited: 2, chances: 3 });
+      // 7 días medidos para que la ventana de 7 esté cubierta: 3 con resumen (2 citado, 1 no)
+      const rows = [dia(28, 1), dia(27, 1), dia(26, 0), dia(25, -1), dia(24, -1), dia(23, -1), dia(22, 0)];
+      expect(citationRatio(rows, 7, HOY)).toEqual({ cited: 2, chances: 4 });
+   });
+
+   it('REGLA: un período sin datos de esa antigüedad devuelve null — nada de repetir el mismo número', () => {
+      // un solo día medido: las cuatro ventanas lo contienen, pero ninguna está cubierta salvo la de 1 día
+      const unDia = [dia(28, 0)];
+      expect(citationRatio(unDia, 7, HOY)).toBeNull();
+      expect(citationRatio(unDia, 30, HOY)).toBeNull();
+      expect(citationRatio(unDia, 90, HOY)).toBeNull();
+      expect(citationRatio(unDia, 1, HOY)).toEqual({ cited: 0, chances: 1 });
+   });
+
+   it('el período se activa recién cuando la serie llega a su comienzo', () => {
+      const sieteDias = [22, 23, 24, 25, 26, 27, 28].map((d) => dia(d, 0));
+      expect(citationRatio(sieteDias, 7, HOY)).toEqual({ cited: 0, chances: 7 });
+      expect(citationRatio(sieteDias, 30, HOY)).toBeNull();
    });
 
    it('REGLA: los días sin resumen no cuentan ni a favor ni en contra', () => {
-      const conHuecos = [dia(28, 1), dia(27, -1), dia(26, -1), dia(25, -1)];
-      expect(citationRatio(conHuecos, 7, HOY)).toEqual({ cited: 1, chances: 1 });
+      const conHuecos = [dia(28, 1), dia(27, -1), dia(26, -1), dia(25, -1), dia(24, -1), dia(23, -1), dia(22, 1)];
+      expect(citationRatio(conHuecos, 7, HOY)).toEqual({ cited: 2, chances: 2 });
    });
 
    it('devuelve null cuando no hubo ni una oportunidad en el período', () => {
@@ -22,7 +37,8 @@ describe('Tracking IA · proporción de citas', () => {
    });
 
    it('cero citas con oportunidades es 0 de N, que no es lo mismo que null', () => {
-      expect(citationRatio([dia(28, 0), dia(27, 0)], 7, HOY)).toEqual({ cited: 0, chances: 2 });
+      const semana = [22, 23, 24, 25, 26, 27, 28].map((d) => dia(d, 0));
+      expect(citationRatio(semana, 7, HOY)).toEqual({ cited: 0, chances: 7 });
    });
 
    it('ignora lo que cae fuera de la ventana', () => {
@@ -31,25 +47,41 @@ describe('Tracking IA · proporción de citas', () => {
       expect(citationRatio(viejo, 90, HOY)).toEqual({ cited: 1, chances: 2 });
    });
 
+   it('caso real de hoy: Madera de Roble con un solo día medido muestra guion en los cuatro períodos', () => {
+      const p = citationPeriods([dia(28, 0)], HOY);
+      expect([p.d7, p.d30, p.d60, p.d90]).toEqual([null, null, null, null]);
+   });
+
    it('la ventana de 7 días incluye hoy y los 6 anteriores', () => {
       const rows = [dia(28, 1), dia(22, 1), dia(21, 1)];
       expect(citationRatio(rows, 7, HOY)).toEqual({ cited: 2, chances: 2 }); // 28 y 22, no el 21
    });
 
    it('tolera fechas con formato roto sin romperse', () => {
-      expect(citationRatio([{ date: 'basura', ai_cited: 1 }, dia(28, 1)], 7, HOY)).toEqual({ cited: 1, chances: 1 });
+      const rows = [{ date: 'basura', ai_cited: 1 }, dia(28, 1), dia(22, 1)];
+      expect(citationRatio(rows, 7, HOY)).toEqual({ cited: 2, chances: 2 });
    });
 
    it('citationPeriods arma los cuatro períodos de la tabla', () => {
-      const p = citationPeriods([dia(28, 1), dia(20, 0)], HOY);
+      // serie que llega a agosto: 7 y 30 quedan cubiertos, 60 y 90 todavía no
+      const p = citationPeriods([dia(28, 1), dia(20, 0), { date: '2026-8-30', ai_cited: 1 }], HOY);
       expect(p.d7).toEqual({ cited: 1, chances: 1 });
-      expect(p.d30).toEqual({ cited: 1, chances: 2 });
-      expect(p.d90).toEqual({ cited: 1, chances: 2 });
+      expect(p.d30).toEqual({ cited: 2, chances: 3 });
+      expect(p.d60).toBeNull();
+      expect(p.d90).toBeNull();
    });
 
-   it('caso real: sin datos hacia atrás, 90d queda en null hasta que se acumulen', () => {
-      expect(citationPeriods([dia(28, 1)], HOY).d90).toEqual({ cited: 1, chances: 1 });
+   it('sin ninguna medición de IA, los cuatro períodos son null', () => {
       expect(citationPeriods([], HOY).d90).toBeNull();
+      expect(citationPeriods([dia(28, -1), dia(27, -1)], HOY).d7).toBeNull();
+   });
+});
+
+describe('Tracking IA · bordes de ventana con cambio de hora', () => {
+   it('REGLA: la ventana se calcula por calendario, no restando 24 h por día', () => {
+      // en septiembre Chile cambia la hora: restar 30 x 24 h cae a las 23:00 del dia anterior
+      const treintaDias = [{ date: '2026-8-30', ai_cited: 1 }, dia(28, 0)];
+      expect(citationRatio(treintaDias, 30, HOY)).toEqual({ cited: 1, chances: 2 });
    });
 });
 
