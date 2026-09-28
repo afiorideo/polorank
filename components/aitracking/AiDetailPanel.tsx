@@ -1,5 +1,6 @@
 import React from 'react';
 import SidePanel from '../common/SidePanel';
+import AiSummaryText from './AiSummaryText';
 import type { AiTrackingRow } from '../../services/aiTracking';
 
 type AiDetailPanelProps = {
@@ -37,10 +38,13 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                <>
                   {row.text && (
                      <div className='mb-6'>
-                        <h4 className='text-[11px] uppercase tracking-wide text-gray-400 mb-2'>Lo que responde Google</h4>
-                        <p className='text-gray-600 leading-relaxed bg-slate-50 rounded p-3 text-[13px]'>
-                           {row.text.replace(/\[\[\d+\]\]\([^)]*\)/g, '').slice(0, 600)}
-                        </p>
+                        <h4 className='text-[11px] uppercase tracking-wide text-gray-400 mb-2'>
+                           Lo que responde Google
+                           <span className='ml-2 normal-case tracking-normal text-gray-300'>· las etiquetas son sus fuentes</span>
+                        </h4>
+                        <div className='bg-slate-50 rounded p-3'>
+                           <AiSummaryText text={row.text} domain={domain} sources={row.references} />
+                        </div>
                      </div>
                   )}
 
