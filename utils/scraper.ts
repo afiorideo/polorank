@@ -4,7 +4,7 @@ import { readFile, writeFile } from 'fs/promises';
 import HttpsProxyAgent from 'https-proxy-agent';
 import countries from './countries';
 import allScrapers from '../scrapers/index';
-import { parseKeywordScrape, resolveScrapeStrategy, strategyToDepth } from './depth';
+import { checkedDepth, parseKeywordScrape, resolveScrapeStrategy, strategyToDepth } from './depth';
 
 type SearchResult = {
    title: string,
@@ -35,6 +35,8 @@ export type RefreshResult = false | {
    aiOverview?: AiOverviewData | null,
    /** PoloRank: number of results requested (depth-based scrapers only) */
    depth?: number,
+   /** PoloRank: number of results really checked (page-based scrapers: Serper, SerpApi…) */
+   checked?: number,
    /** PoloRank: real cost in USD reported by the API, when available */
    cost?: number,
 }
@@ -366,6 +368,7 @@ export const scrapeKeywordWithStrategy = async (
       url: finalSerp.url,
       result: fullResults,
       error: false,
+      checked: checkedDepth(allScrapedResults),
    };
 };
 
@@ -402,7 +405,15 @@ export const scrapeKeywordFromGoogle = async (keyword:KeywordType, settings:Sett
          const extracted = scraperObj?.serpExtractor ? scraperObj.serpExtractor(scrapeResult) : extractScrapedResult(scrapeResult, keyword.device);
          await writeFile('result.txt', JSON.stringify(scrapeResult), { encoding: 'utf-8' }).catch((err) => { console.log(err); });
          const serp = getSerp(keyword.domain, extracted, subdomainMatching);
-         refreshedResults = { ID: keyword.ID, keyword: keyword.keyword, position: serp.position, url: serp.url, result: extracted, error: false };
+         refreshedResults = {
+            ID: keyword.ID,
+            keyword: keyword.keyword,
+            position: serp.position,
+            url: serp.url,
+            result: extracted,
+            error: false,
+            checked: checkedDepth(extracted),
+         };
          console.log('[SERP]: ', keyword.keyword, serp.position, serp.url);
       } else {
          scraperError = res.detail || res.error || 'Unknown Error';

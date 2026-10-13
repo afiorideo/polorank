@@ -106,3 +106,26 @@ export const describeScrape = (r: Pick<ResolvedScrape, 'strategy' | 'paginationL
    if (r.strategy === 'custom') { return r.paginationLimit === 1 ? '1 página' : `${r.paginationLimit} páginas`; }
    return '1 página';
 };
+
+/**
+ * PoloRank: how deep a page-based scraper (Serper, SerpApi…) really looked — the last real position received,
+ * rounded up to its page of 10 (max 100). Positions marked as skipped (pages not requested) don't count.
+ */
+export const checkedDepth = (results: { position?: number, url?: string, skipped?: boolean }[] | null | undefined): number => {
+   const last = (results || []).reduce((max, r) => (r && r.url && !r.skipped && Number(r.position) > max ? Number(r.position) : max), 0);
+   if (last <= 0) { return 0; }
+   return Math.min(TOTAL_PAGES * PAGE_SIZE, Math.ceil(last / PAGE_SIZE) * PAGE_SIZE);
+};
+
+/**
+ * PoloRank: what a refresh stores about depth. DataForSEO reports the requested `depth` (and its SERP features);
+ * page-based scrapers report `checked`. Either one feeds the "+N" label; only `depth` feeds the usage panel.
+ */
+export const scrapeDepthMeta = (r: { depth?: number, checked?: number, serpFeatures?: string[] })
+   : { lastDepth?: number, serpFeatures?: string[], snapshotDepth: number } => {
+   if (typeof r.depth === 'number') {
+      return { lastDepth: r.depth, serpFeatures: r.serpFeatures || [], snapshotDepth: r.depth };
+   }
+   if (typeof r.checked === 'number' && r.checked > 0) { return { lastDepth: r.checked, snapshotDepth: r.checked }; }
+   return { snapshotDepth: 0 };
+};

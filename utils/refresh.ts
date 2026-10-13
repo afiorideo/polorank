@@ -6,6 +6,7 @@ import Keyword from '../database/models/keyword';
 import { logUsage } from './usage';
 import { recordDailySnapshot, recordMonthlyVolume } from './dailySnapshot';
 import { findTargetPosition } from './targetUrl';
+import { scrapeDepthMeta } from './depth';
 
 /**
  * Refreshes the Keywords position by Scraping Google Search Result by
@@ -109,10 +110,9 @@ export const updateKeywordPosition = async (
          const dateKey = `${theDate.getFullYear()}-${theDate.getMonth() + 1}-${theDate.getDate()}`;
          history[dateKey] = newPos;
 
-         // PoloRank: depth-based scrapers report the requested depth and the SERP features found
-         const depthMeta = typeof updatedKeyword.depth === 'number'
-            ? { serpFeatures: updatedKeyword.serpFeatures || [], lastDepth: updatedKeyword.depth }
-            : {};
+         // PoloRank: depth-based scrapers report the requested depth and the SERP features found;
+         // page-based scrapers report how many results they really checked (feeds the "+N" label)
+         const { snapshotDepth, ...depthMeta } = scrapeDepthMeta(updatedKeyword);
          // PoloRank: "URL objetivo" — same SERP, second lookup (only when the keyword has a target and the scrape succeeded)
          const targetMeta: { targetPosition?: number, targetHistory?: KeywordHistory } = {};
          if (keyword.targetUrl && !updatedKeyword.error) {
@@ -131,7 +131,7 @@ export const updateKeywordPosition = async (
             targetPosition: targetMeta.targetPosition ?? keyword.targetPosition ?? 0,
             url: updatedKeyword.url,
             serpFeatures: updatedKeyword.serpFeatures || [],
-            depth: typeof updatedKeyword.depth === 'number' ? updatedKeyword.depth : 0,
+            depth: snapshotDepth,
             measured: !updatedKeyword.error,
             serpTop: updatedKeyword.result,
             aiOverview: updatedKeyword.error ? null : (updatedKeyword.aiOverview ?? null),
@@ -167,7 +167,8 @@ export const updateKeywordPosition = async (
             const { serpFeatures, lastDepth, targetPosition, targetHistory, ...dbVal } = updatedVal as typeof updatedVal & ExtraVal;
             await keywordRaw.update({
                ...dbVal,
-               ...(typeof lastDepth === 'number' ? { serp_features: JSON.stringify(serpFeatures || []), last_depth: lastDepth } : {}),
+               ...(typeof lastDepth === 'number' ? { last_depth: lastDepth } : {}),
+               ...(Array.isArray(serpFeatures) ? { serp_features: JSON.stringify(serpFeatures) } : {}),
                ...(typeof targetPosition === 'number'
                   ? { target_position: targetPosition, target_history: JSON.stringify(targetHistory || {}) } : {}),
                lastResult: Array.isArray(updatedKeyword.result) ? JSON.stringify(updatedKeyword.result) : updatedKeyword.result,
