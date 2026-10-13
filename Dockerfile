@@ -1,8 +1,10 @@
 # Stage 1: Install dependencies
 FROM node:22-alpine AS deps
 WORKDIR /app
-COPY package.json ./
-RUN npm install
+# Exact versions from the lockfile: a plain `npm install` pulled @babel/runtime 7.29.x, whose files
+# Next 12's tracing leaves out of the standalone output → crash on start (POLO-2026-10-13-02)
+COPY package.json package-lock.json ./
+RUN npm ci
 
 # Stage 2: Build the application
 FROM node:22-alpine AS builder
