@@ -1,0 +1,62 @@
+{
+ "version": "0.1.20261022",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "0.9537 sec.",
+ "cost": 0,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "10311506-2362-0666-0000-bed14263aa1c",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "0.9033 sec.",
+   "cost": 0,
+   "result_count": 6,
+   "path": [
+    "v3",
+    "appendix",
+    "goto_url_converter"
+   ],
+   "data": {
+    "api": "appendix",
+    "function": "goto_url_converter",
+    "goto_urls": [
+     "https://google.com/goto?url=CAESSwHrOzAVyM_mBO6V3u80hwAGemHbWvfjlo9RyYcYxGGe14Lk4s9DC2PKaM3llujFjFo8Nll34nuzEKUIgOLkXCkHjIbLa3QefWVUgg",
+     "https://google.com/goto?url=CAESWgHrOzAV9NZEJ-KdiKB89AAbzKRcyQTRlYXhMq55P1TAsEVzNrpVKPkSfaovq5pSRdGdHXHf776r0o24lDUSZ-HEs7G8rcO36JcPxpBoPP2vULMX4NS5mIE-5Q",
+     "https://google.com/goto?url=CAESdQHrOzAV3gHBsUOf174fBGuIRH7j8XHWDCHBp1KvvUv_tmaJXuYUgUj38qHgnEgBsg3eJFmN5j9wdzGct84Qyctyas5z1xACz5SN6yrDFTwvDLiSgaGlP_2gexL3HzyH4j21BcXE85riYF2D3VRhktBGjSQL0w",
+     "https://google.com/goto?url=CAESoQEB6zswFZKscGDYdB6XsC4rgrZgBmioW2GsCoeQYWmKrvkFwMUvNWskCMHO0G-RQNbON8oDWfg_xN8Q8aSUqtWvyzzLpfYklvmDiyssuVQpi8cJMgLUyWYsi24x3LwPpOONt8KjY6dROw4Xc_iljlge0XhEfndDO_P2OyH25ryQU48FG5UB2RSyY5bul2_uirJxYR02RRtiRXtXTciDMJ4s2Q",
+     "https://google.com/goto?url=CAEShwEB6zswFekFsTdVJipYJeFdhfD0mmN90akVeI2bDbYAepmbUZZS2iLgr97hPnvo0MEjzoIyDZdEP-QszLXkOkLx4DORmCevGkUD7PVlKtoVlAt48Vagr5OdMLsUR5Z-_FzgL5MAxUn8qDHOrzJHGU2H7_2wyjcPjyCpEqk3wH4v5DVxjH63O-A",
+     "https://google.com/goto?url=CAESawHrOzAVnDAHDFri0gjCcwMukm-o73eEbXMP3ehvgeRRKmHdrB5Q_V-UsFhDlAS4sQ9_V8nUoK23gXHRWOkrf2w42gwB7wjvq2pSKW5eaZZDeEh6g82jsGo-K8vm6X20_1tlxUO3L2QPd9E0"
+    ]
+   },
+   "result": [
+    {
+     "goto": "https://google.com/goto?url=CAESSwHrOzAVyM_mBO6V3u80hwAGemHbWvfjlo9RyYcYxGGe14Lk4s9DC2PKaM3llujFjFo8Nll34nuzEKUIgOLkXCkHjIbLa3QefWVUgg",
+     "url": "https://ammo.cl/"
+    },
+    {
+     "goto": "https://google.com/goto?url=CAESWgHrOzAV9NZEJ-KdiKB89AAbzKRcyQTRlYXhMq55P1TAsEVzNrpVKPkSfaovq5pSRdGdHXHf776r0o24lDUSZ-HEs7G8rcO36JcPxpBoPP2vULMX4NS5mIE-5Q",
+     "url": "https://www.armariodelakaro.cl/"
+    },
+    {
+     "goto": "https://google.com/goto?url=CAESdQHrOzAV3gHBsUOf174fBGuIRH7j8XHWDCHBp1KvvUv_tmaJXuYUgUj38qHgnEgBsg3eJFmN5j9wdzGct84Qyctyas5z1xACz5SN6yrDFTwvDLiSgaGlP_2gexL3HzyH4j21BcXE85riYF2D3VRhktBGjSQL0w",
+     "url": "https://www.facebook.com/groups/125057071629/?locale=es_LA"
+    },
+    {
+     "goto": "https://google.com/goto?url=CAESoQEB6zswFZKscGDYdB6XsC4rgrZgBmioW2GsCoeQYWmKrvkFwMUvNWskCMHO0G-RQNbON8oDWfg_xN8Q8aSUqtWvyzzLpfYklvmDiyssuVQpi8cJMgLUyWYsi24x3LwPpOONt8KjY6dROw4Xc_iljlge0XhEfndDO_P2OyH25ryQU48FG5UB2RSyY5bul2_uirJxYR02RRtiRXtXTciDMJ4s2Q",
+     "url": "https://florentie.cl/vestidos-fiesta/?srsltid=AYCX9vI4RG2i-uUwEZ_1QD9Kgk2ifQAL438kNhDhtwSS0612zIOPjN8k"
+    },
+    {
+     "goto": "https://google.com/goto?url=CAEShwEB6zswFekFsTdVJipYJeFdhfD0mmN90akVeI2bDbYAepmbUZZS2iLgr97hPnvo0MEjzoIyDZdEP-QszLXkOkLx4DORmCevGkUD7PVlKtoVlAt48Vagr5OdMLsUR5Z-_FzgL5MAxUn8qDHOrzJHGU2H7_2wyjcPjyCpEqk3wH4v5DVxjH63O-A",
+     "url": "https://www.falabella.com/falabella-cl/category/CATG36075/Vestidos-de-Fiesta"
+    },
+    {
+     "goto": "https://google.com/goto?url=CAESawHrOzAVnDAHDFri0gjCcwMukm-o73eEbXMP3ehvgeRRKmHdrB5Q_V-UsFhDlAS4sQ9_V8nUoK23gXHRWOkrf2w42gwB7wjvq2pSKW5eaZZDeEh6g82jsGo-K8vm6X20_1tlxUO3L2QPd9E0",
+     "url": "https://www.instagram.com/jeannettemenard/?hl=es"
+    }
+   ]
+  }
+ ]
+}
