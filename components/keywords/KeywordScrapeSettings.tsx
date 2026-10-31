@@ -25,7 +25,7 @@ const KeywordScrapeSettings = ({ keywords, domain, settings, closeModal }: Keywo
 
    const initialMode: Mode = current ? (current.scrape_strategy as Mode) : 'inherit';
    const [mode, setMode] = useState<Mode>(initialMode);
-   const [pages, setPages] = useState<number>(current?.scrape_pagination_limit || inherited.paginationLimit || 5);
+   const [pages, setPages] = useState<number>(Math.min(current?.scrape_pagination_limit || inherited.paginationLimit || 5, 6));
    const [fallback, setFallback] = useState<boolean>(current?.scrape_smart_full_fallback ?? false);
    const { mutate: save, isLoading } = useUpdateKeywordScrape(() => closeModal());
 
@@ -73,7 +73,7 @@ const KeywordScrapeSettings = ({ keywords, domain, settings, closeModal }: Keywo
                   className='border border-gray-200 rounded px-2 py-1 bg-surface'
                   value={pages}
                   onChange={(e) => setPages(parseInt(e.target.value, 10))}>
-                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => <option key={n} value={n}>{n} ({n * 10} resultados)</option>)}
+                     {[1, 2, 3, 4, 5, 6].map((n) => <option key={n} value={n}>{n} ({n * 10} resultados)</option>)}
                   </select>
                </div>
             )}

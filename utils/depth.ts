@@ -3,9 +3,12 @@
  */
 const TOTAL_PAGES = 10;
 const PAGE_SIZE = 10;
+/** PoloRank: tope de profundidad — 6 páginas / 60 resultados (decisión de Fabián, 2026-10-31). */
+export const MAX_PAGES = 6;
+export const MAX_RESULTS = MAX_PAGES * PAGE_SIZE;
 
 /**
- * PoloRank: translate the scrape strategy into the number of results to request in ONE call (10..100).
+ * PoloRank: translate the scrape strategy into the number of results to request in ONE call (10..60).
  * - basic  → 10 (first page only)
  * - custom → N pages × 10
  * - smart  → from page 1 up to the page AFTER the last known position (pos 2 → 20, pos 46 → 60);
@@ -13,9 +16,9 @@ const PAGE_SIZE = 10;
  * DataForSEO cannot skip pages, so "smart" always starts at result 1.
  */
 export const strategyToDepth = (strategy: ScrapeStrategy | '' | undefined, paginationLimit: number, lastPosition: number): number => {
-   const maxDepth = TOTAL_PAGES * PAGE_SIZE;
+   const maxDepth = MAX_RESULTS;
    if (strategy === 'custom') {
-      const pages = Math.max(1, Math.min(Math.floor(paginationLimit || 1), TOTAL_PAGES));
+      const pages = Math.max(1, Math.min(Math.floor(paginationLimit || 1), MAX_PAGES));
       return pages * PAGE_SIZE;
    }
    if (strategy === 'smart') {

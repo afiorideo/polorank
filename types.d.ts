@@ -51,7 +51,7 @@ type KeywordType = {
    city?: string
    /** PoloRank: SERP feature types present in the last scrape (featured_snippet, people_also_ask, local_pack, video...) */
    serpFeatures?: string[],
-   /** PoloRank: number of results requested in the last scrape (10..100). 0 = unknown/legacy scraper. */
+   /** PoloRank: number of results requested in the last scrape (10..60). 0 = unknown/legacy scraper. */
    lastDepth?: number,
    /** PoloRank: precomputed stats (best, changes 7/30/60/90, results received) — see utils/history.ts */
    stats?: import('./utils/history').KeywordStats,

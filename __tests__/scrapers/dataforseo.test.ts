@@ -32,13 +32,13 @@ describe('DataForSEO scraper (PoloRank)', () => {
       expect(parseCredentials(undefined)).toBeNull();
    });
 
-   it('normalizeDepth redondea a bloques de 10 dentro de 10..100', () => {
+   it('normalizeDepth redondea a bloques de 10 dentro de 10..60', () => {
       expect(normalizeDepth(undefined)).toBe(10);
       expect(normalizeDepth(0)).toBe(10);
       expect(normalizeDepth(10)).toBe(10);
       expect(normalizeDepth(15)).toBe(20);
       expect(normalizeDepth(60)).toBe(60);
-      expect(normalizeDepth(250)).toBe(100);
+      expect(normalizeDepth(250)).toBe(60);
    });
 
    it('headers usa Basic auth con las credenciales del campo API', () => {

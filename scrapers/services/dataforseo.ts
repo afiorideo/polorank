@@ -1,7 +1,7 @@
 /**
  * PoloRank — DataForSEO scraper (Google organic, live/advanced).
  *
- * - One POST request per keyword; `depth` (10..100) is computed by the app from the scrape strategy
+ * - One POST request per keyword; `depth` (10..60) is computed by the app from the scrape strategy
  *   (basic / custom / smart) and arrives as `pagination.num`.
  * - Credentials: Settings → Scraper → API key, in the form `login:password` (DataForSEO API access).
  * - Cost: DataForSEO charges per block of 10 results; the real cost of every response is reported in `cost`
@@ -9,11 +9,12 @@
  * - Country → `location_code` uses the Google geo-target code already present in utils/countries.ts
  *   (DataForSEO uses the same codes, e.g. Chile = 2152).
  */
+import { MAX_RESULTS } from '../../utils/depth';
 
 // Override only for local integration tests (see docs/plans): DATAFORSEO_ENDPOINT=http://localhost:PORT/...
 const DFS_ENDPOINT = process.env.DATAFORSEO_ENDPOINT || 'https://api.dataforseo.com/v3/serp/google/organic/live/advanced';
 const MIN_DEPTH = 10;
-const MAX_DEPTH = 100;
+const MAX_DEPTH = MAX_RESULTS;
 
 /** DataForSEO item types → PoloRank normalized SERP feature names. Unknown types are ignored. */
 const FEATURE_MAP: { [dfsType: string]: string } = {

@@ -8,11 +8,11 @@ describe('strategyToDepth (PoloRank)', () => {
       expect(strategyToDepth(undefined, 5, 46)).toBe(10);
    });
 
-   it('custom → N páginas × 10, acotado a 1..10 páginas', () => {
+   it('custom → N páginas × 10, acotado a 1..6 páginas', () => {
       expect(strategyToDepth('custom', 1, 0)).toBe(10);
       expect(strategyToDepth('custom', 3, 0)).toBe(30);
-      expect(strategyToDepth('custom', 10, 0)).toBe(100);
-      expect(strategyToDepth('custom', 15, 0)).toBe(100);
+      expect(strategyToDepth('custom', 10, 0)).toBe(60);
+      expect(strategyToDepth('custom', 15, 0)).toBe(60);
       expect(strategyToDepth('custom', 0, 0)).toBe(10);
    });
 
@@ -25,7 +25,13 @@ describe('strategyToDepth (PoloRank)', () => {
       expect(strategyToDepth('smart', 5, 10)).toBe(20);
       expect(strategyToDepth('smart', 5, 11)).toBe(30);
       expect(strategyToDepth('smart', 5, 46)).toBe(60);
-      expect(strategyToDepth('smart', 5, 95)).toBe(100);
-      expect(strategyToDepth('smart', 5, 100)).toBe(100);
+      expect(strategyToDepth('smart', 5, 95)).toBe(60);
+      expect(strategyToDepth('smart', 5, 100)).toBe(60);
+   });
+
+   it('tope de 60 resultados (decisión 2026-10-31)', () => {
+      expect(strategyToDepth('custom', 6, 0)).toBe(60);
+      expect(strategyToDepth('smart', 5, 46)).toBe(60);
+      expect(strategyToDepth('smart', 5, 52)).toBe(60);
    });
 });

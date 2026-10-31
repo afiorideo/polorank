@@ -72,7 +72,7 @@ const DomainSettings = ({ domain, closeModal }: DomainSettingsProps) => {
       { label: 'Custom (Set number of pages)', value: 'custom' },
       { label: 'Smart (Based on last known position)', value: 'smart' },
    ];
-   const paginationLimitOptions: SelectionOption[] = Array.from({ length: 10 }, (_, i) => (
+   const paginationLimitOptions: SelectionOption[] = Array.from({ length: 6 }, (_, i) => (
       { label: `${i + 1} Page${i > 0 ? 's' : ''}`, value: String(i + 1) }
    ));
    return (
@@ -195,7 +195,7 @@ const DomainSettings = ({ domain, closeModal }: DomainSettingsProps) => {
                               <SelectField
                                  label='Number of Pages to Scrape'
                                  options={paginationLimitOptions}
-                                 selected={[String(domainSettings.scrape_pagination_limit || 5)]}
+                                 selected={[String(Math.min(domainSettings.scrape_pagination_limit || 5, 6))]}
                                  defaultLabel="Select Page Count"
                                  updateField={(updated:string[]) => {
                                     setDomainSettings({ ...domainSettings, scrape_pagination_limit: parseInt(updated[0] || '5', 10) });
@@ -217,7 +217,7 @@ const DomainSettings = ({ domain, closeModal }: DomainSettingsProps) => {
                                  }}
                               />
                               <small className='text-gray-500 pt-2 block'>
-                                 When enabled, all 10 pages are scraped if the keyword is missing from its nearby pages.
+                                 When enabled, all 6 pages are scraped if the keyword is missing from its nearby pages.
                               </small>
                            </div>
                         )}

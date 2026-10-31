@@ -41,7 +41,7 @@ const ScraperSettings = ({ settings, settingsError, updateSettings }:ScraperSett
       { label: 'Custom (Set number of pages)', value: 'custom' },
       { label: 'Smart (Based on last known position)', value: 'smart' },
    ];
-   const paginationLimitOptions: SelectionOption[] = Array.from({ length: 10 }, (_, i) => (
+   const paginationLimitOptions: SelectionOption[] = Array.from({ length: 6 }, (_, i) => (
       { label: `${i + 1} Page${i > 0 ? 's' : ''}`, value: String(i + 1) }
    ));
    const allScrapers: SelectionOption[] = settings.available_scrapers ? settings.available_scrapers : [];
@@ -150,7 +150,7 @@ const ScraperSettings = ({ settings, settingsError, updateSettings }:ScraperSett
                   <SelectField
                      label='Number of Pages to Scrape'
                      options={paginationLimitOptions}
-                     selected={[String(settings?.scrape_pagination_limit || 5)]}
+                     selected={[String(Math.min(settings?.scrape_pagination_limit || 5, 6))]}
                      defaultLabel="Select Page Count"
                      updateField={(updated:string[]) => updated[0] && updateSettings('scrape_pagination_limit', parseInt(updated[0], 10))}
                      multiple={false}
@@ -168,7 +168,7 @@ const ScraperSettings = ({ settings, settingsError, updateSettings }:ScraperSett
                      onChange={(val) => updateSettings('scrape_smart_full_fallback', val)}
                   />
                   <small className='text-gray-500 pt-2 block'>
-                     When enabled, all 10 pages will be scraped if the keyword is not found near its last known position.
+                     When enabled, all 6 pages will be scraped if the keyword is not found near its last known position.
                   </small>
                </div>
             )}

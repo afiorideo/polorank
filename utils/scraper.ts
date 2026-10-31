@@ -4,7 +4,7 @@ import { readFile, writeFile } from 'fs/promises';
 import HttpsProxyAgent from 'https-proxy-agent';
 import countries from './countries';
 import allScrapers from '../scrapers/index';
-import { checkedDepth, parseKeywordScrape, resolveScrapeStrategy, strategyToDepth } from './depth';
+import { MAX_PAGES, MAX_RESULTS, checkedDepth, parseKeywordScrape, resolveScrapeStrategy, strategyToDepth } from './depth';
 import { gotoCredentials, gotoIncompleteReason, resolveGotoUrls } from './gotoResolver';
 
 type SearchResult = {
@@ -137,7 +137,7 @@ const scrapeDepthBased = async (
    errorResult: Exclude<RefreshResult, false>,
 ): Promise<RefreshResult> => {
    const { strategy, paginationLimit, smartFullFallback } = options;
-   const maxDepth = TOTAL_PAGES * PAGE_SIZE;
+   const maxDepth = MAX_RESULTS;
    let totalCost = 0;
    let costKnown = false;
 
@@ -300,7 +300,7 @@ export const scrapeKeywordWithStrategy = async (
    let pagesToScrape: number[];
 
    if (strategy === 'custom') {
-      const limit = Math.max(1, Math.min(paginationLimit, TOTAL_PAGES));
+      const limit = Math.max(1, Math.min(paginationLimit, MAX_PAGES));
       pagesToScrape = Array.from({ length: limit }, (_, i) => i + 1);
    } else if (strategy === 'smart') {
       const lastPos = keyword.position;
@@ -309,7 +309,7 @@ export const scrapeKeywordWithStrategy = async (
          pagesToScrape = [1];
       } else {
          const lastPage = Math.ceil(lastPos / PAGE_SIZE);
-         const neighbors = [lastPage - 1, lastPage, lastPage + 1].filter((p) => p >= 1 && p <= TOTAL_PAGES);
+         const neighbors = [lastPage - 1, lastPage, lastPage + 1].filter((p) => p >= 1 && p <= MAX_PAGES);
          pagesToScrape = [...new Set(neighbors)];
       }
    } else {
@@ -336,7 +336,7 @@ export const scrapeKeywordWithStrategy = async (
          ? getSerp(keyword.domain, allScrapedResults, subdomainMatching) : { position: 0, url: '' };
       if (serpCheck.position === 0) {
          const alreadyScraped = new Set(pagesToScrape);
-         const remainingPages = Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1).filter((p) => !alreadyScraped.has(p));
+         const remainingPages = Array.from({ length: MAX_PAGES }, (_, i) => i + 1).filter((p) => !alreadyScraped.has(p));
          for (const pageNum of remainingPages) {
             const pagination: ScraperPagination = { start: (pageNum - 1) * PAGE_SIZE, num: PAGE_SIZE, page: pageNum };
             // eslint-disable-next-line no-await-in-loop
