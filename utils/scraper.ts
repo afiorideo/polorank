@@ -5,6 +5,7 @@ import HttpsProxyAgent from 'https-proxy-agent';
 import countries from './countries';
 import allScrapers from '../scrapers/index';
 import { checkedDepth, parseKeywordScrape, resolveScrapeStrategy, strategyToDepth } from './depth';
+import { gotoCredentials, gotoIncompleteReason, resolveGotoUrls } from './gotoResolver';
 
 type SearchResult = {
    title: string,
@@ -14,6 +15,7 @@ type SearchResult = {
 
 type PageScrapeResult = {
    results: SearchResult[],
+   unresolved?: number[],
    error?: string,
 }
 
@@ -120,7 +122,7 @@ export const getScraperClient = (
    return client;
 };
 
-type DepthAttempt = { results: SearchResult[], features: string[], aiOverview: AiOverviewData | null, depth: number, error?: string };
+type DepthAttempt = { results: SearchResult[], unresolved: number[], features: string[], aiOverview: AiOverviewData | null, depth: number, error?: string };
 
 /**
  * PoloRank: scrape a keyword with a depth-based scraper (DataForSEO): one request with the depth
@@ -139,10 +141,11 @@ const scrapeDepthBased = async (
    let totalCost = 0;
    let costKnown = false;
 
+   const creds = gotoCredentials(settings);
    const request = async (depth: number): Promise<DepthAttempt> => {
       const pagination: ScraperPagination = { start: 0, num: depth, page: 1 };
       const client = getScraperClient(keyword, settings, scraperObj, pagination);
-      if (!client) { return { results: [], features: [], aiOverview: null, depth, error: 'No scraper client available' }; }
+      if (!client) { return { results: [], unresolved: [], features: [], aiOverview: null, depth, error: 'No scraper client available' }; }
       try {
          const res: any = await client.then((result: any) => result.json());
          const cost = scraperObj.costExtractor ? scraperObj.costExtractor(res) : undefined;
@@ -150,11 +153,13 @@ const scrapeDepthBased = async (
          const extracted = scraperObj.serpExtractor ? scraperObj.serpExtractor(res) : [];
          const features = scraperObj.featuresExtractor ? scraperObj.featuresExtractor(res) : [];
          const aiOverview = scraperObj.aiOverviewExtractor ? scraperObj.aiOverviewExtractor(res) : null;
-         return { results: extracted.map((item, i) => ({ ...item, position: i + 1 })), features, aiOverview, depth };
+         const positioned = extracted.map((item, i) => ({ ...item, position: i + 1 }));
+         const { results, unresolved } = await resolveGotoUrls(positioned, creds);
+         return { results, unresolved, features, aiOverview, depth };
       } catch (error: any) {
          const msg = error?.message || 'Unknown scraping error';
          console.log('[ERROR] Scraping (depth', depth, ') for keyword:', keyword.keyword, msg);
-         return { results: [], features: [], aiOverview: null, depth, error: msg };
+         return { results: [], unresolved: [], features: [], aiOverview: null, depth, error: msg };
       }
    };
 
@@ -180,6 +185,11 @@ const scrapeDepthBased = async (
    if (attempt.results.length === 0) { return { ...errorResult, ...meta, error: `No search results found (depth ${attempt.depth})` }; }
 
    const serp = getSerp(keyword.domain, attempt.results, subdomainMatching);
+   const incomplete = gotoIncompleteReason(serp.position, attempt.unresolved);
+   if (incomplete) {
+      console.log('[GOTO]', keyword.keyword, incomplete);
+      return { ...errorResult, ...meta, error: incomplete };
+   }
    const fullResults = buildFullResults(attempt.results);
    console.log('[SERP]:', keyword.keyword, serp.position, serp.url, `(strategy: ${strategy}, depth: ${attempt.depth})`);
    return {
@@ -211,7 +221,9 @@ const scrapeSinglePage = async (
       const scrapeResult: string = (scraperResult || res.data || res.html || res.results || '');
       if (res && scrapeResult) {
          const extracted = scraperObj?.serpExtractor ? scraperObj.serpExtractor(scrapeResult) : extractScrapedResult(scrapeResult, keyword.device);
-         return { results: extracted.map((item, i) => ({ ...item, position: pagination.start + i + 1 })) };
+         const positioned = extracted.map((item, i) => ({ ...item, position: pagination.start + i + 1 }));
+         const { results, unresolved } = await resolveGotoUrls(positioned, gotoCredentials(settings));
+         return { results, unresolved };
       }
       return { results: [], error: `Empty response from ${scraperType || 'scraper'}` };
    } catch (error:any) {
@@ -305,6 +317,7 @@ export const scrapeKeywordWithStrategy = async (
    }
 
    const allScrapedResults: SearchResult[] = [];
+   const unresolvedAll: number[] = [];
    let pageErrors = 0;
    let totalPagesAttempted = pagesToScrape.length;
    for (const pageNum of pagesToScrape) {
@@ -312,6 +325,7 @@ export const scrapeKeywordWithStrategy = async (
       // eslint-disable-next-line no-await-in-loop
       const pageResult = await scrapeSinglePage(keyword, settings, scraperObj, pagination);
       const errTag = pageResult.error ? ` (error: ${pageResult.error})` : '';
+      if (pageResult.unresolved) { unresolvedAll.push(...pageResult.unresolved); }
       if (pageResult.error) { pageErrors += 1; }
       if (pageResult.results.length > 0) { allScrapedResults.push(...pageResult.results); }
    }
@@ -328,6 +342,7 @@ export const scrapeKeywordWithStrategy = async (
             // eslint-disable-next-line no-await-in-loop
             const pageResult = await scrapeSinglePage(keyword, settings, scraperObj, pagination);
             totalPagesAttempted += 1;
+            if (pageResult.unresolved) { unresolvedAll.push(...pageResult.unresolved); }
             if (pageResult.error) { pageErrors += 1; }
             if (pageResult.results.length > 0) {
                allScrapedResults.push(...pageResult.results);
@@ -349,6 +364,11 @@ export const scrapeKeywordWithStrategy = async (
    }
 
    const finalSerp = getSerp(keyword.domain, allScrapedResults, subdomainMatching);
+   const incomplete = gotoIncompleteReason(finalSerp.position, unresolvedAll);
+   if (incomplete) {
+      console.log('[GOTO]', keyword.keyword, incomplete);
+      return { ...errorResult, error: incomplete };
+   }
 
    // If domain not found and more than half of the scraped pages had errors,
    // the scraper was unreliable — treat as error to avoid false position=0.
@@ -402,9 +422,12 @@ export const scrapeKeywordFromGoogle = async (keyword:KeywordType, settings:Sett
       const scraperResult = scraperObj?.resultObjectKey && res[scraperObj.resultObjectKey] ? res[scraperObj.resultObjectKey] : '';
       const scrapeResult:string = (scraperResult || res.data || res.html || res.results || '');
       if (res && scrapeResult) {
-         const extracted = scraperObj?.serpExtractor ? scraperObj.serpExtractor(scrapeResult) : extractScrapedResult(scrapeResult, keyword.device);
+         const rawExtracted = scraperObj?.serpExtractor ? scraperObj.serpExtractor(scrapeResult) : extractScrapedResult(scrapeResult, keyword.device);
+         const { results: extracted, unresolved } = await resolveGotoUrls(rawExtracted, gotoCredentials(settings));
          await writeFile('result.txt', JSON.stringify(scrapeResult), { encoding: 'utf-8' }).catch((err) => { console.log(err); });
          const serp = getSerp(keyword.domain, extracted, subdomainMatching);
+         const incomplete = gotoIncompleteReason(serp.position, unresolved);
+         if (incomplete) { return { ...refreshedResults, error: incomplete }; }
          refreshedResults = {
             ID: keyword.ID,
             keyword: keyword.keyword,
