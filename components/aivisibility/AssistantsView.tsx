@@ -25,6 +25,9 @@ const AssistantsView = ({ domain }: { domain: string }) => {
    const [promptRun, setPromptRun] = useState<AiRunScope | null>(null);
    const [configOpen, setConfigOpen] = useState(false);
    const canRun = auth.isSuperadmin;
+   // prompts: domain_admin+ · marca, competidores, país y "Medir este dominio": solo superadmin (el servidor también lo exige)
+   const canEditPrompts = auth.canManageKeywords(domain);
+   const canEditSettings = auth.canManageDomains;
 
    if (isLoading) { return <div className="p-5 text-sm text-gray-500">Cargando visibilidad en IAs…</div>; }
    if (isError || !data) { return <div className="p-5 text-sm text-red-700">No se pudo cargar la visibilidad en IAs.</div>; }
@@ -42,7 +45,11 @@ const AssistantsView = ({ domain }: { domain: string }) => {
                {' '}· Próxima: <b>{fmtDate(data.nextRun, true)}</b> · Semanal · 3 repeticiones
             </div>
             <div className="flex items-center gap-2">
-               <button className="px-3 py-1.5 bg-white border rounded text-sm" onClick={() => setConfigOpen(true)}>⚙ Prompts y competidores</button>
+               {canEditPrompts && (
+                  <button className="px-3 py-1.5 bg-white border rounded text-sm" onClick={() => setConfigOpen(true)}>
+                     ⚙ Prompts y competidores
+                  </button>
+               )}
                <RunNowButton domain={domain} canRun={canRun} />
             </div>
          </div>
@@ -74,7 +81,14 @@ const AssistantsView = ({ domain }: { domain: string }) => {
          <h2 className="mt-8 mb-2 font-semibold">Evolución semanal</h2>
          <EvolutionChart evolution={data.evolution} />
 
-         {configOpen && <AiConfigModal domain={domain} detectedCompetitors={data.detectedCompetitors} closeModal={() => setConfigOpen(false)} />}
+         {configOpen && canEditPrompts && (
+            <AiConfigModal
+            domain={domain}
+            detectedCompetitors={data.detectedCompetitors}
+            canEditPrompts={canEditPrompts}
+            canEditSettings={canEditSettings}
+            closeModal={() => setConfigOpen(false)} />
+         )}
          {promptRun && <RunConfirm domain={domain} scope={promptRun} closeModal={() => setPromptRun(null)} />}
       </div>
    );

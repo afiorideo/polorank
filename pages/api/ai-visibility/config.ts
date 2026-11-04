@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import db from '../../../database/database';
 import Domain from '../../../database/models/domain';
 import { authenticate } from '../../../utils/verifyUser';
-import { canAccessDomain } from '../../../utils/auth/guards';
+import { canAccessDomain, canManageDomains } from '../../../utils/auth/guards';
 import { parseAiSettings, sanitizeAiSettings } from '../../../utils/aiVisibility/config';
 
 /** Lee / guarda la configuración de Visibilidad IA del dominio (columna domain.ai_settings). */
@@ -14,6 +14,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    const domain = (req.query.domain as string) || '';
    if (!domain) { return res.status(400).json({ error: 'Falta indicar el dominio.' }); }
    if (!canAccessDomain(auth.user, domain)) { return res.status(403).json({ error: 'No tienes acceso a este dominio.' }); }
+   // activar la medición gasta presupuesto: la configuración del dominio solo la cambia el superadmin
+   if (req.method === 'PUT' && !canManageDomains(auth.user)) {
+      return res.status(403).json({ error: 'Solo el superadmin puede cambiar la configuración de Visibilidad IA.' });
+   }
 
    try {
       const row = await Domain.findOne({ where: { domain } });

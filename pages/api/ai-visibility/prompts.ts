@@ -3,7 +3,7 @@ import db from '../../../database/database';
 import AiPrompt from '../../../database/models/aiPrompt';
 import { getAppSettings } from '../settings';
 import { authenticate } from '../../../utils/verifyUser';
-import { canAccessDomain } from '../../../utils/auth/guards';
+import { canAccessDomain, canManageKeywords } from '../../../utils/auth/guards';
 
 const clean = (b: any) => ({
    prompt: typeof b?.prompt === 'string' ? b.prompt.trim().slice(0, 500) : '',
@@ -18,6 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
    const domain = (req.query.domain as string) || '';
    if (!domain) { return res.status(400).json({ error: 'Falta indicar el dominio.' }); }
    if (!canAccessDomain(auth.user, domain)) { return res.status(403).json({ error: 'No tienes acceso a este dominio.' }); }
+   if (req.method !== 'GET' && !canManageKeywords(auth.user, domain)) {
+      return res.status(403).json({ error: 'No tienes permiso para editar los prompts de este dominio.' });
+   }
 
    try {
       const maxPrompts = (await getAppSettings()).ai_max_prompts ?? 5;

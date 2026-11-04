@@ -24,7 +24,7 @@ describe('AiConfigModal', () => {
 
    it('deshabilita "+ Agregar prompt" con el máximo de prompts activos', async () => {
       mockApi(true);
-      render(wrap(<AiConfigModal domain='ammo.cl' maxPrompts={5} closeModal={jest.fn()} />));
+      render(wrap(<AiConfigModal domain='ammo.cl' canEditPrompts canEditSettings maxPrompts={5} closeModal={jest.fn()} />));
       await screen.findByText('Máximo 5 prompts');
       expect((screen.getByText('+ Agregar prompt') as HTMLButtonElement).disabled).toBe(true);
    });
@@ -32,7 +32,7 @@ describe('AiConfigModal', () => {
    it.each([true, false])('al guardar envía enabled=%s de forma explícita', async (enabled) => {
       const puts: any[] = [];
       mockApi(enabled, puts);
-      render(wrap(<AiConfigModal domain='ammo.cl' detectedCompetitors={['Rival']} closeModal={jest.fn()} />));
+      render(wrap(<AiConfigModal domain='ammo.cl' canEditPrompts canEditSettings detectedCompetitors={['Rival']} closeModal={jest.fn()} />));
       const checkbox = await screen.findByLabelText('Medir este dominio') as HTMLInputElement;
       await waitFor(() => expect((screen.getByLabelText('Variantes de la marca') as HTMLTextAreaElement).value).toBe('ammo'));
       expect(checkbox.checked).toBe(enabled);
@@ -46,7 +46,7 @@ describe('AiConfigModal', () => {
    it('permite escribir varias variantes de un competidor, letra por letra', async () => {
       const puts: any[] = [];
       mockApi(true, puts);
-      render(wrap(<AiConfigModal domain='ammo.cl' detectedCompetitors={['Blanka']} closeModal={jest.fn()} />));
+      render(wrap(<AiConfigModal domain='ammo.cl' canEditPrompts canEditSettings detectedCompetitors={['Blanka']} closeModal={jest.fn()} />));
       await waitFor(() => expect((screen.getByLabelText('Variantes de la marca') as HTMLTextAreaElement).value).toBe('ammo'));
       fireEvent.click(screen.getByText('Blanka + agregar'));
       const input = screen.getByLabelText('Variantes del competidor 1') as HTMLInputElement;
@@ -59,5 +59,27 @@ describe('AiConfigModal', () => {
       fireEvent.click(screen.getByText('Guardar configuración'));
       await waitFor(() => expect(puts).toHaveLength(1));
       expect(puts[0].settings.competitors).toEqual([{ name: 'Blanka', variants: ['Blanka', 'Blanka Atelier'] }]);
+   });
+
+   it('domain_admin: edita prompts pero no ve marca, competidores, país ni "Medir este dominio"', async () => {
+      mockApi(true);
+      render(wrap(<AiConfigModal domain='ammo.cl' canEditPrompts canEditSettings={false} closeModal={jest.fn()} />));
+      await screen.findAllByTestId('ai-prompt-row');
+      expect(screen.queryByLabelText('Medir este dominio')).toBeNull();
+      expect(screen.queryByLabelText('Variantes de la marca')).toBeNull();
+      expect(screen.queryByText('Competidores')).toBeNull();
+      expect(screen.queryByLabelText('País')).toBeNull();
+      expect(screen.queryByText('Guardar configuración')).toBeNull();
+      expect(screen.getByText('Cerrar')).toBeTruthy();
+      expect((screen.getAllByLabelText('Texto del prompt')[0] as HTMLTextAreaElement).readOnly).toBe(false);
+   });
+
+   it('sin permiso de prompts: los prompts quedan de solo lectura', async () => {
+      mockApi(true);
+      render(wrap(<AiConfigModal domain='ammo.cl' canEditPrompts={false} canEditSettings={false} closeModal={jest.fn()} />));
+      await screen.findAllByTestId('ai-prompt-row');
+      expect((screen.getAllByLabelText('Texto del prompt')[0] as HTMLTextAreaElement).readOnly).toBe(true);
+      expect((screen.getByText('+ Agregar prompt') as HTMLButtonElement).disabled).toBe(true);
+      expect((screen.getAllByText('Eliminar')[0] as HTMLButtonElement).disabled).toBe(true);
    });
 });
