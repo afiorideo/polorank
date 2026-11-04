@@ -52,7 +52,10 @@ const updateSettings = async (req: NextApiRequest, res: NextApiResponse<Settings
       }
       const aiCreds = (settings.ai_dataforseo_credentials || '').trim();
       if (aiCreds && !/^[^:\s]+@[^:\s]+:.+$/.test(aiCreds)) {
-         return res.status(400).json({ error: 'Las credenciales de Visibilidad IA necesitan el formato correo:password.', type: 'no_ai_credentials' } as any);
+         return res.status(400).json({
+            error: 'Las credenciales de Visibilidad IA necesitan el formato correo:password.',
+            type: 'no_ai_credentials',
+         } as any);
       }
       const cryptr = new Cryptr(process.env.SECRET as string);
       const scaping_api = settings.scaping_api ? cryptr.encrypt(settings.scaping_api.trim()) : '';
