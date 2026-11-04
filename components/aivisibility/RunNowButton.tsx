@@ -1,25 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import Modal from '../common/Modal';
-import { AiRunScope, useAiRunEstimate, useRunAiNow } from '../../services/aiVisibility';
+import { AiRunScope, skippedMessage, useAiRunEstimate, useRunAiNow } from '../../services/aiVisibility';
 
 const usd = (n: number) => `US$${n < 0.1 ? n.toFixed(3) : n.toFixed(2)}`.replace('.', ',');
 
 /** Modal de confirmación con el costo estimado (sin window.confirm). */
-export const RunConfirm = ({ domain, scope: initialScope, closeModal }: { domain: string, scope: AiRunScope, closeModal: () => void }) => {
+type ConfirmProps = { domain: string, scope: AiRunScope, closeModal: () => void };
+
+export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmProps) => {
    const [scope] = useState(initialScope);
    const estimate = useAiRunEstimate();
    const run = useRunAiNow(domain);
    const { mutate } = estimate;
    useEffect(() => { mutate(scope); }, [mutate, scope]);
 
-   const confirm = () => run.mutate(scope, { onSuccess: closeModal });
+   const confirm = () => run.mutate(scope, {
+      onSuccess: (out) => { if (!skippedMessage(out.status)) { closeModal(); } },
+   });
+   const skipped = run.data ? skippedMessage(run.data.status) : null;
    return (
-      <Modal closeModal={closeModal} title="Actualizar ahora" verticalCenter>
+      <Modal closeModal={run.isLoading ? () => {} : closeModal} title="Actualizar ahora" verticalCenter>
          {estimate.isLoading && <p className="text-sm text-gray-500">Calculando costo…</p>}
          {estimate.isError && <p className="text-sm text-red-700">No se pudo calcular el costo.</p>}
          {estimate.data && <p className="text-sm">Esto cuesta ~{usd(estimate.data.estimate)}. ¿Actualizar ahora?</p>}
+         {run.isLoading && (
+            <p className="text-sm text-gray-600 mt-3 flex items-center gap-2">
+               <span className="inline-block w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+               Consultando las IAs… puede tardar 1 a 3 minutos. No cierres esta ventana.
+            </p>
+         )}
+         {skipped && <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded p-2 mt-3">{skipped}</p>}
          <div className="flex justify-end gap-2 mt-4 text-sm">
-            <button className="px-3 py-1.5 bg-white border rounded" onClick={closeModal}>Cancelar</button>
+            <button
+            className="px-3 py-1.5 bg-white border rounded disabled:opacity-50"
+            disabled={run.isLoading}
+            onClick={closeModal}>
+               Cancelar
+            </button>
             <button
             className="px-3 py-1.5 bg-blue-600 text-white rounded disabled:opacity-50"
             disabled={!estimate.data || run.isLoading}

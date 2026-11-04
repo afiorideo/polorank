@@ -33,7 +33,7 @@ const runQuery = (s: AiRunScope) => (s.scope === 'prompt'
 export function useFetchAiVisibility(domain: string | undefined) {
    return useQuery(['aiVisibility', domain], () => api<AiVisibilityData>(
       `/api/ai-visibility/data?domain=${encodeURIComponent(domain || '')}`, undefined, 'No se pudo cargar la visibilidad en IAs',
-   ), { enabled: !!domain });
+   ), { enabled: !!domain, refetchInterval: (data) => (data?.lastRun?.status === 'pending' ? 60000 : false) });
 }
 
 /** Respuestas completas (con texto) de un prompt, de la última semana. */
@@ -52,14 +52,29 @@ export function useAiRunEstimate() {
    ), { onError: (error: Error) => { toast(error.message, { icon: '⚠️' }); } });
 }
 
-/** Lanza una corrida en vivo (POST /run, solo superadmin, con espera de 10 minutos). */
+export type AiRunOutcome = { runId: number, status: string, estimate: number };
+
+/** Mensaje de aviso cuando la corrida no hizo ninguna consulta; null si la corrida sí se ejecutó. */
+export const skippedMessage = (status: string): string | null => {
+   if (status === 'skipped_budget') { return 'Se alcanzó el tope mensual de gasto. No se hizo ninguna consulta.'; }
+   if (status === 'skipped_no_credentials') { return 'Faltan las credenciales de DataForSEO para IA en Settings.'; }
+   return null;
+};
+
+/** Lanza una corrida en vivo (POST /run, solo superadmin, con espera de 10 minutos). Responde cuando terminan las consultas. */
 export function useRunAiNow(domain: string | undefined) {
    const queryClient = useQueryClient();
-   return useMutation((s: AiRunScope) => api<unknown>(
+   return useMutation((s: AiRunScope) => api<AiRunOutcome>(
       `/api/ai-visibility/run?${runQuery(s)}`, { method: 'POST' }, 'No se pudo iniciar la actualización',
    ), {
-      onSuccess: () => {
-         toast('Actualización iniciada. Los resultados irán apareciendo en unos minutos.', { icon: '✔️' });
+      onSuccess: (out) => {
+         const skipped = skippedMessage(out.status);
+         if (skipped) { toast(skipped, { icon: '⚠️' }); return; }
+         const text = ({
+            partial: 'Listo, pero algunas consultas fallaron',
+            pending: 'Algunas respuestas llegarán en unos minutos',
+         } as Record<string, string>)[out.status] || 'Actualización lista.';
+         toast(text, { icon: out.status === 'partial' ? '⚠️' : '✔️' });
          queryClient.invalidateQueries(['aiVisibility', domain]);
       },
       onError: (error: Error) => { toast(error.message, { icon: '⚠️' }); },
