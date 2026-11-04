@@ -134,7 +134,9 @@ export const updateKeywordPosition = async (
             depth: snapshotDepth,
             measured: !updatedKeyword.error,
             serpTop: updatedKeyword.result,
-            aiOverview: updatedKeyword.error ? null : (updatedKeyword.aiOverview ?? null),
+            // solo DataForSEO trae el resumen con IA en la consulta de posiciones; con otro proveedor no se midió
+            aiOverview: settings.scraper_type !== 'dataforseo' ? undefined
+               : (updatedKeyword.error ? null : (updatedKeyword.aiOverview ?? null)),
             domain: keyword.domain,
             brand: brandFromSettings(domainSettings),
          });

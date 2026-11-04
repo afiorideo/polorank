@@ -1,5 +1,5 @@
 import KeywordDaily from '../database/models/keywordDaily';
-import { brandOf, mentionState, AI_NO_SUMMARY, AI_DEFERRED } from './aiTracking';
+import { brandOf, mentionState, AI_NO_SUMMARY, AI_DEFERRED, AI_NOT_MEASURED } from './aiTracking';
 import KeywordVolume from '../database/models/keywordVolume';
 
 /** How many SERP results are kept per day. Two pages: our keywords live around the top-10 border. */
@@ -48,6 +48,26 @@ export const aiCitedState = (aiOverview: AiOverviewData | null | undefined, doma
    return aiOverview.references.some((r) => sameDomain(r.domain, domain)) ? 1 : 0;
 };
 
+/**
+ * Campos ai_* de la fila del día.
+ *   undefined → el proveedor de posiciones no mide IA (Serper): no se pisa lo que haya dejado Google IA ese
+ *               día; si la fila es nueva, queda -3 "no medido".
+ *   null      → se midió y Google no mostró resumen (-1).
+ */
+export const aiFieldsFor = (
+   aiOverview: AiOverviewData | null | undefined, domain: string, brand: string, rowExists: boolean,
+): Record<string, unknown> => {
+   if (aiOverview === undefined) {
+      return rowExists ? {} : { ai_cited: AI_NOT_MEASURED, ai_mentioned: AI_NOT_MEASURED, ai_references: '[]', ai_text: '' };
+   }
+   return {
+      ai_cited: aiCitedState(aiOverview, domain),
+      ai_mentioned: aiOverview?.deferred ? AI_DEFERRED : mentionState(aiOverview ? aiOverview.text : null, brand),
+      ai_references: JSON.stringify(aiOverview?.references || []),
+      ai_text: aiOverview?.text || '',
+   };
+};
+
 /** 'YYYY-MM' for the month a history key belongs to. */
 export const monthOf = (dateKey: string): string => {
    const [y, m] = dateKey.split('-');
@@ -79,16 +99,10 @@ export const recordDailySnapshot = async (snap: DailySnapshot): Promise<void> =>
          depth: snap.depth || 0,
          measured: snap.measured,
          serp_top: JSON.stringify(topOfSerp(snap.serpTop)),
-         ai_cited: aiCitedState(snap.aiOverview, snap.domain || ''),
-         // un resumen diferido llega con el texto vacío: buscar la marca ahí diría "no te nombra", que es mentira
-         ai_mentioned: snap.aiOverview?.deferred
-            ? AI_DEFERRED
-            : mentionState(snap.aiOverview ? snap.aiOverview.text : null, brandOf(snap.domain || '', snap.brand)),
-         ai_references: JSON.stringify(snap.aiOverview?.references || []),
-         ai_text: snap.aiOverview?.text || '',
       };
       const existing = await KeywordDaily.findOne({ where });
-      if (existing) { await existing.update(values); } else { await KeywordDaily.create(values); }
+      const ai = aiFieldsFor(snap.aiOverview, snap.domain || '', brandOf(snap.domain || '', snap.brand), !!existing);
+      if (existing) { await existing.update({ ...values, ...ai }); } else { await KeywordDaily.create({ ...values, ...ai }); }
    } catch (error) {
       console.log('[ERROR] Guardando el detalle diario de', snap.keywordID, error);
    }

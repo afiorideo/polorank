@@ -137,6 +137,7 @@ describe('utils/dailySnapshot (PoloRank)', () => {
             depth: 10,
             measured: true,
             serpTop: [],
+            aiOverview: null,
             domain: 'maderasfresard.com',
          });
          const saved = daily.create.mock.calls[0][0];
