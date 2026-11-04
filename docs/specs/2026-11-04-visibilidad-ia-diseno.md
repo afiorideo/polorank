@@ -36,7 +36,15 @@ tráfico desde IAs con GA4, Claude (caro: US$0,047 por llamada y coincidió con 
 
 ## 3. Dominios y prompts iniciales
 
-Se activa solo en: **ammo.cl, mavae.cl, maderasfresard.com, emignia.com, thetravellab.cl, thetravellab.com.br.**
+Dominios destino: **ammo.cl, mavae.cl, maderasfresard.com, emignia.com, thetravellab.cl, thetravellab.com.br.**
+
+**Encendido gradual (decisión de Fabián 2026-11-04, para no gastar créditos si algo falla):** se cargan los 30 prompts, pero `ai_enabled` arranca en `true` **solo para ammo.cl** y el tope mensual en **US$2**. Ammo sirve de control: sus resultados se comparan con el piloto del 04-nov. Si la primera corrida sale bien → se enciende maderasfresard.com; después de una corrida limpia de ambos → los 4 restantes y el tope sube a US$10.
+
+| Etapa de encendido | Costo por corrida semanal |
+|---|---|
+| Solo Ammo | ~US$0,17 |
+| Ammo + Fresard | ~US$0,34 |
+| Los 6 | ~US$1,05 |
 Los 30 prompts son los aprobados por Fabián el 2026-11-04 (ver §12). Máximo **5 prompts por dominio**
 (ajuste global `ai_max_prompts`, por defecto 5).
 
@@ -46,7 +54,7 @@ Los 30 prompts son los aprobados por Fabián el 2026-11-04 (ver §12). Máximo *
 | Campo | Tipo | Por defecto | Uso |
 |---|---|---|---|
 | `ai_dataforseo_credentials` | `login:password` (cifrado igual que `scaping_api`) | vacío | Todas las llamadas de IA. Si está vacío, el módulo no corre |
-| `ai_monthly_budget_usd` | número | 10 | Tope de gasto del módulo en el mes calendario |
+| `ai_monthly_budget_usd` | número | 2 (sube a 10 con los 6 dominios) | Tope de gasto del módulo en el mes calendario |
 | `ai_max_prompts` | entero | 5 | Prompts por dominio |
 | `ai_weekly_enabled` | booleano | true | Corrida semanal automática |
 
