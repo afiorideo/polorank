@@ -36,3 +36,30 @@ export const targetFor = (
       country_iso: p.country_iso || cfg.country_iso,
    };
 };
+
+const strs = (v: unknown, max: number): string[] => (Array.isArray(v) ? v : [])
+   .filter((x): x is string => typeof x === 'string').map((x) => x.trim().slice(0, 100)).filter(Boolean).slice(0, max);
+const posInt = (v: unknown): number | undefined => (typeof v === 'number' && Number.isInteger(v) && v > 0 ? v : undefined);
+
+/** Normaliza y acota la configuración que llega del cliente antes de guardarla. */
+export const sanitizeAiSettings = (input: unknown, domain: string): AiDomainSettings => {
+   const o = (input && typeof input === 'object' ? input : {}) as Record<string, unknown>;
+   const competitors = (Array.isArray(o.competitors) ? o.competitors : [])
+      .filter((c): c is Record<string, unknown> => !!c && typeof c === 'object' && typeof (c as any).name === 'string')
+      .map((c) => ({ name: (c.name as string).trim().slice(0, 100), variants: strs(c.variants, 10) }))
+      .filter((c) => c.name)
+      .slice(0, 30);
+   const lang = typeof o.language_code === 'string' ? o.language_code : '';
+   const iso = typeof o.country_iso === 'string' ? o.country_iso.trim().toUpperCase() : '';
+   const base = parseAiSettings('{}', domain);
+   return {
+      enabled: o.enabled === true,
+      brand_variants: strs(o.brand_variants, 10),
+      brand_urls: strs(o.brand_urls, 10).length ? strs(o.brand_urls, 10) : base.brand_urls,
+      competitors,
+      location_code: posInt(o.location_code) || base.location_code,
+      language_code: ['es', 'pt', 'en'].includes(lang) ? lang : base.language_code,
+      gemini_location_code: posInt(o.gemini_location_code),
+      country_iso: /^[A-Z]{2}$/.test(iso) ? iso : base.country_iso,
+   };
+};

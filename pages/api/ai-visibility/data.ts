@@ -57,7 +57,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          where: { domain, week: { [Op.in]: weeks }, status: 'ok' },
          attributes: ['prompt_id', 'engine', 'rep', 'week', 'status', 'mentioned', 'cited', 'position', 'brands', 'sources'],
       }) : [];
-      const lastRun = await AiRun.findOne({ order: [['ID', 'DESC']] });
+      const scopes = ['all', `domain:${domain}`, `google:${domain}`, ...prompts.map((p) => `prompt:${p.get('ID')}`)];
+      const lastRun = await AiRun.findOne({ where: { scope: { [Op.in]: scopes } }, order: [['ID', 'DESC']] });
 
       const panel = buildPanel(
          prompts.map((p) => p.get({ plain: true })) as any,

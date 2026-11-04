@@ -1,10 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { Op } from 'sequelize';
 import db from '../../../database/database';
 import AiPrompt from '../../../database/models/aiPrompt';
 import { getAppSettings } from '../settings';
 import { authenticate } from '../../../utils/verifyUser';
-import { canAccessDomain } from '../../../utils/auth/guards';
+import AiRun from '../../../database/models/aiRun';
+import { canAccessDomain, canRefreshKeywords } from '../../../utils/auth/guards';
 import { planRun, startRun, RunScope } from '../../../utils/aiVisibility/runner';
+
+const COOLDOWN_MIN = 10;
 
 /** GET = estimación de costo · POST = lanza la corrida en vivo. Scopes: prompt (id), domain, google. */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -34,6 +38,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (req.method === 'GET') {
          const plan = await planRun(scope, 'live');
          return res.status(200).json({ estimate: plan.estimate });
+      }
+      if (!canRefreshKeywords(auth.user)) { return res.status(403).json({ error: 'Solo el superadmin puede lanzar una corrida.' }); }
+      const label = scope.kind === 'prompt' ? `prompt:${scope.promptId}` : `${scope.kind}:${domain}`;
+      const since = new Date(Date.now() - COOLDOWN_MIN * 60000).toJSON();
+      const recent = await AiRun.findOne({ where: { scope: label, started_at: { [Op.gte]: since } }, order: [['ID', 'DESC']] });
+      if (recent) {
+         const left = Math.max(1, Math.ceil(COOLDOWN_MIN - (Date.now() - new Date(recent.get('started_at') as string).getTime()) / 60000));
+         return res.status(429).json({ error: `Espera ${left} minutos antes de volver a actualizar` });
       }
       const settings = await getAppSettings();
       const out = await startRun(scope, 'live', `user:${auth.user?.uid}`, settings);

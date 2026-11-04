@@ -3,7 +3,7 @@ import db from '../../../database/database';
 import Domain from '../../../database/models/domain';
 import { authenticate } from '../../../utils/verifyUser';
 import { canAccessDomain } from '../../../utils/auth/guards';
-import { parseAiSettings } from '../../../utils/aiVisibility/config';
+import { parseAiSettings, sanitizeAiSettings } from '../../../utils/aiVisibility/config';
 
 /** Lee / guarda la configuración de Visibilidad IA del dominio (columna domain.ai_settings). */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -21,7 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (req.method === 'GET') {
          return res.status(200).json({ settings: parseAiSettings(row.get('ai_settings') as string, domain) });
       }
-      const settings = parseAiSettings(JSON.stringify(req.body?.settings ?? req.body ?? {}), domain);
+      const settings = sanitizeAiSettings(req.body?.settings ?? req.body, domain);
+      if (!settings.brand_variants.length) { return res.status(400).json({ error: 'Indica al menos una variante del nombre de la marca.' }); }
       await row.update({ ai_settings: JSON.stringify(settings) });
       return res.status(200).json({ settings });
    } catch (error) {
