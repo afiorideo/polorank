@@ -126,6 +126,19 @@ const runAppCronJobs = () => {
          }
       }
 
+      // PoloRank — Visibilidad IA: corrida semanal (lunes 06:00 Chile = 09:00 UTC) y recolector de la cola cada 10 min
+      const aiOpts = { method: 'POST', headers: { Authorization: `Bearer ${process.env.APIKEY}` } };
+      new Cron('0 0 9 * * 1', () => {
+         fetch(`${INTERNAL_BASE_URL}/api/ai-visibility/cron`, aiOpts).then((r) => r.json())
+            .then((d) => console.log('[VISIBILIDAD IA] Corrida semanal:', JSON.stringify(d)))
+            .catch((err) => console.log('ERROR Visibilidad IA cron', err));
+      }, { scheduled: true, timezone: 'UTC' });
+      new Cron('0 */10 * * * *', () => {
+         fetch(`${INTERNAL_BASE_URL}/api/ai-visibility/collect`, aiOpts).then((r) => r.json())
+            .then((d) => { if (d.collected || d.errors) { console.log('[VISIBILIDAD IA] Recolección:', JSON.stringify(d)); } })
+            .catch((err) => console.log('ERROR Visibilidad IA collect', err));
+      }, { scheduled: true });
+
       // RUN Email Notification CRON
       const notif_interval = (!settings.notification_interval || settings.notification_interval === 'never') ? false : settings.notification_interval;
       if (notif_interval) {
