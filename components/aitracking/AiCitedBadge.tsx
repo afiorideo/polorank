@@ -1,5 +1,5 @@
 import React from 'react';
-import { AI_DEFERRED } from '../../utils/aiTracking';
+import { AI_DEFERRED, AI_NOT_MEASURED } from '../../utils/aiTracking';
 
 type AiCitedBadgeProps = {
    /** 1 sí · 0 hubo resumen y no · -1 no hubo resumen · -2 hubo resumen pero Google lo entregó diferido */
@@ -49,6 +49,15 @@ const AiCitedBadge = ({ cited, kind = 'citation' }: AiCitedBadgeProps) => {
          className='inline-block text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-500 italic'
          title='Google SÍ respondió con IA, pero entrega el contenido en una segunda consulta que no hacemos. No sabemos si te cita.'>
             — sin leer
+         </span>
+      );
+   }
+   if (cited === AI_NOT_MEASURED) {
+      return (
+         <span
+         className='inline-block text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-500'
+         title='Esta medición no incluye el resumen con IA (la semana todavía no se mide con Google). No es que no te citen.'>
+            — No medido
          </span>
       );
    }

@@ -5,7 +5,7 @@ import Keyword from '../../database/models/keyword';
 import KeywordDaily from '../../database/models/keywordDaily';
 import { authenticate } from '../../utils/verifyUser';
 import { canAccessDomain } from '../../utils/auth/guards';
-import { citationPeriods, parseKey, brandOf, mentionState } from '../../utils/aiTracking';
+import { citationPeriodsWeeks, parseKey, brandOf, mentionState, AI_NOT_MEASURED } from '../../utils/aiTracking';
 import type { CitationRatio } from '../../utils/aiTracking';
 
 /** Una fila de la tabla de Tracking IA. */
@@ -27,7 +27,13 @@ export type AiTrackingRow = {
    text: string,
    /** Fecha del último día con dato de IA. */
    lastDate: string,
-   periods: { d7: CitationRatio, d30: CitationRatio, d60: CitationRatio, d90: CitationRatio },
+   /** Posición en el Local Pack de la última medición confiable que lo trajo (0 si no aparece). */
+   localPack: { present: boolean, position: number },
+   /** false si la última página de Google vino alterada (no coincide con Serper). */
+   trusted: boolean,
+   /** Otras preguntas de los usuarios (People Also Ask). */
+   paa: string[],
+   periods: { w4: CitationRatio, w8: CitationRatio, w12: CitationRatio },
 };
 
 const norm = (d: string): string => (d || '').replace(/^https?:\/\//, '').replace(/^www\./i, '').replace(/\/.*$/, '').toLowerCase();
@@ -72,12 +78,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                ai_mentioned: d.get('ai_mentioned') as number,
                refs: d.get('ai_references') as string,
                text: d.get('ai_text') as string,
+               local_pack: d.get('local_pack') as string,
+               paa: d.get('paa') as string,
+               serp_trust: d.get('serp_trust') as number | null,
             }))
             // por fecha real: ordenar estas claves como texto pone '2026-9-9' después de '2026-9-28'
             .sort((a, b) => parseKey(a.date) - parseKey(b.date));
+         // Candidatos a "último dato": sin las filas no medidas (-3) ni las de página alterada (serp_trust 0).
+         const usable = days.filter((d) => d.ai_cited !== AI_NOT_MEASURED && d.serp_trust !== 0);
          // el último día que tuvo resumen manda lo que se muestra arriba; si nunca hubo, la fila queda en -1
-         const lastWithAi = [...days].reverse().find((d) => d.ai_cited !== -1);
-         const latest = lastWithAi || days[days.length - 1];
+         const lastWithAi = [...usable].reverse().find((d) => d.ai_cited !== -1);
+         const latest = lastWithAi || usable[usable.length - 1];
+         // hay filas pero ninguna utilizable: es "no medido", no "no hubo resumen"
+         const notMeasured = !latest && days.length > 0;
+         const trusted = days.length === 0 || days[days.length - 1].serp_trust !== 0;
+         const lp = [...usable].reverse()
+            .map((d) => parseJson<{ present?: boolean, position?: number }>(d.local_pack, {}))
+            .find((o) => Object.keys(o).length > 0);
+         const paaRow = [...usable].reverse().map((d) => parseJson<string[]>(d.paa, [])).find((a) => a.length > 0);
          const crudas = parseJson<AiOverviewReference[]>(latest?.refs, []);
          const texto = latest?.text || '';
          // de cada fuente: si además de citarla, el resumen la nombra por su nombre
@@ -89,14 +107,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             keyword: k.get('keyword') as string,
             country: k.get('country') as string,
             volume: (k.get('volume') as number) || 0,
-            cited: latest ? latest.ai_cited : -1,
-            mentioned: latest ? latest.ai_mentioned : -1,
+            cited: latest ? latest.ai_cited : (notMeasured ? AI_NOT_MEASURED : -1),
+            mentioned: latest ? latest.ai_mentioned : (notMeasured ? AI_NOT_MEASURED : -1),
             position: mine ? mine.position : 0,
             citedUrl: mine ? mine.url : '',
             references,
             text: texto,
             lastDate: latest?.date || '',
-            periods: citationPeriods(days),
+            localPack: { present: !!lp?.present, position: lp?.position || 0 },
+            trusted,
+            paa: paaRow || [],
+            periods: citationPeriodsWeeks(days),
          };
       });
 

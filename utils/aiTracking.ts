@@ -95,6 +95,12 @@ export const citationPeriods = (rows: DailyCite[], now: Date = new Date()) => ({
    d90: citationRatio(rows, 90, now),
 });
 
+/** Igual que citationPeriods pero en semanas (Google IA es semanal) y sin las páginas envenenadas. */
+export const citationPeriodsWeeks = (rows: (DailyCite & { serp_trust?: number | null })[], now: Date = new Date()) => {
+   const ok = rows.filter((r) => r.serp_trust !== 0);
+   return { w4: citationRatio(ok, 28, now), w8: citationRatio(ok, 56, now), w12: citationRatio(ok, 84, now) };
+};
+
 export default citationRatio;
 
 /** Nombre de marca a buscar en el texto del resumen. Configurable por dominio; si no, sale del dominio. */

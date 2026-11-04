@@ -2,7 +2,7 @@ import React from 'react';
 import SidePanel from '../common/SidePanel';
 import AiSummaryText from './AiSummaryText';
 import type { AiTrackingRow } from '../../services/aiTracking';
-import { AI_NO_SUMMARY, AI_DEFERRED } from '../../utils/aiTracking';
+import { AI_NO_SUMMARY, AI_DEFERRED, AI_NOT_MEASURED } from '../../utils/aiTracking';
 
 type AiDetailPanelProps = {
    row: AiTrackingRow,
@@ -32,6 +32,13 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                <div className='p-4 rounded bg-slate-50 text-gray-600'>
                   Google no respondió con IA para esta búsqueda en la última medición.
                   <span className='block text-xs text-gray-400 mt-1'>No es que no te citen: no hubo resumen que citara a nadie.</span>
+               </div>
+            )}
+
+            {row.cited === AI_NOT_MEASURED && (
+               <div className='p-4 rounded bg-slate-50 text-gray-600'>
+                  Esta búsqueda todavía no tiene una medición de Google con resumen de IA.
+                  <span className='block text-xs text-gray-400 mt-1'>No es que no te citen: simplemente no se midió.</span>
                </div>
             )}
 
@@ -125,6 +132,15 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                      </p>
                   )}
                </>
+            )}
+
+            {row.paa && row.paa.length > 0 && (
+               <div className='mt-6'>
+                  <h4 className='text-[11px] uppercase tracking-wide text-gray-400 mb-2'>Otras preguntas de los usuarios</h4>
+                  <ul className='flex flex-col gap-1 list-disc pl-5 text-gray-600'>
+                     {row.paa.map((q) => <li key={q}>{q}</li>)}
+                  </ul>
+               </div>
             )}
          </div>
       </SidePanel>

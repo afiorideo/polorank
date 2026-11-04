@@ -12,7 +12,7 @@ export type AiTrackingRow = {
    keyword: string,
    country: string,
    volume: number,
-   /** 1 citado · 0 hubo resumen y no te citó · -1 no hubo resumen */
+   /** 1 citado · 0 hubo resumen y no te citó · -1 no hubo resumen · -2 diferido · -3 no medido */
    cited: number,
    /** 1 te nombra · 0 no te nombra · -1 no hubo resumen */
    mentioned: number,
@@ -21,7 +21,10 @@ export type AiTrackingRow = {
    references: AiReference[],
    text: string,
    lastDate: string,
-   periods: { d7: CitationRatio, d30: CitationRatio, d60: CitationRatio, d90: CitationRatio },
+   localPack: { present: boolean, position: number },
+   trusted: boolean,
+   paa: string[],
+   periods: { w4: CitationRatio, w8: CitationRatio, w12: CitationRatio },
 };
 
 /** Citas en el resumen con IA de Google para todas las keywords de un dominio. */

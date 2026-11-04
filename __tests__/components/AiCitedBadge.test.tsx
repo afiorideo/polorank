@@ -21,6 +21,12 @@ describe('AiCitedBadge', () => {
       expect(el.className).not.toContain('rose');
    });
 
+   it('-3 muestra No medido en gris', () => {
+      const { container } = render(<AiCitedBadge cited={-3} />);
+      expect(container.textContent).toBe('— No medido');
+      expect(container.firstElementChild?.className).toContain('slate');
+   });
+
    it('el título del N/A explica que no es "no te citan"', () => {
       render(<AiCitedBadge cited={-1} />);
       expect(screen.getByTitle(/No es que no te citen/)).toBeInTheDocument();

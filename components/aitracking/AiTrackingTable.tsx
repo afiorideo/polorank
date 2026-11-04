@@ -10,12 +10,11 @@ type AiTrackingTableProps = {
    isLoading: boolean,
 }
 
-/** `5/7` = visible en la respuesta de IA 5 de los últimos 7 días. `—` = la serie no cubre el período. */
-const ratio = (r: CitationRatio): string => (r ? `${r.cited}/${r.days}` : '—');
+/** `3/4` = te citó 3 de las 4 semanas con resumen. `—` = la serie no cubre el período. */
+const ratio = (r: CitationRatio): string => (r ? `${r.cited}/${r.withAi}` : '—');
 
 const ratioTitle = (r: CitationRatio): string => (r
-   ? `Visible ${r.cited} de los últimos ${r.days} días. Google respondió con IA en ${r.withAi} de ellos`
-      + ` y se midieron ${r.measured} de ${r.days} días.`
+   ? `Te citó ${r.cited} de las ${r.withAi} semanas con resumen.`
    : 'Todavía no hay mediciones que cubran ese período');
 
 const shortUrl = (url: string, domain: string): string => {
@@ -46,7 +45,7 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
       );
    }
 
-   const conResumen = rows.filter((r) => r.cited !== -1).length;
+   const conResumen = rows.filter((r) => r.cited >= 0 || r.cited === -2).length;
 
    return (
       <>
@@ -56,7 +55,7 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                : `${rows.filter((r) => r.cited === 1).length} de ${conResumen} búsquedas con resumen te citan.`}
          </p>
          <div className='overflow-x-auto border rounded-md bg-surface inline-block max-w-full align-top'>
-            <table className='w-full text-sm' style={{ minWidth: 780, maxWidth: 940 }}>
+            <table className='w-full text-sm' style={{ minWidth: 800, maxWidth: 940 }}>
                <thead>
                   <tr className='text-left border-b'>
                      <th className={`${th} pl-3`}>Keyword</th>
@@ -64,11 +63,11 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                      <th className={`${th} w-[70px]`}>¿Te cita?</th>
                      <th className={`${th} w-[80px]`}>¿Te nombra?</th>
                      <th className={`${th} text-right w-[52px]`}>Puesto</th>
+                     <th className={`${th} text-right w-[60px]`}>Local Pack</th>
                      <th className={`${th} w-[150px]`}>URL citada</th>
-                     <th className={`${th} text-right w-[46px]`}>7d</th>
-                     <th className={`${th} text-right w-[46px]`}>30d</th>
-                     <th className={`${th} text-right w-[46px]`}>60d</th>
-                     <th className={`${th} text-right pr-3 w-[46px]`}>90d</th>
+                     <th className={`${th} text-right w-[56px]`}>4 sem</th>
+                     <th className={`${th} text-right w-[56px]`}>8 sem</th>
+                     <th className={`${th} text-right pr-3 w-[56px]`}>12 sem</th>
                   </tr>
                </thead>
                <tbody>
@@ -80,18 +79,28 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
                         <td className={`${td} pl-3 font-semibold text-gray-700`}>
                            <span className={`fflag fflag-${r.country} w-[18px] h-[12px] mr-2 inline-block align-middle`} />
                            {r.keyword}
+                           {!r.trusted && (
+                              <span
+                              className='ml-2 inline-block text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-500 align-middle'
+                              title='La página de Google de esta semana vino alterada (no coincide con Serper). No cuenta en las tasas.'>
+                                 no confiable
+                              </span>
+                           )}
                         </td>
                         <td className={`${td} text-right text-gray-500 tabular-nums`}>{r.volume || '—'}</td>
                         <td className={td}><AiCitedBadge cited={r.cited} /></td>
                         <td className={td}><AiCitedBadge cited={r.mentioned} kind='mention' /></td>
                         <td className={`${td} text-right tabular-nums text-gray-600`}>{r.position || '—'}</td>
+                        <td className={`${td} text-right tabular-nums text-gray-600`}>
+                           {r.localPack?.present && r.localPack.position ? `#${r.localPack.position}` : '—'}
+                        </td>
                         <td className={`${td} text-xs text-gray-500 max-w-[150px] truncate`} title={r.citedUrl}>
                            {shortUrl(r.citedUrl, domain)}
                         </td>
-                        {(['d7', 'd30', 'd60', 'd90'] as const).map((p) => (
+                        {(['w4', 'w8', 'w12'] as const).map((p) => (
                            <td
                            key={p}
-                           className={`${td} text-right text-xs text-gray-500 tabular-nums ${p === 'd90' ? 'pr-3' : ''}`}
+                           className={`${td} text-right text-xs text-gray-500 tabular-nums ${p === 'w12' ? 'pr-3' : ''}`}
                            title={ratioTitle(r.periods[p])}>
                               {ratio(r.periods[p])}
                            </td>
@@ -104,9 +113,9 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
          <p className='text-[11px] text-gray-400 mt-2'>
             <strong>Te cita</strong> = tu sitio aparece como fuente del resumen. <strong>Te nombra</strong> = el texto
             escribe tu marca; la etiqueta de la cita no cuenta, tiene que estar en la redacción.
-            Los períodos se cuentan en <strong>días</strong>: <code>5/7</code>
-            significa que fuiste visible 5 de los últimos 7 días, y muestran <code>—</code> hasta que haya mediciones de
-            esa antigüedad, igual que en Tracking. <strong>N/A</strong> no es que no aparezcas: es que Google no respondió
+            Los períodos se cuentan en <strong>semanas</strong>: <code>3/4</code>
+            significa que te citó 3 de las 4 semanas en que hubo resumen, y muestran <code>—</code> hasta que haya
+            mediciones de esa antigüedad. Las semanas con página <strong>no confiable</strong> no cuentan. <strong>N/A</strong> no es que no aparezcas: es que Google no respondió
             con IA en esa búsqueda.
          </p>
          {selected && <AiDetailPanel row={selected} domain={domain} closePanel={() => setSelected(null)} />}
