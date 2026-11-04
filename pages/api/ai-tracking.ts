@@ -5,7 +5,7 @@ import Keyword from '../../database/models/keyword';
 import KeywordDaily from '../../database/models/keywordDaily';
 import { authenticate } from '../../utils/verifyUser';
 import { canAccessDomain } from '../../utils/auth/guards';
-import { citationPeriodsWeeks, parseKey, brandOf, mentionState, AI_NOT_MEASURED } from '../../utils/aiTracking';
+import { citationPeriodsWeeks, parseKey, brandOf, mentionState, lastSerpTrusted, AI_NOT_MEASURED } from '../../utils/aiTracking';
 import type { CitationRatio } from '../../utils/aiTracking';
 
 /** Una fila de la tabla de Tracking IA. */
@@ -91,7 +91,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          const latest = lastWithAi || usable[usable.length - 1];
          // hay filas pero ninguna utilizable: es "no medido", no "no hubo resumen"
          const missing = days.length > 0 ? AI_NOT_MEASURED : -1;
-         const trusted = days.length === 0 || days[days.length - 1].serp_trust !== 0;
+         const trusted = lastSerpTrusted(days);
          const lp = [...usable].reverse()
             .map((d) => parseJson<{ present?: boolean, position?: number }>(d.local_pack, {}))
             .find((o) => Object.keys(o).length > 0);

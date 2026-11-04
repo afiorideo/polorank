@@ -155,3 +155,12 @@ export const mentionState = (text: string | null | undefined, brand: string): nu
    if (aguja.length < MIN_BRAND_LENGTH) { return -1; }
    return flat(prose(text)).includes(aguja) ? 1 : 0;
 };
+
+/**
+ * ¿Es confiable la última medición de la página de Google? Usa la última fila con `serp_trust` informado:
+ * desde el martes la última fila es de Serper (serp_trust null) y no dice nada de la página alterada del lunes.
+ */
+export const lastSerpTrusted = (days: { serp_trust: number | null | undefined }[]): boolean => {
+   const last = [...days].reverse().find((d) => d.serp_trust !== null && d.serp_trust !== undefined);
+   return !last || last.serp_trust !== 0;
+};
