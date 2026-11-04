@@ -30,14 +30,36 @@ const pool = async <T>(jobs: (() => Promise<T>)[]): Promise<T[]> => {
    return out;
 };
 
-const enabledDomains = async (): Promise<Map<string, AiDomainSettings>> => {
+/** Configuración IA de todos los dominios (habilitados o no). */
+const domainSettings = async (): Promise<Map<string, AiDomainSettings>> => {
    const all = await Domain.findAll();
    const m = new Map<string, AiDomainSettings>();
-   all.forEach((d) => {
-      const cfg = parseAiSettings(d.get('ai_settings') as string, d.get('domain') as string);
-      if (cfg.enabled) { m.set(d.get('domain') as string, cfg); }
-   });
+   all.forEach((d) => { m.set(d.get('domain') as string, parseAiSettings(d.get('ai_settings') as string, d.get('domain') as string)); });
    return m;
+};
+
+const enabledDomains = async (): Promise<Map<string, AiDomainSettings>> => {
+   const m = await domainSettings();
+   [...m.keys()].forEach((k) => { if (!(m.get(k) as AiDomainSettings).enabled) { m.delete(k); } });
+   return m;
+};
+
+/** Estado de cierre de una corrida según sus respuestas. */
+export const runStatus = (pending: number, errors: number): 'pending' | 'partial' | 'done' => {
+   if (pending > 0) { return 'pending'; }
+   return errors > 0 ? 'partial' : 'done';
+};
+
+/** Cierra la corrida si ya no quedan respuestas pendientes. Devuelve su estado. */
+const closeRunIfDone = async (run: AiRun, cost?: number): Promise<string> => {
+   const runId = run.get('ID') as number;
+   const pending = await AiAnswer.count({ where: { run_id: runId, status: 'pending' } });
+   const errors = await AiAnswer.count({ where: { run_id: runId, status: 'error' } });
+   const status = runStatus(pending, errors);
+   const values: Record<string, unknown> = { status, finished_at: status === 'pending' ? null : new Date().toJSON() };
+   if (cost !== undefined) { values.cost_usd = cost; }
+   if (cost !== undefined || status !== 'pending') { await run.update(values); }
+   return status;
 };
 
 export const planRun = async (scope: RunScope, mode: 'queue' | 'live') => {
@@ -128,16 +150,15 @@ export const startRun = async (scope: RunScope, mode: 'queue' | 'live', triggere
          } catch (e) { console.log('[ERROR] Google IA falló para', d, e); }
       }
    }
-   const pending = await AiAnswer.count({ where: { run_id: runId, status: 'pending' } });
-   await run.update({ cost_usd: cost, status: pending ? 'pending' : 'done', finished_at: pending ? null : new Date().toJSON() });
-   return { runId, status: pending ? 'pending' : 'done', estimate: plan.estimate };
+   const status = await closeRunIfDone(run, cost);
+   return { runId, status, estimate: plan.estimate };
 };
 
 /** Recoge las tareas en cola que ya terminaron. Lo pendiente por más de 24 h pasa a error. */
 export const collectPending = async (settings: SettingsType) => {
    const creds = settings.ai_dataforseo_credentials || '';
    const pending = await AiAnswer.findAll({ where: { status: 'pending', task_id: { [Op.ne]: '' } }, limit: 400 });
-   const cfgs = await enabledDomains();
+   const cfgs = await domainSettings();
    let collected = 0; let errors = 0;
    await pool(pending.map((a) => async () => {
       try {
@@ -161,11 +182,7 @@ export const collectPending = async (settings: SettingsType) => {
    const runs = await AiRun.findAll({ where: { status: 'pending' } });
    for (const run of runs) {
       // eslint-disable-next-line no-await-in-loop
-      const left = await AiAnswer.count({ where: { run_id: run.get('ID'), status: 'pending' } });
-      // eslint-disable-next-line no-await-in-loop
-      const errs = await AiAnswer.count({ where: { run_id: run.get('ID'), status: 'error' } });
-      // eslint-disable-next-line no-await-in-loop
-      if (!left) { await run.update({ status: errs ? 'partial' : 'done', finished_at: new Date().toJSON() }); }
+      await closeRunIfDone(run);
    }
    // purga de raw con más de 26 semanas
    const limit = new Date(Date.now() - 26 * 7 * 24 * 3600 * 1000).toJSON();

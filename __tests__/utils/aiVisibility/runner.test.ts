@@ -1,5 +1,5 @@
 /** @jest-environment node */
-import { packRaw, unpackRaw, budgetAllows, isQueuedStatus } from '../../../utils/aiVisibility/runner';
+import { packRaw, unpackRaw, budgetAllows, isQueuedStatus, runStatus } from '../../../utils/aiVisibility/runner';
 
 describe('runner', () => {
    it('raw comprimido ida y vuelta', () => {
@@ -16,5 +16,10 @@ describe('runner', () => {
       expect(isQueuedStatus(20000)).toBe(false);
       expect(isQueuedStatus(40501)).toBe(false);
       expect(isQueuedStatus(undefined)).toBe(false);
+   });
+   it('estado de cierre de la corrida', () => {
+      expect(runStatus(2, 0)).toBe('pending');
+      expect(runStatus(0, 3)).toBe('partial');
+      expect(runStatus(0, 0)).toBe('done');
    });
 });
