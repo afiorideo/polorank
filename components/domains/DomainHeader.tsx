@@ -68,13 +68,13 @@ const DomainHeader = (
             <li className={`${tabStyle} ${router.pathname === '/ai-tracking/[slug]' ? 'bg-surface border border-b-0 font-semibold' : ''}`}>
                <Link href={`/ai-tracking/${domain.slug}`} passHref={true}>
                   <a className='px-4 py-2 inline-block'><Icon type="research" size={13} classes='hidden lg:inline-block' />
-                     <span className='text-xs lg:text-sm lg:ml-2'>Tracking IA</span>
+                     <span className='text-xs lg:text-sm lg:ml-2'>Visibilidad IA</span>
                      <Icon
                      type='help'
                      size={14}
                      color="#aaa"
                      classes="ml-2 hidden lg:inline-block"
-                     title='Si Google te cita en su resumen con IA'
+                     title='Asistentes IA y resumen con IA de Google'
                      />
                   </a>
                </Link>

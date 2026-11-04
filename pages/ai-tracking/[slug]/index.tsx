@@ -18,6 +18,7 @@ import { useFetchDomains } from '../../../services/domains';
 import AiTrackingTable from '../../../components/aitracking/AiTrackingTable';
 import { useFetchAiTracking } from '../../../services/aiTracking';
 import { useFetchSettings } from '../../../services/settings';
+import AssistantsView from '../../../components/aivisibility/AssistantsView';
 import Footer from '../../../components/common/Footer';
 
 const AiTrackingPage: NextPage = () => {
@@ -26,6 +27,7 @@ const AiTrackingPage: NextPage = () => {
    const [showDomainSettings, setShowDomainSettings] = useState(false);
    const [showSettings, setShowSettings] = useState(false);
    const [showAddDomain, setShowAddDomain] = useState(false);
+   const [view, setView] = useState<'assistants' | 'google'>('assistants');
    const [scDateFilter, setSCDateFilter] = useState('thirtyDays');
    const { data: appSettings } = useFetchSettings();
    const { data: domainsData } = useFetchDomains(router);
@@ -71,7 +73,21 @@ const AiTrackingPage: NextPage = () => {
                }
                {activDomain && (
                   <div className='mt-5'>
-                     <AiTrackingTable rows={aiData?.rows || []} domain={activDomain.domain} isLoading={aiLoading} />
+                     <div className='inline-flex rounded border overflow-hidden text-sm mb-4'>
+                        <button
+                        className={`px-4 py-1.5 ${view === 'assistants' ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-500'}`}
+                        onClick={() => setView('assistants')}>
+                           Asistentes IA <span className='text-gray-400 font-normal'>(prompts)</span>
+                        </button>
+                        <button
+                        className={`px-4 py-1.5 border-l ${view === 'google' ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-500'}`}
+                        onClick={() => setView('google')}>
+                           Google IA <span className='text-gray-400 font-normal'>(palabras clave)</span>
+                        </button>
+                     </div>
+                     {view === 'assistants'
+                        ? <AssistantsView domain={activDomain.domain} />
+                        : <AiTrackingTable rows={aiData?.rows || []} domain={activDomain.domain} isLoading={aiLoading} />}
                   </div>
                )}
             </div>
