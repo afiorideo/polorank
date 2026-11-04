@@ -14,6 +14,7 @@ export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmP
    const { mutate } = estimate;
    useEffect(() => { mutate(scope); }, [mutate, scope]);
 
+   // el servidor responde al instante ('pending'): se cierra y el aviso lo da el toast
    const confirm = () => run.mutate(scope, {
       onSuccess: (out) => { if (!skippedMessage(out.status)) { closeModal(); } },
    });
@@ -23,12 +24,6 @@ export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmP
          {estimate.isLoading && <p className="text-sm text-gray-500">Calculando costo…</p>}
          {estimate.isError && <p className="text-sm text-red-700">No se pudo calcular el costo.</p>}
          {estimate.data && <p className="text-sm">Esto cuesta ~{usd(estimate.data.estimate)}. ¿Actualizar ahora?</p>}
-         {run.isLoading && (
-            <p className="text-sm text-gray-600 mt-3 flex items-center gap-2">
-               <span className="inline-block w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-               Consultando las IAs… puede tardar 1 a 3 minutos. No cierres esta ventana.
-            </p>
-         )}
          {skipped && <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded p-2 mt-3">{skipped}</p>}
          <div className="flex justify-end gap-2 mt-4 text-sm">
             <button

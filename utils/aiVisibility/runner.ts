@@ -70,7 +70,8 @@ export const planRun = async (scope: RunScope, mode: 'queue' | 'live') => {
    let prompts: AiPrompt[] = [];
    if (scope.kind === 'prompt') {
       const p = await AiPrompt.findByPk(scope.promptId);
-      if (p && doms.has(p.get('domain') as string)) { prompts = [p]; domains = [p.get('domain') as string]; }
+      // un prompt desactivado (eliminado en la UI) no se vuelve a medir
+      if (p && p.get('active') !== false && doms.has(p.get('domain') as string)) { prompts = [p]; domains = [p.get('domain') as string]; }
    } else if (scope.kind !== 'google' && domains.length) {
       prompts = await AiPrompt.findAll({ where: { domain: { [Op.in]: domains }, active: true } });
    }
@@ -90,21 +91,53 @@ const storeResult = async (answer: AiAnswer, engine: Engine, result: any, cost: 
    });
 };
 
-export const startRun = async (scope: RunScope, mode: 'queue' | 'live', triggeredBy: string, settings: SettingsType) => {
+/** Etiqueta del alcance tal como se guarda en ai_run.scope. */
+export const scopeLabelOf = (scope: RunScope): string => {
+   if (scope.kind === 'all') { return 'all'; }
+   return `${scope.kind}:${scope.kind === 'prompt' ? scope.promptId : scope.domain}`;
+};
+
+export const OVERLAP_MIN = 30;
+/** ¿Hay una corrida del mismo alcance aún en curso (pendiente y empezada hace menos de OVERLAP_MIN minutos)? */
+export const runInFlight = (
+   runs: { scope: string, status: string, started_at: string }[],
+   scopeLabel: string,
+   now: Date = new Date(),
+   windowMin: number = OVERLAP_MIN,
+): boolean => runs.some((r) => r.scope === scopeLabel && r.status === 'pending'
+   && now.getTime() - new Date(r.started_at).getTime() < windowMin * 60000);
+
+type Plan = Awaited<ReturnType<typeof planRun>>;
+export type PreparedRun = {
+   runId: number, status: string, estimate: number,
+   run: AiRun, plan: Plan, scope: RunScope, mode: 'queue' | 'live', triggeredBy: string, creds: string,
+};
+
+/** Paso 1 (síncrono): plan, credenciales, presupuesto y alta de la corrida. Si status !== 'pending' no hay nada que ejecutar. */
+export const prepareRun = async (
+   scope: RunScope, mode: 'queue' | 'live', triggeredBy: string, settings: SettingsType,
+): Promise<PreparedRun> => {
    const creds = settings.ai_dataforseo_credentials || '';
    const plan = await planRun(scope, mode);
-   const scopeLabel = scope.kind === 'all' ? 'all' : `${scope.kind}:${scope.kind === 'prompt' ? scope.promptId : scope.domain}`;
-   const run = await AiRun.create({ started_at: new Date().toJSON(), triggered_by: triggeredBy, scope: scopeLabel, est_cost_usd: plan.estimate });
-   const runId = run.get('ID') as number;
+   const run = await AiRun.create({
+      started_at: new Date().toJSON(), triggered_by: triggeredBy, scope: scopeLabelOf(scope), est_cost_usd: plan.estimate,
+   });
+   const base = { runId: run.get('ID') as number, estimate: plan.estimate, run, plan, scope, mode, triggeredBy, creds };
    if (!creds) {
       await run.update({ status: 'skipped_no_credentials', finished_at: new Date().toJSON() });
-      return { runId, status: 'skipped_no_credentials', estimate: plan.estimate };
+      return { ...base, status: 'skipped_no_credentials' };
    }
    const budget = settings.ai_monthly_budget_usd ?? 2;
    if (!budgetAllows(await monthSpend(), plan.estimate, budget)) {
       await run.update({ status: 'skipped_budget', finished_at: new Date().toJSON() });
-      return { runId, status: 'skipped_budget', estimate: plan.estimate };
+      return { ...base, status: 'skipped_budget' };
    }
+   return { ...base, status: 'pending' };
+};
+
+/** Paso 2: las consultas, Google IA y el cierre de la corrida. */
+export const executeRun = async (prep: PreparedRun) => {
+   const { run, runId, plan, scope, mode, triggeredBy, creds } = prep;
    const week = weekOf(new Date());
    let cost = 0;
 
@@ -152,6 +185,13 @@ export const startRun = async (scope: RunScope, mode: 'queue' | 'live', triggere
    }
    const status = await closeRunIfDone(run, cost);
    return { runId, status, estimate: plan.estimate };
+};
+
+/** Corrida completa en una sola llamada (la semanal del cron). */
+export const startRun = async (scope: RunScope, mode: 'queue' | 'live', triggeredBy: string, settings: SettingsType) => {
+   const prep = await prepareRun(scope, mode, triggeredBy, settings);
+   if (prep.status !== 'pending') { return { runId: prep.runId, status: prep.status, estimate: prep.estimate }; }
+   return executeRun(prep);
 };
 
 /** Recoge las tareas en cola que ya terminaron. Lo pendiente por más de 24 h pasa a error. */

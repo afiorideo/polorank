@@ -61,7 +61,10 @@ export const skippedMessage = (status: string): string | null => {
    return null;
 };
 
-/** Lanza una corrida en vivo (POST /run, solo superadmin, con espera de 10 minutos). Responde cuando terminan las consultas. */
+/**
+ * Lanza una corrida en vivo (POST /run, solo superadmin, con espera de 10 minutos). El servidor responde de inmediato
+ * con status 'pending' y las consultas siguen en segundo plano; el panel se refresca solo mientras siga pendiente.
+ */
 export function useRunAiNow(domain: string | undefined) {
    const queryClient = useQueryClient();
    return useMutation((s: AiRunScope) => api<AiRunOutcome>(
@@ -71,12 +74,13 @@ export function useRunAiNow(domain: string | undefined) {
          const skipped = skippedMessage(out.status);
          if (skipped) { toast(skipped, { icon: '⚠️' }); return; }
          const text = ({
+            pending: 'Actualización iniciada. Los resultados aparecerán en unos minutos.',
             partial: 'Listo, pero algunas consultas fallaron',
-            pending: 'Algunas respuestas llegarán en unos minutos',
          } as Record<string, string>)[out.status] || 'Actualización lista.';
          toast(text, { icon: out.status === 'partial' ? '⚠️' : '✔️' });
          queryClient.invalidateQueries(['aiVisibility', domain]);
       },
+      // 409 (ya hay una en curso) y 429 (espera) llegan acá con el mensaje del servidor
       onError: (error: Error) => { toast(error.message, { icon: '⚠️' }); },
    });
 }
