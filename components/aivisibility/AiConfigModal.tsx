@@ -17,6 +17,9 @@ const parseTags = (raw: string): string[] => {
 };
 const splitList = (s: string, sep: RegExp) => s.split(sep).map((x) => x.trim()).filter(Boolean);
 
+/** Competidor en edición: las variantes se guardan como texto crudo y se separan al guardar. */
+type CompetitorDraft = { name: string, variants: string };
+
 type PromptRowProps = { domain: string, row?: AiPromptRow, onDone?: () => void };
 
 /** Fila de un prompt existente (editar/eliminar) o de uno nuevo (sin `row`). */
@@ -79,7 +82,7 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
    const [enabled, setEnabled] = useState(false);
    const [brands, setBrands] = useState('');
    const [urls, setUrls] = useState('');
-   const [competitors, setCompetitors] = useState<AiCompetitor[]>([]);
+   const [competitors, setCompetitors] = useState<CompetitorDraft[]>([]);
    const [iso, setIso] = useState('CL');
    const [gemini, setGemini] = useState('');
    const settings = config.data?.settings;
@@ -88,7 +91,7 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
       setEnabled(settings.enabled === true);
       setBrands(settings.brand_variants.join('\n'));
       setUrls(settings.brand_urls.join('\n'));
-      setCompetitors(settings.competitors);
+      setCompetitors(settings.competitors.map((c) => ({ name: c.name, variants: c.variants.join(', ') })));
       setIso(COUNTRIES.some((c) => c.country_iso === settings.country_iso) ? settings.country_iso : 'CL');
       setGemini(settings.gemini_location_code ? String(settings.gemini_location_code) : '');
    }, [settings]);
@@ -99,7 +102,7 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
    const missing = detectedCompetitors.filter((n) => !competitors.some((c) => c.name.toLowerCase() === n.toLowerCase()));
    const brandList = splitList(brands, /\n/);
 
-   const updateCompetitor = (i: number, patch: Partial<AiCompetitor>) => setCompetitors(
+   const updateCompetitor = (i: number, patch: Partial<CompetitorDraft>) => setCompetitors(
       (list) => list.map((c, j) => (j === i ? { ...c, ...patch } : c)),
    );
 
@@ -110,7 +113,7 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
          enabled,
          brand_variants: brandList,
          brand_urls: splitList(urls, /\n/),
-         competitors: competitors.filter((c) => c.name.trim()),
+         competitors: competitors.filter((c) => c.name.trim()).map((c): AiCompetitor => ({ name: c.name, variants: splitList(c.variants, /,/) })),
          location_code: country.location_code,
          language_code: country.language_code,
          country_iso: country.country_iso,
@@ -172,8 +175,8 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
                   aria-label={`Variantes del competidor ${i + 1}`}
                   className={inputCls}
                   placeholder="Variantes separadas por coma"
-                  value={c.variants.join(', ')}
-                  onChange={(e) => updateCompetitor(i, { variants: splitList(e.target.value, /,/) })} />
+                  value={c.variants}
+                  onChange={(e) => updateCompetitor(i, { variants: e.target.value })} />
                   <button
                   className="px-2 text-xs bg-white border rounded"
                   onClick={() => setCompetitors((l) => l.filter((_, j) => j !== i))}>
@@ -181,7 +184,7 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
                   </button>
                </div>
             ))}
-            <button className="px-2 py-1 text-xs bg-white border rounded" onClick={() => setCompetitors((l) => [...l, { name: '', variants: [] }])}>
+            <button className="px-2 py-1 text-xs bg-white border rounded" onClick={() => setCompetitors((l) => [...l, { name: '', variants: '' }])}>
                + Agregar competidor
             </button>
             {missing.length > 0 && (
@@ -192,7 +195,7 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
                         <button
                         key={n}
                         className="px-2 py-0.5 text-xs bg-gray-100 border rounded-full"
-                        onClick={() => setCompetitors((l) => [...l, { name: n, variants: [] }])}>
+                        onClick={() => setCompetitors((l) => [...l, { name: n, variants: '' }])}>
                            {n} + agregar
                         </button>
                      ))}

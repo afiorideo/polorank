@@ -42,4 +42,22 @@ describe('AiConfigModal', () => {
       expect(puts[0].settings.enabled).toBe(enabled);
       expect(puts[0].settings.competitors).toEqual([{ name: 'Rival', variants: [] }]);
    });
+
+   it('permite escribir varias variantes de un competidor, letra por letra', async () => {
+      const puts: any[] = [];
+      mockApi(true, puts);
+      render(wrap(<AiConfigModal domain='ammo.cl' detectedCompetitors={['Blanka']} closeModal={jest.fn()} />));
+      await waitFor(() => expect((screen.getByLabelText('Variantes de la marca') as HTMLTextAreaElement).value).toBe('ammo'));
+      fireEvent.click(screen.getByText('Blanka + agregar'));
+      const input = screen.getByLabelText('Variantes del competidor 1') as HTMLInputElement;
+      let typed = '';
+      'Blanka, Blanka Atelier'.split('').forEach((ch) => {
+         typed += ch;
+         fireEvent.change(input, { target: { value: typed } });
+      });
+      expect(input.value).toBe('Blanka, Blanka Atelier');
+      fireEvent.click(screen.getByText('Guardar configuración'));
+      await waitFor(() => expect(puts).toHaveLength(1));
+      expect(puts[0].settings.competitors).toEqual([{ name: 'Blanka', variants: ['Blanka', 'Blanka Atelier'] }]);
+   });
 });
