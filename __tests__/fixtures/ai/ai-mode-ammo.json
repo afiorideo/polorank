@@ -1,0 +1,254 @@
+{
+ "version": "0.1.20261103",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "11.5670 sec.",
+ "cost": 0.004,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "11042138-2362-0139-0000-ebc4b492da68",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "11.4216 sec.",
+   "cost": 0.004,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "serp",
+    "google",
+    "ai_mode",
+    "live",
+    "advanced"
+   ],
+   "data": {
+    "api": "serp",
+    "function": "live",
+    "se": "google",
+    "se_type": "ai_mode",
+    "keyword": "¿Dónde puedo arrendar un vestido de fiesta en Temuco?",
+    "location_code": 2152,
+    "language_code": "es",
+    "device": "mobile",
+    "os": "android"
+   },
+   "result": [
+    {
+     "keyword": "¿Dónde puedo arrendar un vestido de fiesta en Temuco?",
+     "type": "ai_mode",
+     "se_domain": "google.com",
+     "location_code": 2152,
+     "language_code": "es",
+     "check_url": "https://www.google.com/search?q=%C2%BFD%C3%B3nde%20puedo%20arrendar%20un%20vestido%20de%20fiesta%20en%20Temuco%3F&hl=es&gl=CL&udm=50&uule=w+CAIQIFISCS-vJQRBxWKWER25AhET4QUF",
+     "datetime": "2026-11-04 21:38:42 +00:00",
+     "spell": null,
+     "refinement_chips": null,
+     "item_types": [
+      "ai_overview"
+     ],
+     "se_results_count": 0,
+     "items_count": 1,
+     "items": [
+      {
+       "type": "ai_overview",
+       "rank_group": 1,
+       "rank_absolute": 1,
+       "page": 1,
+       "position": "left",
+       "xpath": "/html[1]/body[1]/div[4]/div[3]/div[1]/div[12]/div[1]/div[2]/section[1]/div[1]/div[1]/div[3]/div[4]/div[1]/div[1]/div[1]/div[3]",
+       "markdown": "En Temuco cuentas con `varias alternativas físicas y showrooms dedicados al arriendo y venta de vestidos de fiesta, graduaciones y matrimonios` . Aquí tienes las opciones más destacadas:[[1]](https://www.instagram.com/quebonitava_arriendos/)[[2]](https://www.google.com/searchviewer/10?svid=CCYSESoPCg0vZy8xMXd4czc1eXRkGAo)[[3]](https://www.instagram.com/reel/Dbl9ijjJOtl/)\n\n- **Ammo Store** \n\t- **Qué ofrece:** Vestidos de fiesta, enteritos, accesorios y clutches exclusivos para matrimonios o graduaciones. Tienen tanto venta como arriendo.\n\t- **Ubicación:** Av. Alemania 0425, Local 207, Temuco.\n\t- **Horarios referenciales:** Lunes a viernes (14:00 a 19:00 hrs) y sábados (12:00 a 17:00 hrs). Puedes revisar su catálogo en el sitio web oficial de Ammo Store o en su cuenta de Instagram [@ammostorechile](https://www.instagram.com/ammostorechile/).[[1]](https://www.google.com/searchviewer/10?svid=CCYSESoPCg0vZy8xMXd4czc1eXRkGAo)[[2]](https://ammo.cl/)[[3]](https://www.instagram.com/ammostorechile/)\n- **Que Bonita Va (Showroom Centro)** \n\t- **Qué ofrece:** Arriendo de vestidos de fiesta (incluyendo variedad de modelos en tallas XL y XXL) y también opciones de vestidos de novia.\n\t- **Modalidad:** La atención para pruebas se agendad previamente.\n\t- **Contacto:** Puedes coordinar tu visita a través de su cuenta de Instagram [@quebonitava_arriendos](https://www.instagram.com/quebonitava_arriendos/).[[1]](https://www.instagram.com/quebonitava_arriendos/)\n- **Showroom / Atelier en Sector Hochstetter** \n\t- Existen iniciativas locales enfocadas en tenidas formales y de gala con reserva de hora previa (por ejemplo, espacios ubicados en el sector de Hochstetter / Edificio K) que ofrecen atención muy personalizada. Se recomienda contactar directamente por redes sociales o WhatsApp para asegurar disponibilidad de tallas y estilos antes de asistir.[[1]](https://www.instagram.com/reel/Dbl9ijjJOtl/)[[2]](https://www.google.com/searchviewer/10?svid=CCYSECoOCgwvZy8xcHAyd3hkangYCg)\n\nSi me cuentas **para qué tipo de evento** lo necesitas (matrimonio, gala, graduación) y tu **talla aproximada** , puedo orientarte mejor sobre cuál de estas alternativas se adapta mejor a lo que buscas.",
+       "items": [
+        {
+         "type": "ai_overview_element",
+         "position": "left",
+         "title": null,
+         "text": "En Temuco cuentas con varias alternativas físicas y showrooms dedicados al arriendo y venta de vestidos de fiesta, graduaciones y matrimonios. Aquí tienes las opciones más destacadas:",
+         "markdown": "En Temuco cuentas con `varias alternativas físicas y showrooms dedicados al arriendo y venta de vestidos de fiesta, graduaciones y matrimonios` . Aquí tienes las opciones más destacadas:[[1]](https://www.instagram.com/quebonitava_arriendos/)[[2]](https://www.google.com/searchviewer/10?svid=CCYSESoPCg0vZy8xMXd4czc1eXRkGAo)[[3]](https://www.instagram.com/reel/Dbl9ijjJOtl/)",
+         "links": null,
+         "images": null,
+         "references": [
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Instagram",
+           "domain": "www.instagram.com",
+           "url": "https://www.instagram.com/quebonitava_arriendos/",
+           "title": "Arriendo vestidos fiesta QBV (@quebonitava_arriendos) · Temuco",
+           "text": "Showroom Temuco, Centro ✨Arriendos de vestidos de fiesta. modelos XL y XXL. Arriendo de hermosos vestidos de Novia. Tallas S-M y L"
+          },
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Google",
+           "domain": "www.google.com",
+           "url": "https://www.google.com/searchviewer/10?svid=CCYSESoPCg0vZy8xMXd4czc1eXRkGAo",
+           "title": "Ammo Store",
+           "text": "Av. Alemania 0425, Loc 207, 4780000 Temuco, Araucanía · En Ammo Temuco, redefinimos la elegancia para tus momentos más importantes. Somos una boutique exclusiva..."
+          },
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Instagram",
+           "domain": "www.instagram.com",
+           "url": "https://www.instagram.com/reel/Dbl9ijjJOtl/",
+           "title": "No esperes !! Este vestido de fiesta es para ti #vestidosdefiestatemuco ...",
+           "text": "✨Buscando el vestido para tu evento? Aquí te ayudo! Reserva con anticipación tu hora! Instagram/ Wsp +569 62536636 Hochstetter 1002 oficina 305 Edificio K-Temuc..."
+          }
+         ]
+        },
+        {
+         "type": "ai_overview_element",
+         "position": "left",
+         "title": null,
+         "text": "Ammo Store Ammo Store Ammo Store Qué ofrece: Vestidos de fiesta, enteritos, accesorios y clutches exclusivos para matrimonios o graduaciones. Tienen tanto venta como arriendo. Ubicación: Av. Alemania 0425, Local 207, Temuco. Horarios referenciales: Lunes a viernes (14:00 a 19:00 hrs) y sábados (12:00 a 17:00 hrs). Puedes revisar su catálogo en el sitio web oficial de Ammo Store o en su cuenta de Instagram @ammostorechile. Ammo Store Ammo Store Que Bonita Va (Showroom Centro) Que Bonita Va (Showroom Centro) Qué ofrece: Arriendo de vestidos de fiesta (incluyendo variedad de modelos en tallas XL y XXL) y también opciones de vestidos de novia. Modalidad: La atención para pruebas se agendad previamente. Contacto: Puedes coordinar tu visita a través de su cuenta de Instagram @quebonitava_arriendos. Showroom / Atelier en Sector Hochstetter Existen iniciativas locales enfocadas en tenidas formales y de gala con reserva de hora previa (por ejemplo, espacios ubicados en el sector de Hochstetter / Edificio K) que ofrecen atención muy personalizada. Se recomienda contactar directamente por redes sociales o WhatsApp para asegurar disponibilidad de tallas y estilos antes de asistir.",
+         "markdown": "- **Ammo Store** \n\t- **Qué ofrece:** Vestidos de fiesta, enteritos, accesorios y clutches exclusivos para matrimonios o graduaciones. Tienen tanto venta como arriendo.\n\t- **Ubicación:** Av. Alemania 0425, Local 207, Temuco.\n\t- **Horarios referenciales:** Lunes a viernes (14:00 a 19:00 hrs) y sábados (12:00 a 17:00 hrs). Puedes revisar su catálogo en el sitio web oficial de Ammo Store o en su cuenta de Instagram [@ammostorechile](https://www.instagram.com/ammostorechile/).[[1]](https://www.google.com/searchviewer/10?svid=CCYSESoPCg0vZy8xMXd4czc1eXRkGAo)[[2]](https://ammo.cl/)[[3]](https://www.instagram.com/ammostorechile/)\n- **Que Bonita Va (Showroom Centro)** \n\t- **Qué ofrece:** Arriendo de vestidos de fiesta (incluyendo variedad de modelos en tallas XL y XXL) y también opciones de vestidos de novia.\n\t- **Modalidad:** La atención para pruebas se agendad previamente.\n\t- **Contacto:** Puedes coordinar tu visita a través de su cuenta de Instagram [@quebonitava_arriendos](https://www.instagram.com/quebonitava_arriendos/).[[1]](https://www.instagram.com/quebonitava_arriendos/)\n- **Showroom / Atelier en Sector Hochstetter** \n\t- Existen iniciativas locales enfocadas en tenidas formales y de gala con reserva de hora previa (por ejemplo, espacios ubicados en el sector de Hochstetter / Edificio K) que ofrecen atención muy personalizada. Se recomienda contactar directamente por redes sociales o WhatsApp para asegurar disponibilidad de tallas y estilos antes de asistir.[[1]](https://www.instagram.com/reel/Dbl9ijjJOtl/)[[2]](https://www.google.com/searchviewer/10?svid=CCYSECoOCgwvZy8xcHAyd3hkangYCg)",
+         "links": [
+          {
+           "type": "link_element",
+           "title": "@ammostorechile",
+           "description": null,
+           "url": "https://www.instagram.com/ammostorechile/",
+           "domain": "www.instagram.com"
+          },
+          {
+           "type": "link_element",
+           "title": "@quebonitava_arriendos",
+           "description": null,
+           "url": "https://www.instagram.com/quebonitava_arriendos/",
+           "domain": "www.instagram.com"
+          }
+         ],
+         "images": null,
+         "references": [
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Google",
+           "domain": "www.google.com",
+           "url": "https://www.google.com/searchviewer/10?svid=CCYSESoPCg0vZy8xMXd4czc1eXRkGAo",
+           "title": "Ammo Store",
+           "text": "Av. Alemania 0425, Loc 207, 4780000 Temuco, Araucanía · En Ammo Temuco, redefinimos la elegancia para tus momentos más importantes. Somos una boutique exclusiva especializada en vestidos de fiesta, enteritos y clutches, seleccionados cuidadosamente para graduaciones, matrimonios y eventos especiales. Nuestro objetivo es ofrecerte no solo prendas de alta calidad y diseño, sino también una experiencia inolvidable, con atención personalizada y un enfoque en los detalles que hacen la diferencia. Visítanos y descubre cómo transformar cada ocasión en un momento para brillar. En Ammo, sabemos que cada mujer merece sentirse única y espectacular. ✨ 📍 Encuéntranos en Temuco y déjate sorprender por nuestra colección."
+          },
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "ammo.cl",
+           "domain": "ammo.cl",
+           "url": "https://ammo.cl/",
+           "title": "Vestidos de Fiesta en Temuco – Arriendo y Venta | Ammo Store",
+           "text": "Venta y arriendo de vestidos de fiesta, graduaciones, galas, matrimonios. Ubicación: Temuco, La Araucanía, sur de Chile"
+          },
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Instagram",
+           "domain": "www.instagram.com",
+           "url": "https://www.instagram.com/ammostorechile/",
+           "title": "Ammo | vestidos de fiesta en Temuco (@ammostorechile) - Instagram",
+           "text": "Arriendo y venta | Vestidos de Fiesta y accesorios Temuco Av. Alemania 0425, loc 207. Lun a Vie: 14:00 a 19:00. Sáb 12:00 a 17:00."
+          },
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Instagram",
+           "domain": "www.instagram.com",
+           "url": "https://www.instagram.com/quebonitava_arriendos/",
+           "title": "Arriendo vestidos fiesta QBV (@quebonitava_arriendos) · Temuco",
+           "text": "Showroom Temuco, Centro ✨Arriendos de vestidos de fiesta. de nuestros modelos XL y XXL. Arriendo de hermosos vestidos de Novia. Tallas S-M y L"
+          },
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Instagram",
+           "domain": "www.instagram.com",
+           "url": "https://www.instagram.com/reel/Dbl9ijjJOtl/",
+           "title": "No esperes !! Este vestido de fiesta es para ti #vestidosdefiestatemuco ...",
+           "text": "+569 62536636 Hochstetter 1002 oficina 305 Edificio K-Temuco - Sólo atención con reserva- Así te aseguro atención personalizada ✨"
+          },
+          {
+           "type": "ai_overview_reference",
+           "position": "left",
+           "source": "Google",
+           "domain": "www.google.com",
+           "url": "https://www.google.com/searchviewer/10?svid=CCYSECoOCgwvZy8xcHAyd3hkangYCg",
+           "title": "ChocolateAmargo Atelier",
+           "text": "el número se entrega al agendar cita - Hochstetter 215, departamento xx, 4800861 Temuco, Araucanía · Marca de diseño dedicada a la confección de vestuario y acc..."
+          }
+         ]
+        },
+        {
+         "type": "ai_overview_element",
+         "position": "left",
+         "title": null,
+         "text": "Si me cuentas para qué tipo de evento lo necesitas (matrimonio, gala, graduación) y tu talla aproximada, puedo orientarte mejor sobre cuál de estas alternativas se adapta mejor a lo que buscas.",
+         "markdown": "Si me cuentas **para qué tipo de evento** lo necesitas (matrimonio, gala, graduación) y tu **talla aproximada** , puedo orientarte mejor sobre cuál de estas alternativas se adapta mejor a lo que buscas.",
+         "links": null,
+         "images": null,
+         "references": null
+        }
+       ],
+       "references": [
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "Instagram",
+         "domain": "www.instagram.com",
+         "url": "https://www.instagram.com/quebonitava_arriendos/",
+         "title": "Arriendo vestidos fiesta QBV (@quebonitava_arriendos) · Temuco",
+         "text": "Showroom Temuco, Centro ✨Arriendos de vestidos de fiesta. de nuestros modelos XL y XXL. Arriendo de hermosos vestidos de Novia. Tallas S-M y L"
+        },
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "ammo.cl",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/",
+         "title": "Vestidos de Fiesta en Temuco – Arriendo y Venta | Ammo Store",
+         "text": "Venta y arriendo de vestidos de fiesta, graduaciones, galas, matrimonios. Ubicación: Temuco, La Araucanía, sur de Chile"
+        },
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "Instagram",
+         "domain": "www.instagram.com",
+         "url": "https://www.instagram.com/ammostorechile/",
+         "title": "Ammo | vestidos de fiesta en Temuco (@ammostorechile) - Instagram",
+         "text": "Arriendo y venta | Vestidos de Fiesta y accesorios Temuco Av. Alemania 0425, loc 207. Lun a Vie: 14:00 a 19:00. Sáb 12:00 a 17:00."
+        },
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "Instagram",
+         "domain": "www.instagram.com",
+         "url": "https://www.instagram.com/reel/Dbl9ijjJOtl/",
+         "title": "No esperes !! Este vestido de fiesta es para ti #vestidosdefiestatemuco ...",
+         "text": "+569 62536636 Hochstetter 1002 oficina 305 Edificio K-Temuco - Sólo atención con reserva- Así te aseguro atención personalizada ✨"
+        },
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "Google",
+         "domain": "www.google.com",
+         "url": "https://www.google.com/searchviewer/10?svid=CCYSESoPCg0vZy8xMXd4czc1eXRkGAo",
+         "title": "Ammo Store",
+         "text": "Av. Alemania 0425, Loc 207, 4780000 Temuco, Araucanía · En Ammo Temuco, redefinimos la elegancia para tus momentos más importantes. Somos una boutique exclusiva especializada en vestidos de fiesta, enteritos y clutches, seleccionados cuidadosamente para graduaciones, matrimonios y eventos especiales. Nuestro objetivo es ofrecerte no solo prendas de alta calidad y diseño, sino también una experiencia inolvidable, con atención personalizada y un enfoque en los detalles que hacen la diferencia. Visítanos y descubre cómo transformar cada ocasión en un momento para brillar. En Ammo, sabemos que cada mujer merece sentirse única y espectacular. ✨ 📍 Encuéntranos en Temuco y déjate sorprender por nuestra colección."
+        },
+        {
+         "type": "ai_overview_reference",
+         "position": "right",
+         "source": "Google",
+         "domain": "www.google.com",
+         "url": "https://www.google.com/searchviewer/10?svid=CCYSECoOCgwvZy8xcHAyd3hkangYCg",
+         "title": "ChocolateAmargo Atelier",
+         "text": "el número se entrega al agendar cita - Hochstetter 215, departamento xx, 4800861 Temuco, Araucanía · Marca de diseño dedicada a la confección de vestuario y accesorios femeninos de alta costura. Vestidos de noche, novias. Chaquetas y trajes. Tocados de novia, pendientes. Acesoria"
+        }
+       ],
+       "rectangle": null
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

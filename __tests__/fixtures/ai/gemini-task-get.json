@@ -1,0 +1,374 @@
+{
+ "version": "0.1.20261103",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "0.0186 sec.",
+ "cost": 0,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "11042138-2362-0626-0000-4b143b8aa246",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "0.0096 sec.",
+   "cost": 0,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "ai_optimization",
+    "gemini",
+    "llm_scraper",
+    "task_get",
+    "advanced",
+    "11042138-2362-0626-0000-4b143b8aa246"
+   ],
+   "data": {
+    "api": "ai_optimization",
+    "function": "llm_scraper",
+    "se": "gemini",
+    "keyword": "¿Dónde puedo arrendar un vestido de fiesta en Temuco?",
+    "location_code": 20153,
+    "language_code": "es",
+    "device": "desktop",
+    "os": "windows"
+   },
+   "result": [
+    {
+     "keyword": "¿Dónde puedo arrendar un vestido de fiesta en Temuco?",
+     "location_code": 20153,
+     "language_code": "es",
+     "model": "3.5 Flash-Lite",
+     "datetime": "2026-11-04 21:40:23 +00:00",
+     "markdown": "En Temuco existen tiendas especializadas en el arriendo y venta de vestidos de fiesta, gala y matrimonios.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Las opciones más destacadas y recomendadas en la ciudad son:\n\n### 1. **Ammo Store**[ammo.cl](https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.)\n* **Qué ofrece:** Una amplia colección de vestidos importados de fiesta, gala, matrimonios y graduaciones (desde la talla XS hasta la XL).[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Cuentan con opciones de arriendo por periodos de 4 u 8 días.[ammo.cl](https://ammo.cl/arriendo-de-vestidos-en-temuco/#:~:text=Vestidos%20disponibles%20para%20arriendo.%20Stock%20real%20de,actualizado%20autom%C3%A1ticamente.%20Animal%20print.%20Berenjena.%20Estampado%20beige.) Lo cómodo de esta tienda es que por lo general no requiere cita previa para ir a probarse.[ammo.cl](https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.)\n* **Ubicación:** Paseo Los Suizos, **Av.[ammo.cl](https://ammo.cl/contacto/) Alemania 0425, Local 207**, Temuco.[ammo.cl](https://ammo.cl/contacto/)\n* **Horarios habituales:** Lunes a viernes de 14:00 a 19:00 hrs y sábados de 12:00 a 17:00 hrs.[ammo.cl](https://ammo.cl/contacto/)\n\n### 2. **El Armario de la Karo**\n* **Qué ofrece:** Es una tienda muy popular y con excelentes referencias en Temuco por su atención sumamente personalizada.[www.armariodelakaro.cl](https://www.armariodelakaro.cl/#:~:text=Todo%20impecable%2C%20los%20vestidos%20de%20muy%20buena,la%20compra.%20Yesika%20R.%20hace%204%20meses.) Tienen una colección muy amplia y exclusiva de vestidos de gala, fiestas y licenciaturas (incluyendo gran variedad de tallas y diseños exclusivos importados), además de asesoría directa para armar todo el *outfit* con accesorios.[ammo.cl](https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.) \n* *Nota:* Al ser una atención muy personalizada y enfocada en guiarte según tu tipo de cuerpo y el evento, te sugieren revisar sus redes sociales o contactarlos previamente para coordinar tu visita de la mejor manera.\n\n---\n\n**Consejos útiles antes de ir:**\n* **Fechas clave:** Si tu evento es durante épocas de alta demanda (como matrimonios en temporada primavera-verano o galas/licenciaturas en noviembre y diciembre), se recomienda cotizar y reservar con antelación.[ammo.cl](https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.)\n* **Accesorios:** Muchos de estos locales también ofrecen complementos (como aros, carteras de fiesta o cinturones), por lo que puedes salir con el look completo listo.",
+     "sources": [
+      {
+       "type": "gemini_source",
+       "title": "Arriendo de Vestidos en Temuco - Ammo Store",
+       "snippet": null,
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Arriendo de Vestidos en Temuco - Ammo Store"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Vestidos de Fiesta en La Araucanía y el Sur de Chile - Ammo Store",
+       "snippet": null,
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/vestidos-de-fiesta-araucania-sur-de-chile/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Vestidos de Fiesta en La Araucanía y el Sur de Chile - Ammo Store"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": null,
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Arriendo Vestidos De Novia En Temuco | MercadoLibre",
+       "snippet": null,
+       "domain": "listado.mercadolibre.cl",
+       "url": "https://listado.mercadolibre.cl/arriendo-vestidos-de-novia-en-temuco",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://listado.mercadolibre.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "listado.mercadolibre.cl",
+       "publication_date": null,
+       "markdown": "Arriendo Vestidos De Novia En Temuco | MercadoLibre"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta",
+       "snippet": null,
+       "domain": "twinsdresses.cl",
+       "url": "https://twinsdresses.cl/",
+       "thumbnail": "https://t2.gstatic.com/faviconV2?url=https://twinsdresses.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "twinsdresses.cl",
+       "publication_date": null,
+       "markdown": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "contacto | Ammo Store",
+       "snippet": "Vestidos de fiesta, enteritos y accesorios exclusivos en Temuco. Contacto. \nPaseo Los Suizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a \nViernes: 14:00",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/contacto/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "contacto | Ammo Store"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+       "snippet": null,
+       "domain": "www.armariodelakaro.cl",
+       "url": "https://www.armariodelakaro.cl/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://www.armariodelakaro.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "www.armariodelakaro.cl",
+       "publication_date": null,
+       "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "Alemania, Temuco y descubrir una colección que celebra la elegancia y el \nestilo con una atención que transforma tu visita en una experiencia \ninolvidable. En Amm...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Arriendo de Vestidos en Temuco - Ammo Store",
+       "snippet": " Vestidos disponibles para arriendo. Stock real de nuestra tienda en Temuco \n— arriendo por 4 u 8 días, actualizado automáticamente. Animal print. \nBerenjena. Est...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/#:~:text=Vestidos%20disponibles%20para%20arriendo.%20Stock%20real%20de,actualizado%20autom%C3%A1ticamente.%20Animal%20print.%20Berenjena.%20Estampado%20beige.",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "Ammo Store",
+       "publication_date": null,
+       "markdown": "Arriendo de Vestidos en Temuco - Ammo Store"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "Sofía Muñoz. Quinceañera · Temuco. ¿Para qué evento? * Graduación. \nLicenciaturas de colegio y universidad: tu look para el día que cierra una \netapa. Ver Vestido...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "contacto | Ammo Store",
+       "snippet": "Vestidos de fiesta, enteritos y accesorios exclusivos en Temuco. Contacto. \nPaseo Los Suizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a \nViernes: 14:00",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/contacto/",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "contacto | Ammo Store"
+      },
+      {
+       "type": "gemini_source",
+       "title": "contacto | Ammo Store",
+       "snippet": "Visítanos en Temuco * 📍 Paseo Los Suizos, Av. * 🕒 Lunes a Viernes · 14:00 \n– 19:00 hrs. Sábado · 12:00 – 17:00 hrs. Sin necesidad de agendar cita \nprevia. * 📧 con...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/contacto/",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "Ammo Store",
+       "publication_date": null,
+       "markdown": "contacto | Ammo Store"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+       "snippet": " Todo impecable, los vestidos de muy buena calidad y la atención es \nsumamente personalizada, te guían en el proceso y ayudan a elegir lo mejor \npara ti, incluyen...",
+       "domain": "www.armariodelakaro.cl",
+       "url": "https://www.armariodelakaro.cl/#:~:text=Todo%20impecable%2C%20los%20vestidos%20de%20muy%20buena,la%20compra.%20Yesika%20R.%20hace%204%20meses.",
+       "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQFPx0BfAeZUYI_QW175bFTY_evtnUHHzXOCWGjPXLbtfwzSSRJXPz1WgrH8j59G1MVdMjq6eqw-PpclHrhSWbHWNVDZR9R9n5nuNUvcGJGUlU",
+       "source_name": "www.armariodelakaro.cl",
+       "publication_date": null,
+       "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "Alemania, Temuco y descubrir una colección que celebra la elegancia y el \nestilo con una atención que transforma tu visita en una experiencia \ninolvidable. En Amm...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "Sofía Muñoz. Quinceañera · Temuco. ¿Para qué evento? * Graduación. \nLicenciaturas de colegio y universidad: tu look para el día que cierra una \netapa. Ver Vestido...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      }
+     ],
+     "se_results_count": 0,
+     "item_types": [
+      "gemini_text"
+     ],
+     "items_count": 1,
+     "items": [
+      {
+       "type": "gemini_text",
+       "rank_group": 1,
+       "rank_absolute": 1,
+       "markdown": "En Temuco existen tiendas especializadas en el arriendo y venta de vestidos de fiesta, gala y matrimonios.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Las opciones más destacadas y recomendadas en la ciudad son:\n\n### 1. **Ammo Store**[ammo.cl](https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.)\n* **Qué ofrece:** Una amplia colección de vestidos importados de fiesta, gala, matrimonios y graduaciones (desde la talla XS hasta la XL).[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Cuentan con opciones de arriendo por periodos de 4 u 8 días.[ammo.cl](https://ammo.cl/arriendo-de-vestidos-en-temuco/#:~:text=Vestidos%20disponibles%20para%20arriendo.%20Stock%20real%20de,actualizado%20autom%C3%A1ticamente.%20Animal%20print.%20Berenjena.%20Estampado%20beige.) Lo cómodo de esta tienda es que por lo general no requiere cita previa para ir a probarse.[ammo.cl](https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.)\n* **Ubicación:** Paseo Los Suizos, **Av.[ammo.cl](https://ammo.cl/contacto/) Alemania 0425, Local 207**, Temuco.[ammo.cl](https://ammo.cl/contacto/)\n* **Horarios habituales:** Lunes a viernes de 14:00 a 19:00 hrs y sábados de 12:00 a 17:00 hrs.[ammo.cl](https://ammo.cl/contacto/)\n\n### 2. **El Armario de la Karo**\n* **Qué ofrece:** Es una tienda muy popular y con excelentes referencias en Temuco por su atención sumamente personalizada.[www.armariodelakaro.cl](https://www.armariodelakaro.cl/#:~:text=Todo%20impecable%2C%20los%20vestidos%20de%20muy%20buena,la%20compra.%20Yesika%20R.%20hace%204%20meses.) Tienen una colección muy amplia y exclusiva de vestidos de gala, fiestas y licenciaturas (incluyendo gran variedad de tallas y diseños exclusivos importados), además de asesoría directa para armar todo el *outfit* con accesorios.[ammo.cl](https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.) \n* *Nota:* Al ser una atención muy personalizada y enfocada en guiarte según tu tipo de cuerpo y el evento, te sugieren revisar sus redes sociales o contactarlos previamente para coordinar tu visita de la mejor manera.\n\n---\n\n**Consejos útiles antes de ir:**\n* **Fechas clave:** Si tu evento es durante épocas de alta demanda (como matrimonios en temporada primavera-verano o galas/licenciaturas en noviembre y diciembre), se recomienda cotizar y reservar con antelación.[ammo.cl](https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.)\n* **Accesorios:** Muchos de estos locales también ofrecen complementos (como aros, carteras de fiesta o cinturones), por lo que puedes salir con el look completo listo.",
+       "original_text": "En Temuco existen tiendas especializadas en el arriendo y venta de vestidos de fiesta, gala y matrimonios. Las opciones más destacadas y recomendadas en la ciudad son:\n\n### 1. **Ammo Store**\n* **Qué ofrece:** Una amplia colección de vestidos importados de fiesta, gala, matrimonios y graduaciones (desde la talla XS hasta la XL). Cuentan con opciones de arriendo por periodos de 4 u 8 días. Lo cómodo de esta tienda es que por lo general no requiere cita previa para ir a probarse.\n* **Ubicación:** Paseo Los Suizos, **Av. Alemania 0425, Local 207**, Temuco.\n* **Horarios habituales:** Lunes a viernes de 14:00 a 19:00 hrs y sábados de 12:00 a 17:00 hrs.\n\n### 2. **El Armario de la Karo**\n* **Qué ofrece:** Es una tienda muy popular y con excelentes referencias en Temuco por su atención sumamente personalizada. Tienen una colección muy amplia y exclusiva de vestidos de gala, fiestas y licenciaturas (incluyendo gran variedad de tallas y diseños exclusivos importados), además de asesoría directa para armar todo el *outfit* con accesorios. \n* *Nota:* Al ser una atención muy personalizada y enfocada en guiarte según tu tipo de cuerpo y el evento, te sugieren revisar sus redes sociales o contactarlos previamente para coordinar tu visita de la mejor manera.\n\n---\n\n**Consejos útiles antes de ir:**\n* **Fechas clave:** Si tu evento es durante épocas de alta demanda (como matrimonios en temporada primavera-verano o galas/licenciaturas en noviembre y diciembre), se recomienda cotizar y reservar con antelación.\n* **Accesorios:** Muchos de estos locales también ofrecen complementos (como aros, carteras de fiesta o cinturones), por lo que puedes salir con el look completo listo.",
+       "sources": [
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "Alemania, Temuco y descubrir una colección que celebra la elegancia y el \nestilo con una atención que transforma tu visita en una experiencia \ninolvidable. En Amm...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Arriendo de Vestidos en Temuco - Ammo Store",
+         "snippet": " Vestidos disponibles para arriendo. Stock real de nuestra tienda en Temuco \n— arriendo por 4 u 8 días, actualizado automáticamente. Animal print. \nBerenjena. Est...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/#:~:text=Vestidos%20disponibles%20para%20arriendo.%20Stock%20real%20de,actualizado%20autom%C3%A1ticamente.%20Animal%20print.%20Berenjena.%20Estampado%20beige.",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "Ammo Store",
+         "publication_date": null,
+         "markdown": "Arriendo de Vestidos en Temuco - Ammo Store"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "Sofía Muñoz. Quinceañera · Temuco. ¿Para qué evento? * Graduación. \nLicenciaturas de colegio y universidad: tu look para el día que cierra una \netapa. Ver Vestido...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "contacto | Ammo Store",
+         "snippet": "Vestidos de fiesta, enteritos y accesorios exclusivos en Temuco. Contacto. \nPaseo Los Suizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a \nViernes: 14:00",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/contacto/",
+         "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "contacto | Ammo Store"
+        },
+        {
+         "type": "gemini_source",
+         "title": "contacto | Ammo Store",
+         "snippet": "Vestidos de fiesta, enteritos y accesorios exclusivos en Temuco. Contacto. \nPaseo Los Suizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a \nViernes: 14:00",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/contacto/",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "contacto | Ammo Store"
+        },
+        {
+         "type": "gemini_source",
+         "title": "contacto | Ammo Store",
+         "snippet": "Visítanos en Temuco * 📍 Paseo Los Suizos, Av. * 🕒 Lunes a Viernes · 14:00 \n– 19:00 hrs. Sábado · 12:00 – 17:00 hrs. Sin necesidad de agendar cita \nprevia. * 📧 con...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/contacto/",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "Ammo Store",
+         "publication_date": null,
+         "markdown": "contacto | Ammo Store"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+         "snippet": " Todo impecable, los vestidos de muy buena calidad y la atención es \nsumamente personalizada, te guían en el proceso y ayudan a elegir lo mejor \npara ti, incluyen...",
+         "domain": "www.armariodelakaro.cl",
+         "url": "https://www.armariodelakaro.cl/#:~:text=Todo%20impecable%2C%20los%20vestidos%20de%20muy%20buena,la%20compra.%20Yesika%20R.%20hace%204%20meses.",
+         "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQFPx0BfAeZUYI_QW175bFTY_evtnUHHzXOCWGjPXLbtfwzSSRJXPz1WgrH8j59G1MVdMjq6eqw-PpclHrhSWbHWNVDZR9R9n5nuNUvcGJGUlU",
+         "source_name": "www.armariodelakaro.cl",
+         "publication_date": null,
+         "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "Alemania, Temuco y descubrir una colección que celebra la elegancia y el \nestilo con una atención que transforma tu visita en una experiencia \ninolvidable. En Amm...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=Alemania%2C%20Temuco%20y%20descubrir%20una%20colecci%C3%B3n%20que,buscando%20el%20vestido%20perfecto%20para%20tu%20grad.",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "Sofía Muñoz. Quinceañera · Temuco. ¿Para qué evento? * Graduación. \nLicenciaturas de colegio y universidad: tu look para el día que cierra una \netapa. Ver Vestido...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=Sof%C3%ADa%20Mu%C3%B1oz.%20Quincea%C3%B1era%20%C2%B7%20Temuco.%20%C2%BFPara%20qu%C3%A9,cita%2C%20en%20una%20sola%20visita.%20Ver%20Vestidos.",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
