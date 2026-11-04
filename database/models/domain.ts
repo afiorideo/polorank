@@ -53,6 +53,10 @@ class Domain extends Model {
 
    @Column({ type: DataType.STRING, allowNull: true, defaultValue: '' })
    subdomain_matching!: string;
+
+   /** PoloRank — Visibilidad IA: JSON AiDomainSettings (utils/aiVisibility/config.ts). */
+   @Column({ type: DataType.TEXT, allowNull: true, defaultValue: '{}' })
+   ai_settings!: string;
 }
 
 export default Domain;

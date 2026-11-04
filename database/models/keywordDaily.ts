@@ -80,6 +80,18 @@ class KeywordDaily extends Model {
     */
    @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: -1 })
    ai_mentioned!: number;
+
+   /** Google IA: {present, position, items:[{title, domain, rating}]} */
+   @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '{}' })
+   local_pack!: string;
+
+   /** Google IA: "Otras preguntas de los usuarios", JSON string[] */
+   @Column({ type: DataType.TEXT, allowNull: false, defaultValue: '[]' })
+   paa!: string;
+
+   /** Google IA: 1 página confiable · 0 envenenada · null sin comparar */
+   @Column({ type: DataType.INTEGER, allowNull: true })
+   serp_trust!: number | null;
 }
 
 export default KeywordDaily;

@@ -12,6 +12,9 @@ import AuditRun from './models/auditRun';
 import AuditCheckResult from './models/auditCheckResult';
 import AuditBlockScore from './models/auditBlockScore';
 import AuditPage from './models/auditPage';
+import AiPrompt from './models/aiPrompt';
+import AiRun from './models/aiRun';
+import AiAnswer from './models/aiAnswer';
 
 const connection = new Sequelize({
    dialect: 'sqlite',
@@ -27,7 +30,8 @@ const connection = new Sequelize({
    },
    logging: false,
    models: [Domain, Keyword, ApiUsage, User, LoginCode, KeywordDaily, KeywordVolume,
-      AuditRun, AuditCheckResult, AuditBlockScore, AuditPage],
+      AuditRun, AuditCheckResult, AuditBlockScore, AuditPage,
+      AiPrompt, AiRun, AiAnswer],
    storage: './data/database.sqlite',
 });
 

@@ -24,6 +24,8 @@ export type CitationRatio = { cited: number, days: number, measured: number, wit
  */
 export const AI_NO_SUMMARY = -1;
 export const AI_DEFERRED = -2;
+/** -3: no se midió (el proveedor de ese día no trae IA, p. ej. Serper). Distinto de -1 "no hubo resumen". */
+export const AI_NOT_MEASURED = -3;
 
 export type DailyCite = { date: string, ai_cited: number };
 
@@ -125,7 +127,7 @@ export const prose = (text: string): string => (text || '')
  * `thetravellab.com.br` da la marca pegada `thetravellab`, pero el resumen la escribe "The Travel Lab".
  * Lo mismo con los acentos: `goaraucania` contra "Go Araucanía".
  */
-const flat = (text: string): string => (text || '')
+export const flat = (text: string): string => (text || '')
    .toLowerCase()
    .normalize('NFD')
    .replace(/[̀-ͯ]/g, '')
