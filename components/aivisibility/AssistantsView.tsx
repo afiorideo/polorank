@@ -9,6 +9,7 @@ import CompetitorsTable from './CompetitorsTable';
 import SourcesGrid from './SourcesGrid';
 import EvolutionChart from './EvolutionChart';
 import RunNowButton, { RunConfirm } from './RunNowButton';
+import AiConfigModal from './AiConfigModal';
 
 const fmtDate = (iso: string, withWeekday = false) => {
    const d = new Date(iso);
@@ -22,6 +23,7 @@ const AssistantsView = ({ domain }: { domain: string }) => {
    const { data, isLoading, isError } = useFetchAiVisibility(domain);
    const [activeTag, setActiveTag] = useState('');
    const [promptRun, setPromptRun] = useState<AiRunScope | null>(null);
+   const [configOpen, setConfigOpen] = useState(false);
    const canRun = auth.isSuperadmin;
 
    if (isLoading) { return <div className="p-5 text-sm text-gray-500">Cargando visibilidad en IAs…</div>; }
@@ -39,7 +41,10 @@ const AssistantsView = ({ domain }: { domain: string }) => {
                Última medición: <b>{data.lastRun ? fmtDate(data.lastRun.started_at) : 'sin mediciones'}</b>
                {' '}· Próxima: <b>{fmtDate(data.nextRun, true)}</b> · Semanal · 3 repeticiones
             </div>
-            <RunNowButton domain={domain} canRun={canRun} />
+            <div className="flex items-center gap-2">
+               <button className="px-3 py-1.5 bg-white border rounded text-sm" onClick={() => setConfigOpen(true)}>⚙ Prompts y competidores</button>
+               <RunNowButton domain={domain} canRun={canRun} />
+            </div>
          </div>
 
          <SummaryCards data={data} />
@@ -69,6 +74,7 @@ const AssistantsView = ({ domain }: { domain: string }) => {
          <h2 className="mt-8 mb-2 font-semibold">Evolución semanal</h2>
          <EvolutionChart evolution={data.evolution} />
 
+         {configOpen && <AiConfigModal domain={domain} detectedCompetitors={data.detectedCompetitors} closeModal={() => setConfigOpen(false)} />}
          {promptRun && <RunConfirm domain={domain} scope={promptRun} closeModal={() => setPromptRun(null)} />}
       </div>
    );
