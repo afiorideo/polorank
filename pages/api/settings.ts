@@ -50,8 +50,13 @@ const updateSettings = async (req: NextApiRequest, res: NextApiResponse<Settings
       if (settings.scraper_type === 'dataforseo' && !/^[^:\s]+@[^:\s]+:.+$/.test((settings.scaping_api || '').trim())) {
          return res.status(400).json({ error: 'DataForSEO necesita el formato correo:password (API Access de app.dataforseo.com).' });
       }
+      const aiCreds = (settings.ai_dataforseo_credentials || '').trim();
+      if (aiCreds && !/^[^:\s]+@[^:\s]+:.+$/.test(aiCreds)) {
+         return res.status(400).json({ error: 'Las credenciales de Visibilidad IA necesitan el formato correo:password.', type: 'no_ai_credentials' } as any);
+      }
       const cryptr = new Cryptr(process.env.SECRET as string);
       const scaping_api = settings.scaping_api ? cryptr.encrypt(settings.scaping_api.trim()) : '';
+      const ai_dataforseo_credentials = aiCreds ? cryptr.encrypt(aiCreds) : '';
       const smtp_password = settings.smtp_password ? cryptr.encrypt(settings.smtp_password.trim()) : '';
       const search_console_client_email = settings.search_console_client_email ? cryptr.encrypt(settings.search_console_client_email.trim()) : '';
       const search_console_private_key = settings.search_console_private_key ? cryptr.encrypt(settings.search_console_private_key.trim()) : '';
@@ -63,6 +68,7 @@ const updateSettings = async (req: NextApiRequest, res: NextApiResponse<Settings
       const securedSettings = {
          ...settings,
          scaping_api,
+         ai_dataforseo_credentials,
          smtp_password,
          search_console_client_email,
          search_console_private_key,
@@ -119,6 +125,9 @@ export const getAppSettings = async () : Promise<SettingsType> => {
       scrape_strategy: 'basic',
       scrape_pagination_limit: 5,
       scrape_smart_full_fallback: false,
+      ai_monthly_budget_usd: 2,
+      ai_max_prompts: 5,
+      ai_weekly_enabled: true,
    };
 
    const settings: SettingsType = await safeReadJSON(`${process.cwd()}/data/settings.json`, defaultSettings);
@@ -128,6 +137,7 @@ export const getAppSettings = async () : Promise<SettingsType> => {
    try {
       const cryptr = new Cryptr(process.env.SECRET as string);
       const scaping_api = settings.scaping_api ? cryptr.decrypt(settings.scaping_api) : '';
+      const ai_dataforseo_credentials = settings.ai_dataforseo_credentials ? cryptr.decrypt(settings.ai_dataforseo_credentials) : '';
       const smtp_password = settings.smtp_password ? cryptr.decrypt(settings.smtp_password) : '';
       const search_console_client_email = settings.search_console_client_email ? cryptr.decrypt(settings.search_console_client_email) : '';
       const search_console_private_key = settings.search_console_private_key ? cryptr.decrypt(settings.search_console_private_key) : '';
@@ -139,6 +149,7 @@ export const getAppSettings = async () : Promise<SettingsType> => {
       decryptedSettings = {
          ...settings,
          scaping_api,
+         ai_dataforseo_credentials,
          smtp_password,
          search_console_client_email,
          search_console_private_key,

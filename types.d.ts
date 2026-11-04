@@ -120,6 +120,11 @@ type DomainSettings = {
 type SettingsType = {
    scraper_type: string,
    scaping_api?: string,
+   /** PoloRank — Visibilidad IA (spec 2026-11-04) */
+   ai_dataforseo_credentials?: string,
+   ai_monthly_budget_usd?: number,
+   ai_max_prompts?: number,
+   ai_weekly_enabled?: boolean,
    proxy?: string,
    notification_interval: string,
    notification_email: string,

@@ -18,9 +18,9 @@ const GOTO_RE = /^https?:\/\/(www\.)?google\.[a-z.]+\/goto\?/i;
 export const isGotoUrl = (url?: string): boolean => GOTO_RE.test(url || '');
 
 /** Credenciales `login:password` para el convertidor. */
-export const gotoCredentials = (settings: Pick<SettingsType, 'scraper_type' | 'scaping_api'>): string => {
+export const gotoCredentials = (settings: Pick<SettingsType, 'scraper_type' | 'scaping_api' | 'ai_dataforseo_credentials'>): string => {
    if (settings.scraper_type === 'dataforseo' && settings.scaping_api) { return settings.scaping_api; }
-   return process.env.DATAFORSEO_GOTO_CREDENTIALS || '';
+   return settings.ai_dataforseo_credentials || process.env.DATAFORSEO_GOTO_CREDENTIALS || '';
 };
 
 /** Quita `srsltid` (rastreo de Google Shopping) para que la URL se compare y se muestre limpia. */

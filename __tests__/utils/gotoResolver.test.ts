@@ -32,6 +32,11 @@ describe('gotoCredentials', () => {
       expect(gotoCredentials({ scraper_type: 'serper', scaping_api: 'serper-key' })).toBe(CREDS);
       delete process.env.DATAFORSEO_GOTO_CREDENTIALS;
    });
+   it('con otro proveedor usa ai_dataforseo_credentials antes que la variable de entorno', () => {
+      process.env.DATAFORSEO_GOTO_CREDENTIALS = 'env@x.cl:e';
+      expect(gotoCredentials({ scraper_type: 'serper', scaping_api: 'k', ai_dataforseo_credentials: CREDS } as any)).toBe(CREDS);
+      delete process.env.DATAFORSEO_GOTO_CREDENTIALS;
+   });
 });
 
 describe('resolveGotoUrls (respuesta real de Ammo, móvil, 2026-10-31)', () => {

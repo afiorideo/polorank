@@ -184,6 +184,22 @@ const ScraperSettings = ({ settings, settingsError, updateSettings }:ScraperSett
                   </button>
                </div>
             )}
+         <div className="settings__section__secret mb-5 border-t pt-4">
+            <h4 className="text-sm font-semibold mb-2">Visibilidad IA (DataForSEO)</h4>
+            <SecretField
+               label='DataForSEO login:password (solo IA)'
+               placeholder='login@correo.com:password'
+               value={settings?.ai_dataforseo_credentials || ''}
+               hasError={settingsError?.type === 'no_ai_credentials'}
+               onChange={(value:string) => updateSettings('ai_dataforseo_credentials', value)}
+            />
+            <label className={labelStyle}>Tope de gasto mensual (US$)</label>
+            <input type='number' min={0} step={0.5} className='w-full p-2 border border-gray-200 rounded mb-3 text-sm'
+               value={settings?.ai_monthly_budget_usd ?? 2}
+               onChange={(e) => updateSettings('ai_monthly_budget_usd', parseFloat(e.target.value) || 0)} />
+            <ToggleField label='Corrida semanal automática (lunes 06:00 Chile)' value={settings?.ai_weekly_enabled !== false}
+               onChange={(val) => updateSettings('ai_weekly_enabled', val)} />
+         </div>
       </div>
    </div>
    );

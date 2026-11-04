@@ -84,6 +84,9 @@ const Settings = ({ closeSettings }:SettingsProps) => {
       if (scraper_type === 'dataforseo' && scaping_api && !/^[^:\s]+@[^:\s]+:.+$/.test(scaping_api.trim())) {
          error = { type: 'no_api_key', msg: 'DataForSEO necesita el formato correo:password (la API password de app.dataforseo.com → API Access).' };
       }
+      if (settings.ai_dataforseo_credentials && !/^[^:\s]+@[^:\s]+:.+$/.test(settings.ai_dataforseo_credentials.trim())) {
+         error = { type: 'no_ai_credentials', msg: 'Las credenciales de Visibilidad IA necesitan el formato correo:password.' };
+      }
 
       if (error) {
          setSettingsError(error);
