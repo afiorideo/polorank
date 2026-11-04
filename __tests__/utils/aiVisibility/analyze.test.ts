@@ -32,9 +32,21 @@ describe('analyzeAnswer', () => {
       expect(newCompetitors(p.entities, ammo)).toEqual(expect.arrayContaining(['Jeannette Menard']));
       expect(newCompetitors(p.entities, ammo)).not.toContain('Ammo Store (AMMÔ)');
    });
-   it('un enlace markdown con la marca como etiqueta cuenta como nombrada (la etiqueta es prosa)', () => {
-      const p = { text: 'Mira [Ammo](https://x.cl/) para comprar.', sources: [], fanOut: [], entities: [] };
-      expect(analyzeAnswer(p, ammo).mentioned).toBe(1);
+   const src = [{ domain: 'ammo.cl', url: 'https://ammo.cl/', title: '' }];
+   it('una etiqueta de dominio [ammo.cl](url) es cita, no mención', () => {
+      const p = { text: 'Hay varias tiendas. [ammo.cl](https://ammo.cl/)', sources: src, fanOut: [], entities: [] };
+      expect(analyzeAnswer(p, ammo)).toMatchObject({ mentioned: 0, cited: 1 });
+   });
+   it('una etiqueta con nombre [Ammo Store](url) sí es mención', () => {
+      const p = { text: 'Prueba [Ammo Store](https://ammo.cl/).', sources: src, fanOut: [], entities: [] };
+      expect(analyzeAnswer(p, ammo)).toMatchObject({ mentioned: 1, cited: 1 });
+   });
+   it('Gemini sin la marca en la prosa: solo cita', () => {
+      const p0 = ENGINE_DEF.gemini.parse(res('gemini-arriendo-1.json'));
+      const p = { ...p0, text: p0.text.replace(/Ammo Store/gi, 'Tienda X').replace(/\*ammo\.cl\*/g, 'su web') };
+      const a = analyzeAnswer(p, ammo);
+      expect(a.mentioned).toBe(0);
+      expect(a.cited).toBe(1);
    });
    it('una URL pelada con la marca no cuenta como nombrada', () => {
       const p = { text: 'Más info en https://ammo.cl/tienda', sources: [], fanOut: [], entities: [] };

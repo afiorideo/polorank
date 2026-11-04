@@ -25,13 +25,17 @@ const citesUs = (url: string, brandUrls: string[]): boolean => {
    });
 };
 
+/** Enlace markdown a http(s) cuya etiqueta tiene forma de dominio: es una cita en línea, no prosa. */
+const DOMAIN_LINK = /\[\s*(?:www\.)?[\w-]+(?:\.[\w-]+)+\s*\]\(\s*https?:\/\/[^)\s]*\)/gi;
+
 /**
- * "Te nombra" = la marca aparece en la prosa. `prose()` quita marcadores de cita y URLs peladas, pero
- * conserva la etiqueta de un enlace markdown: `[ammo.cl](https://ammo.cl/)` cuenta como nombrada,
- * porque el modelo eligió escribir esa palabra al lector. Una URL pelada no cuenta (eso es "te cita").
+ * "Te nombra" = la marca aparece en la prosa. `prose()` quita marcadores de cita y URLs peladas; además
+ * se eliminan los enlaces cuya etiqueta es un dominio (`[ammo.cl](https://ammo.cl/)`), que Gemini/AI Mode
+ * pone tras cada frase: eso es "te cita", y contarlo como mención duplicaría la señal. Una etiqueta con
+ * nombre (`[Ammo Store](url)`) sí es prosa y cuenta.
  */
 export const analyzeAnswer = (p: ParsedAnswer, cfg: AiDomainSettings): AnswerAnalysis => {
-   const text = flat(prose(p.text));
+   const text = flat(prose(p.text.replace(DOMAIN_LINK, ' ')));
    const mentioned: 0 | 1 = firstIndex(text, cfg.brand_variants) >= 0 ? 1 : 0;
    const cited: 0 | 1 = p.sources.some((s) => citesUs(s.url, cfg.brand_urls)) ? 1 : 0;
 
