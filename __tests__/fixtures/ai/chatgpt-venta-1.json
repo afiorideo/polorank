@@ -1,0 +1,497 @@
+{
+ "version": "0.1.20261103",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "28.2083 sec.",
+ "cost": 0.004,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "11041257-2362-0629-0000-5ea8ca9f08b6",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "28.0735 sec.",
+   "cost": 0.004,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "ai_optimization",
+    "chat_gpt",
+    "llm_scraper",
+    "live",
+    "advanced"
+   ],
+   "data": {
+    "api": "ai_optimization",
+    "function": "live",
+    "se": "chat_gpt",
+    "keyword": "¿Qué tiendas en Temuco venden vestidos de fiesta bonitos y de buena calidad?",
+    "location_code": 2152,
+    "language_code": "es",
+    "device": "desktop",
+    "os": "windows"
+   },
+   "result": [
+    {
+     "keyword": "¿Qué tiendas en Temuco venden vestidos de fiesta bonitos y de buena calidad?",
+     "location_code": 2152,
+     "language_code": "es",
+     "model": "gpt-6",
+     "check_url": "https://chatgpt.com/?prompt=%C2%BFQu%C3%A9%20tiendas%20en%20Temuco%20venden%20vestidos%20de%20fiesta%20bonitos%20y%20de%20buena%20calidad%3F",
+     "datetime": "2026-11-04 12:57:57 +00:00",
+     "markdown": "¡Sí\\! 💗 Busqué tiendas en Temuco especializadas en vestidos de fiesta y encontré varias alternativas interesantes. Si buscas vestidos bonitos, elegantes y de buena calidad, estas serían mis principales recomendaciones\\:\n\n## Mis 5 tiendas recomendadas en Temuco\n\n![Emma Clara | Vestidos de Gala y Fiesta Exclusivos](https://images.openai.com/static-rsc-4/dLY16iF5Fcj8AUgw1EdH4NJRZksEX_oxV5MiVFzMJ7yIgLlQc8fYqWJKtvWpYTBX7FZL0LbeR96J3fCIQV1-5DlPE64pIXr5VjljS63McpB8VRpMc5zAQIdmqgnt9qdnKrJH6plrRGTncpJk1jLmx3gxS3rBJjcSqBJHDqzDiG7zmkssam7nbiYw3xztgoYu?purpose=fullsize)\n\n**1\\. Armario de la Karo**\n\n(Mi primera recomendación)\n\nCentro Comercial Sevilla, Av. Pablo Neruda 02050, local 113\n\n- Gran variedad de vestidos de gala y fiesta.\n- Diseños brasileños y modelos exclusivos.\n- Asesoría personalizada y distintas tallas.\n- Precios de referencia desde \\$179.000 hasta \\$399.000 en algunos modelos.\n\nWeb: [Ver vestidos y catálogo](https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?utm_source=chatgpt.com)\n\n---\n\n![VESTIDO DE FIESTA YANAY](https://images.openai.com/static-rsc-4/m9I04Z-Ft_rEmIquoaGVgQ1MHpOtkFSV-Ns3Z8TSupFINFI6Sqm1SpgKSAeG0pmIQhobz9nWss8dNm0S93ryR6h9u0m-MzAb_8SI5tsPEhM4T_l_GaY2BwAnHWm39WBM4hsVMRHn_VTOfj0ovk4dGGk6AwE2uFget92DYCqSca329-I4JO8HpMFpOxkL1mmw?purpose=fullsize)\n\n**2\\. Ammo Store (AMMÔ)**\n\nPaseo Los Suizos, Av. Alemania 0425, local 207\n\n- Vestidos modernos y elegantes.\n- Puedes comprar o arrendar.\n- También tienen accesorios.\n- Precios publicados desde aproximadamente \\$30.000 en outlet y otros modelos entre \\$69.000 y \\$149.000.\n\nWeb: [Ver tienda y vestidos](https://ammo.cl/?utm_source=chatgpt.com)\n\n---\n\n![Elizabeth Macoritto - Vestidos de Fiesta](https://images.openai.com/static-rsc-4/2A5yUU-yA3Twqm4WLyQI6uLrWBI75FDVdRW6q-tsvuKLQ6qZfcwoJSjgMinzSlmanEw5aZi6sb9aK2ffuQIal0aVIABUj90szgv9EcEKedA8ob_Pkzsb0XnjcezqfBodr1fMcw4RN1TJHfQgowa76j4xTYQ92fQMO_IS-cD2ZRwyjkHQmE-ocbY41gDhWaWJ?purpose=fullsize)\n\n**3\\. Blanka Atelier**\n\nEspaña 270, Temuco\n\n- Vestidos para matrimonios, galas y graduaciones.\n- Diferentes diseños, telas y cortes.\n- Alternativas ajustadas, sueltas y estilo corset.\n\nBuena alternativa si buscas algo especial y femenino.\n\n---\n\n![VESTIDO VICENTA ROJO | Indala](https://images.openai.com/static-rsc-4/xmGu_zwpKfTiw6FfqSaWOrPfM-FuyzkZi9RluA4VK4E8MpHEZAVYfLQ2k9arGUja2L4lN4QSJCaJhdcBcU8le2wwUejEac9GLLeufEm_pkQeCOncbhrrmTc64-k1kxO4Gcrl5oxbrIM7R8d1Lyd2LTosajrhYwul5IeFr7vG1uZzhEBNIpgRWYZa7BQWe02V?purpose=fullsize)\n\n**4\\. Jeannette Menard**\n\nTorremolinos 320, local 5\n\n- Vestuario femenino exclusivo.\n- Confecciones para fiestas, graduaciones y ocasiones especiales.\n- Diseños diferenciados y atención personalizada.\n\nInteresante si buscas algo menos común.\n\n---\n\n![Vestido Fiesta Largo 4101893 | Maria Couture](https://images.openai.com/static-rsc-4/jtjwE96qvsJnKBKKXTxVOTaEoHp4nfU-3EUXqkHJQPu-6MZ-Wv105Edc1oKmrLnx94kN6-EyN5OKkbWuyq92f7mwoUE0xw-M4qoPZLJJLXu_hzLZ23cfT2gK1PzpB63SXCzu-zmI2W9pPQFCjCHPvPk9PoxdAHQYY_SpVr3ZR9pFhiln2cGhonmu-WdoTWKU?purpose=fullsize)\n\n**5\\. Atelier Marí Garró**\n\nAv. Simón Bolívar 01885\n\n- Confección de vestidos a medida.\n- Vestidos para madrinas y eventos especiales.\n- Arreglos y ajustes para conseguir un buen calce.\n\nIdeal si buscas algo personalizado.\n\n## Ubicación de las tiendas\n\n\n## Quiero ayudarte a encontrar un vestido realmente bonito\n\nMe gustaría afinar la búsqueda para mostrarte tiendas y modelos que vayan con tu gusto.\n\n**¿Para qué ocasión necesitas el vestido?**\n\n**1\\. Tipo de evento**\n\n---\n\n**2\\. ¿Qué estilo te gusta?**\n\n---\n\n**3\\. ¿Cuánto quieres gastar?**\n\n---\n\n**4\\. ¿Qué largo prefieres?**\n\n[Buscar vestidos según mis gustos]\n\nAsí puedo orientarte hacia tiendas con vestidos de mejor calidad, diseños bonitos y precios acordes a tu presupuesto. 💕",
+     "search_results": [
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?utm_source=chatgpt.com",
+       "domain": "www.armariodelakaro.cl",
+       "title": "Vestidos de Fiesta en Temuco | Catálogo Exclusivo - Armario de la Karo",
+       "description": "VESTIDOS DE FIESTA Y VESTIDOS DE GALA EN TEMUCO | ARMARIO DE LA KARO  LA MEJOR COLECCIÓN DE VESTIDOS DE FIESTA Y GALA EN TEMUCO  En El Armario de la Karo nos consolidamos como la tienda especialista...",
+       "breadcrumb": "armariodelakaro.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.armariodelakaro.cl/nosotros-armario-de-la-karo/?utm_source=chatgpt.com",
+       "domain": "www.armariodelakaro.cl",
+       "title": "Nosotros - Armario de la Karo - Vestidos de Fiesta",
+       "description": "Image: Armario de la Karo Vestidos de Fiesta Temuco Tienda  ARMARIO DE LA KARO  ARMARIO DE LA KARO: LA TIENDA DE VESTIDOS DE FIESTA MEJOR EVALUADA DE TEMUCO  ENCUENTRANOS EN AV. PABLO NERUDA 02050, C...",
+       "breadcrumb": "armariodelakaro.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?shop_view=list_view&utm_source=chatgpt.com",
+       "domain": "www.armariodelakaro.cl",
+       "title": "Vestidos de Fiesta en Temuco | Catálogo Exclusivo - Armario de la Karo",
+       "description": "VESTIDOS DE FIESTA Y VESTIDOS DE GALA EN TEMUCO | ARMARIO DE LA KARO  LA MEJOR COLECCIÓN DE VESTIDOS DE FIESTA Y GALA EN TEMUCO  En El Armario de la Karo nos consolidamos como la tienda especialista...",
+       "breadcrumb": "armariodelakaro.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.armariodelakaro.cl/?add-to-cart=3360&utm_source=chatgpt.com",
+       "domain": "www.armariodelakaro.cl",
+       "title": "Vestidos de Fiesta en Temuco | Diseños Exclusivos | Armario de la Karo",
+       "description": "¡Nueva tienda online!  Despachos a todo Chile   Image: Vestidos de Fiesta y Gala en Temuco-Armario de la Karo  VESTIDOS DE FIESTA Y GALA EN TEMUCO  LA MEJOR SELECCIÓN DE VESTIDOS DE FIESTA Y GALA EN L...",
+       "breadcrumb": "armariodelakaro.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?add-to-cart=4879&utm_source=chatgpt.com",
+       "domain": "www.armariodelakaro.cl",
+       "title": "Vestidos de Fiesta en Temuco | Catálogo Exclusivo - Armario de la Karo",
+       "description": "VESTIDOS DE FIESTA Y VESTIDOS DE GALA EN TEMUCO | ARMARIO DE LA KARO  LA MEJOR COLECCIÓN DE VESTIDOS DE FIESTA Y GALA EN TEMUCO  En El Armario de la Karo nos consolidamos como la tienda especialista...",
+       "breadcrumb": "armariodelakaro.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://ammo.cl/?utm_source=chatgpt.com",
+       "domain": "ammo.cl",
+       "title": "Vestidos de Fiesta en Temuco – Arriendo y Venta | Ammo Store",
+       "description": "VESTIDOS DE FIESTA EN TEMUCO - ARRIENDO Y VENTA  LA COLECCIÓN AMMO STORE  VENTA DE VESTIDOS  Vestidos para siempre, dignos de atesorar.  Ver Productos  ARRIENDO DE VESTIDOS  Elegancia perfecta, sin e...",
+       "breadcrumb": "ammo.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://ammo.cl/contacto/?utm_source=chatgpt.com",
+       "domain": "ammo.cl",
+       "title": "contacto | Ammo Store",
+       "description": "ESTAMOS AQUÍ  CONTACTO  INFORMACIÓN DE CONTACTO  VISÍTANOS EN TEMUCO  📍 Paseo Los Suizos, Av. Alemania 0425 Local 207 Temuco, Chile  🕒 Lunes a Viernes · 14:00 – 19:00 hrs Sábado · 12:00 – 17:00 hrs S...",
+       "breadcrumb": "ammo.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://ammo.cl/venta-de-vestidos-en-temuco/?utm_source=chatgpt.com",
+       "domain": "ammo.cl",
+       "title": "Venta de Vestidos de Fiesta en Temuco | Ammo Store",
+       "description": "Image: Dos mujeres con vestidos de fiesta rojo y morado en venta - AMMO Temuco  VENTA DE VESTIDOS DE FIESTA EN TEMUCO  ¿Por qué elegirnos?  VENTA DE VESTIDOS DE FIESTA EN TEMUCO: la experiencia Ammo...",
+       "breadcrumb": "ammo.cl"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.mundochileno.com/temuco/tiendas%2Bde%2Bropa?utm_source=chatgpt.com",
+       "domain": "www.mundochileno.com",
+       "title": "Las mejores tiendas de ropa en Temuco (318): abiertas ahora y 24 h",
+       "description": "* # Tiendas de ropa en Temuco  * 318 tiendas de ropa en Temuco, la mayoría en Centro, Sector Poniente y Pueblo Nuevo. Suelen atender de lunes a sábado de 10 a 20 h.  MapaCerca de míCentro102Sector Po...",
+       "breadcrumb": "mundochileno.com"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.mundochileno.com/armario-de-la-karo-vestidos-de-fiesta-F120DC4041ED641?utm_source=chatgpt.com",
+       "domain": "www.mundochileno.com",
+       "title": "Armario de la Karo - Vestidos de Fiesta en Temuco | WhatsApp y horario",
+       "description": "ARMARIO DE LA KARO - VESTIDOS DE FIESTA · TIENDAS DE ROPA EN TEMUCO  5,0  Los clientes destacan: los vestidos de gala y de fiesta, y que las ayudan a elegir según el cuerpo y el evento, con paciencia...",
+       "breadcrumb": "mundochileno.com"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://www.aiyellow.com/boutiquejeanettemenard/?utm_source=chatgpt.com",
+       "domain": "www.aiyellow.com",
+       "title": "BOUTIQUE JEANNETTE MENARD - TEMUCO - AiYellow",
+       "description": "BOUTIQUE JEANNETTE MENARD  VESTUARIO EXCLUSIVO PARA DAMAS , CONFECCIONES DE : TRAJES DE FIESTA Y CALLE : NOVIA , MADRINA , GRADUACIONES , LICENCIATURAS , ACCESORIOS Y BIJOUTERÍA , PRUEBA Y ENTREGA EN...",
+       "breadcrumb": "aiyellow.com"
+      },
+      {
+       "type": "chatgpt_search_result",
+       "url": "https://vestuariotienditamagica.cl/?utm_source=chatgpt.com",
+       "domain": "vestuariotienditamagica.cl",
+       "title": "Home ⋆ Venta de Vestuario y Accesorios Infantiles",
+       "description": "NOSOTROS  Somos Tienda Online para todo Chile. Atendemos presencialmente en la ciudad de Temuco.  Creada en el año 2014.  Ofrecemos una gran variedad de Vestidos de fiesta, de bautizo, paje, cumpleañ...",
+       "breadcrumb": "vestuariotienditamagica.cl"
+      }
+     ],
+     "sources": [
+      {
+       "type": "chat_gpt_source",
+       "title": "Ver vestidos y catálogo",
+       "snippet": null,
+       "domain": "www.armariodelakaro.cl",
+       "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?utm_source=chatgpt.com",
+       "thumbnail": null,
+       "source_name": null,
+       "publication_date": null,
+       "markdown": "[Ver vestidos y catálogo](https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?utm_source=chatgpt.com)"
+      },
+      {
+       "type": "chat_gpt_source",
+       "title": "Ver tienda y vestidos",
+       "snippet": null,
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/?utm_source=chatgpt.com",
+       "thumbnail": null,
+       "source_name": null,
+       "publication_date": null,
+       "markdown": "[Ver tienda y vestidos](https://ammo.cl/?utm_source=chatgpt.com)"
+      }
+     ],
+     "fan_out_queries": [
+      "tiendas vestidos de fiesta Temuco Chile boutiques vestidos de noche opiniones"
+     ],
+     "brand_entities": [
+      {
+       "type": "chat_gpt_brand_entity",
+       "title": "Armario de la Karo",
+       "category": "local_business",
+       "markdown": "Armario de la Karo",
+       "urls": null
+      },
+      {
+       "type": "chat_gpt_brand_entity",
+       "title": "Ammo Store (AMMÔ)",
+       "category": "local_business",
+       "markdown": "Ammo Store (AMMÔ)",
+       "urls": null
+      },
+      {
+       "type": "chat_gpt_brand_entity",
+       "title": "Blanka Atelier",
+       "category": "local_business",
+       "markdown": "Blanka Atelier",
+       "urls": null
+      },
+      {
+       "type": "chat_gpt_brand_entity",
+       "title": "Jeannette Menard",
+       "category": "local_business",
+       "markdown": "Jeannette Menard",
+       "urls": null
+      },
+      {
+       "type": "chat_gpt_brand_entity",
+       "title": "Atelier Marí Garró",
+       "category": "local_business",
+       "markdown": "Atelier Marí Garró",
+       "urls": null
+      }
+     ],
+     "se_results_count": 0,
+     "item_types": [
+      "chat_gpt_text",
+      "chat_gpt_images",
+      "chat_gpt_local_businesses"
+     ],
+     "items_count": 13,
+     "items": [
+      {
+       "type": "chat_gpt_text",
+       "rank_group": 1,
+       "rank_absolute": 1,
+       "markdown": "¡Sí\\! 💗 Busqué tiendas en Temuco especializadas en vestidos de fiesta y encontré varias alternativas interesantes. Si buscas vestidos bonitos, elegantes y de buena calidad, estas serían mis principales recomendaciones\\:\n\n## Mis 5 tiendas recomendadas en Temuco\n\n",
+       "sources": null,
+       "brand_entities": null
+      },
+      {
+       "type": "chat_gpt_images",
+       "rank_group": 1,
+       "rank_absolute": 2,
+       "markdown": "![Emma Clara | Vestidos de Gala y Fiesta Exclusivos](https://images.openai.com/static-rsc-4/dLY16iF5Fcj8AUgw1EdH4NJRZksEX_oxV5MiVFzMJ7yIgLlQc8fYqWJKtvWpYTBX7FZL0LbeR96J3fCIQV1-5DlPE64pIXr5VjljS63McpB8VRpMc5zAQIdmqgnt9qdnKrJH6plrRGTncpJk1jLmx3gxS3rBJjcSqBJHDqzDiG7zmkssam7nbiYw3xztgoYu?purpose=fullsize)",
+       "items": [
+        {
+         "type": "chat_gpt_images_element",
+         "url": "https://emmaclara.cl/",
+         "alt": "Emma Clara | Vestidos de Gala y Fiesta Exclusivos",
+         "image_url": "https://images.openai.com/static-rsc-4/dLY16iF5Fcj8AUgw1EdH4NJRZksEX_oxV5MiVFzMJ7yIgLlQc8fYqWJKtvWpYTBX7FZL0LbeR96J3fCIQV1-5DlPE64pIXr5VjljS63McpB8VRpMc5zAQIdmqgnt9qdnKrJH6plrRGTncpJk1jLmx3gxS3rBJjcSqBJHDqzDiG7zmkssam7nbiYw3xztgoYu?purpose=fullsize",
+         "markdown": "![Emma Clara | Vestidos de Gala y Fiesta Exclusivos](https://images.openai.com/static-rsc-4/dLY16iF5Fcj8AUgw1EdH4NJRZksEX_oxV5MiVFzMJ7yIgLlQc8fYqWJKtvWpYTBX7FZL0LbeR96J3fCIQV1-5DlPE64pIXr5VjljS63McpB8VRpMc5zAQIdmqgnt9qdnKrJH6plrRGTncpJk1jLmx3gxS3rBJjcSqBJHDqzDiG7zmkssam7nbiYw3xztgoYu?purpose=fullsize)"
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_text",
+       "rank_group": 2,
+       "rank_absolute": 3,
+       "markdown": "\n\n**1\\. Armario de la Karo**\n\n(Mi primera recomendación)\n\nCentro Comercial Sevilla, Av. Pablo Neruda 02050, local 113\n\n- Gran variedad de vestidos de gala y fiesta.\n- Diseños brasileños y modelos exclusivos.\n- Asesoría personalizada y distintas tallas.\n- Precios de referencia desde \\$179.000 hasta \\$399.000 en algunos modelos.\n\nWeb: [Ver vestidos y catálogo](https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?utm_source=chatgpt.com)\n\n---\n\n",
+       "sources": [
+        {
+         "type": "chat_gpt_source",
+         "title": "Ver vestidos y catálogo",
+         "snippet": null,
+         "domain": "www.armariodelakaro.cl",
+         "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?utm_source=chatgpt.com",
+         "thumbnail": null,
+         "source_name": null,
+         "publication_date": null,
+         "markdown": "[Ver vestidos y catálogo](https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/?utm_source=chatgpt.com)"
+        }
+       ],
+       "brand_entities": [
+        {
+         "type": "chat_gpt_brand_entity",
+         "title": "Armario de la Karo",
+         "category": "local_business",
+         "markdown": "Armario de la Karo",
+         "urls": null
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_images",
+       "rank_group": 2,
+       "rank_absolute": 4,
+       "markdown": "![VESTIDO DE FIESTA YANAY](https://images.openai.com/static-rsc-4/m9I04Z-Ft_rEmIquoaGVgQ1MHpOtkFSV-Ns3Z8TSupFINFI6Sqm1SpgKSAeG0pmIQhobz9nWss8dNm0S93ryR6h9u0m-MzAb_8SI5tsPEhM4T_l_GaY2BwAnHWm39WBM4hsVMRHn_VTOfj0ovk4dGGk6AwE2uFget92DYCqSca329-I4JO8HpMFpOxkL1mmw?purpose=fullsize)",
+       "items": [
+        {
+         "type": "chat_gpt_images_element",
+         "url": "https://www.coquettebonchic.es/vestido-de-fiesta-largo/5335-vestido-de-fiesta-yanay.html",
+         "alt": "VESTIDO DE FIESTA YANAY",
+         "image_url": "https://images.openai.com/static-rsc-4/m9I04Z-Ft_rEmIquoaGVgQ1MHpOtkFSV-Ns3Z8TSupFINFI6Sqm1SpgKSAeG0pmIQhobz9nWss8dNm0S93ryR6h9u0m-MzAb_8SI5tsPEhM4T_l_GaY2BwAnHWm39WBM4hsVMRHn_VTOfj0ovk4dGGk6AwE2uFget92DYCqSca329-I4JO8HpMFpOxkL1mmw?purpose=fullsize",
+         "markdown": "![VESTIDO DE FIESTA YANAY](https://images.openai.com/static-rsc-4/m9I04Z-Ft_rEmIquoaGVgQ1MHpOtkFSV-Ns3Z8TSupFINFI6Sqm1SpgKSAeG0pmIQhobz9nWss8dNm0S93ryR6h9u0m-MzAb_8SI5tsPEhM4T_l_GaY2BwAnHWm39WBM4hsVMRHn_VTOfj0ovk4dGGk6AwE2uFget92DYCqSca329-I4JO8HpMFpOxkL1mmw?purpose=fullsize)"
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_text",
+       "rank_group": 3,
+       "rank_absolute": 5,
+       "markdown": "\n\n**2\\. Ammo Store (AMMÔ)**\n\nPaseo Los Suizos, Av. Alemania 0425, local 207\n\n- Vestidos modernos y elegantes.\n- Puedes comprar o arrendar.\n- También tienen accesorios.\n- Precios publicados desde aproximadamente \\$30.000 en outlet y otros modelos entre \\$69.000 y \\$149.000.\n\nWeb: [Ver tienda y vestidos](https://ammo.cl/?utm_source=chatgpt.com)\n\n---\n\n",
+       "sources": [
+        {
+         "type": "chat_gpt_source",
+         "title": "Ver tienda y vestidos",
+         "snippet": null,
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/?utm_source=chatgpt.com",
+         "thumbnail": null,
+         "source_name": null,
+         "publication_date": null,
+         "markdown": "[Ver tienda y vestidos](https://ammo.cl/?utm_source=chatgpt.com)"
+        }
+       ],
+       "brand_entities": [
+        {
+         "type": "chat_gpt_brand_entity",
+         "title": "Ammo Store (AMMÔ)",
+         "category": "local_business",
+         "markdown": "Ammo Store (AMMÔ)",
+         "urls": null
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_images",
+       "rank_group": 3,
+       "rank_absolute": 6,
+       "markdown": "![Elizabeth Macoritto - Vestidos de Fiesta](https://images.openai.com/static-rsc-4/2A5yUU-yA3Twqm4WLyQI6uLrWBI75FDVdRW6q-tsvuKLQ6qZfcwoJSjgMinzSlmanEw5aZi6sb9aK2ffuQIal0aVIABUj90szgv9EcEKedA8ob_Pkzsb0XnjcezqfBodr1fMcw4RN1TJHfQgowa76j4xTYQ92fQMO_IS-cD2ZRwyjkHQmE-ocbY41gDhWaWJ?purpose=fullsize)",
+       "items": [
+        {
+         "type": "chat_gpt_images_element",
+         "url": "https://emacoritto.com/",
+         "alt": "Elizabeth Macoritto - Vestidos de Fiesta",
+         "image_url": "https://images.openai.com/static-rsc-4/2A5yUU-yA3Twqm4WLyQI6uLrWBI75FDVdRW6q-tsvuKLQ6qZfcwoJSjgMinzSlmanEw5aZi6sb9aK2ffuQIal0aVIABUj90szgv9EcEKedA8ob_Pkzsb0XnjcezqfBodr1fMcw4RN1TJHfQgowa76j4xTYQ92fQMO_IS-cD2ZRwyjkHQmE-ocbY41gDhWaWJ?purpose=fullsize",
+         "markdown": "![Elizabeth Macoritto - Vestidos de Fiesta](https://images.openai.com/static-rsc-4/2A5yUU-yA3Twqm4WLyQI6uLrWBI75FDVdRW6q-tsvuKLQ6qZfcwoJSjgMinzSlmanEw5aZi6sb9aK2ffuQIal0aVIABUj90szgv9EcEKedA8ob_Pkzsb0XnjcezqfBodr1fMcw4RN1TJHfQgowa76j4xTYQ92fQMO_IS-cD2ZRwyjkHQmE-ocbY41gDhWaWJ?purpose=fullsize)"
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_text",
+       "rank_group": 4,
+       "rank_absolute": 7,
+       "markdown": "\n\n**3\\. Blanka Atelier**\n\nEspaña 270, Temuco\n\n- Vestidos para matrimonios, galas y graduaciones.\n- Diferentes diseños, telas y cortes.\n- Alternativas ajustadas, sueltas y estilo corset.\n\nBuena alternativa si buscas algo especial y femenino.\n\n---\n\n",
+       "sources": null,
+       "brand_entities": [
+        {
+         "type": "chat_gpt_brand_entity",
+         "title": "Blanka Atelier",
+         "category": "local_business",
+         "markdown": "Blanka Atelier",
+         "urls": null
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_images",
+       "rank_group": 4,
+       "rank_absolute": 8,
+       "markdown": "![VESTIDO VICENTA ROJO | Indala](https://images.openai.com/static-rsc-4/xmGu_zwpKfTiw6FfqSaWOrPfM-FuyzkZi9RluA4VK4E8MpHEZAVYfLQ2k9arGUja2L4lN4QSJCaJhdcBcU8le2wwUejEac9GLLeufEm_pkQeCOncbhrrmTc64-k1kxO4Gcrl5oxbrIM7R8d1Lyd2LTosajrhYwul5IeFr7vG1uZzhEBNIpgRWYZa7BQWe02V?purpose=fullsize)",
+       "items": [
+        {
+         "type": "chat_gpt_images_element",
+         "url": "https://www.indala.cl/product/vestido-vicenta-rojo",
+         "alt": "VESTIDO VICENTA ROJO | Indala",
+         "image_url": "https://images.openai.com/static-rsc-4/xmGu_zwpKfTiw6FfqSaWOrPfM-FuyzkZi9RluA4VK4E8MpHEZAVYfLQ2k9arGUja2L4lN4QSJCaJhdcBcU8le2wwUejEac9GLLeufEm_pkQeCOncbhrrmTc64-k1kxO4Gcrl5oxbrIM7R8d1Lyd2LTosajrhYwul5IeFr7vG1uZzhEBNIpgRWYZa7BQWe02V?purpose=fullsize",
+         "markdown": "![VESTIDO VICENTA ROJO | Indala](https://images.openai.com/static-rsc-4/xmGu_zwpKfTiw6FfqSaWOrPfM-FuyzkZi9RluA4VK4E8MpHEZAVYfLQ2k9arGUja2L4lN4QSJCaJhdcBcU8le2wwUejEac9GLLeufEm_pkQeCOncbhrrmTc64-k1kxO4Gcrl5oxbrIM7R8d1Lyd2LTosajrhYwul5IeFr7vG1uZzhEBNIpgRWYZa7BQWe02V?purpose=fullsize)"
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_text",
+       "rank_group": 5,
+       "rank_absolute": 9,
+       "markdown": "\n\n**4\\. Jeannette Menard**\n\nTorremolinos 320, local 5\n\n- Vestuario femenino exclusivo.\n- Confecciones para fiestas, graduaciones y ocasiones especiales.\n- Diseños diferenciados y atención personalizada.\n\nInteresante si buscas algo menos común.\n\n---\n\n",
+       "sources": null,
+       "brand_entities": [
+        {
+         "type": "chat_gpt_brand_entity",
+         "title": "Jeannette Menard",
+         "category": "local_business",
+         "markdown": "Jeannette Menard",
+         "urls": null
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_images",
+       "rank_group": 5,
+       "rank_absolute": 10,
+       "markdown": "![Vestido Fiesta Largo 4101893 | Maria Couture](https://images.openai.com/static-rsc-4/jtjwE96qvsJnKBKKXTxVOTaEoHp4nfU-3EUXqkHJQPu-6MZ-Wv105Edc1oKmrLnx94kN6-EyN5OKkbWuyq92f7mwoUE0xw-M4qoPZLJJLXu_hzLZ23cfT2gK1PzpB63SXCzu-zmI2W9pPQFCjCHPvPk9PoxdAHQYY_SpVr3ZR9pFhiln2cGhonmu-WdoTWKU?purpose=fullsize)",
+       "items": [
+        {
+         "type": "chat_gpt_images_element",
+         "url": "https://www.mariacouture.cl/product/vestido-fiesta-largo-4101893",
+         "alt": "Vestido Fiesta Largo 4101893 | Maria Couture",
+         "image_url": "https://images.openai.com/static-rsc-4/jtjwE96qvsJnKBKKXTxVOTaEoHp4nfU-3EUXqkHJQPu-6MZ-Wv105Edc1oKmrLnx94kN6-EyN5OKkbWuyq92f7mwoUE0xw-M4qoPZLJJLXu_hzLZ23cfT2gK1PzpB63SXCzu-zmI2W9pPQFCjCHPvPk9PoxdAHQYY_SpVr3ZR9pFhiln2cGhonmu-WdoTWKU?purpose=fullsize",
+         "markdown": "![Vestido Fiesta Largo 4101893 | Maria Couture](https://images.openai.com/static-rsc-4/jtjwE96qvsJnKBKKXTxVOTaEoHp4nfU-3EUXqkHJQPu-6MZ-Wv105Edc1oKmrLnx94kN6-EyN5OKkbWuyq92f7mwoUE0xw-M4qoPZLJJLXu_hzLZ23cfT2gK1PzpB63SXCzu-zmI2W9pPQFCjCHPvPk9PoxdAHQYY_SpVr3ZR9pFhiln2cGhonmu-WdoTWKU?purpose=fullsize)"
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_text",
+       "rank_group": 6,
+       "rank_absolute": 11,
+       "markdown": "\n\n**5\\. Atelier Marí Garró**\n\nAv. Simón Bolívar 01885\n\n- Confección de vestidos a medida.\n- Vestidos para madrinas y eventos especiales.\n- Arreglos y ajustes para conseguir un buen calce.\n\nIdeal si buscas algo personalizado.\n\n## Ubicación de las tiendas\n",
+       "sources": null,
+       "brand_entities": [
+        {
+         "type": "chat_gpt_brand_entity",
+         "title": "Atelier Marí Garró",
+         "category": "local_business",
+         "markdown": "Atelier Marí Garró",
+         "urls": null
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_local_businesses",
+       "rank_group": 1,
+       "rank_absolute": 12,
+       "markdown": null,
+       "items": [
+        {
+         "type": "chat_gpt_local_businesses_element",
+         "title": "Armario de la Karo - Vestidos De Fiesta",
+         "description": "Dress store",
+         "address": "Centro Comercial Sevilla - Av. Pablo Neruda 02050, Loc 113, 4780000 Temuco, Araucanía, Chile",
+         "phone": "+56 9 9559 3500",
+         "reviews_count": 1454,
+         "url": "https://www.armariodelakaro.cl/",
+         "domain": "www.armariodelakaro.cl",
+         "rating": {
+          "rating_type": "Max5",
+          "value": 5,
+          "votes_count": 1454,
+          "rating_max": 5
+         }
+        },
+        {
+         "type": "chat_gpt_local_businesses_element",
+         "title": "Ammo Store",
+         "description": "Dress store",
+         "address": "Av. Alemania 0425, Loc 207, 4780000 Temuco, Araucanía, Chile",
+         "phone": "+56 9 5401 1541",
+         "reviews_count": 2,
+         "url": "http://www.ammo.cl/",
+         "domain": "www.ammo.cl",
+         "rating": {
+          "rating_type": "Max5",
+          "value": 5,
+          "votes_count": 2,
+          "rating_max": 5
+         }
+        },
+        {
+         "type": "chat_gpt_local_businesses_element",
+         "title": "Blanka Atelier",
+         "description": "Dress store",
+         "address": "España 270, 4800863 Temuco, Araucanía, Chile",
+         "phone": "+56 9 3930 0290",
+         "reviews_count": 9,
+         "url": "https://www.instagram.com/blanka.atelier/?hl=es",
+         "domain": "www.instagram.com",
+         "rating": {
+          "rating_type": "Max5",
+          "value": 4,
+          "votes_count": 9,
+          "rating_max": 5
+         }
+        },
+        {
+         "type": "chat_gpt_local_businesses_element",
+         "title": "Jeannette Menard",
+         "description": "Clothing store",
+         "address": "Torremolinos 320, Loc 5, 4800886 Temuco, Araucanía, Chile",
+         "phone": "+56 9 9979 3624",
+         "reviews_count": 27,
+         "url": null,
+         "domain": null,
+         "rating": {
+          "rating_type": "Max5",
+          "value": 4.1,
+          "votes_count": 27,
+          "rating_max": 5
+         }
+        },
+        {
+         "type": "chat_gpt_local_businesses_element",
+         "title": "Atelier Marí Garró",
+         "description": "Tailor",
+         "address": "Av. Simon Bolivar 01885, 4812875 Temuco, Araucanía, Chile",
+         "phone": null,
+         "reviews_count": null,
+         "url": null,
+         "domain": null,
+         "rating": null
+        }
+       ]
+      },
+      {
+       "type": "chat_gpt_text",
+       "rank_group": 7,
+       "rank_absolute": 13,
+       "markdown": "\n\n## Quiero ayudarte a encontrar un vestido realmente bonito\n\nMe gustaría afinar la búsqueda para mostrarte tiendas y modelos que vayan con tu gusto.\n\n**¿Para qué ocasión necesitas el vestido?**\n\n**1\\. Tipo de evento**\n\n---\n\n**2\\. ¿Qué estilo te gusta?**\n\n---\n\n**3\\. ¿Cuánto quieres gastar?**\n\n---\n\n**4\\. ¿Qué largo prefieres?**\n\n[Buscar vestidos según mis gustos]\n\nAsí puedo orientarte hacia tiendas con vestidos de mejor calidad, diseños bonitos y precios acordes a tu presupuesto. 💕",
+       "sources": null,
+       "brand_entities": null
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

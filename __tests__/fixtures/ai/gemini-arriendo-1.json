@@ -1,0 +1,296 @@
+{
+ "version": "0.1.20261103",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "33.4078 sec.",
+ "cost": 0.004,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "11041257-2362-0629-0000-9c58bdf00c2b",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "33.3052 sec.",
+   "cost": 0.004,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "ai_optimization",
+    "gemini",
+    "llm_scraper",
+    "live",
+    "advanced"
+   ],
+   "data": {
+    "api": "ai_optimization",
+    "function": "live",
+    "se": "gemini",
+    "keyword": "Tengo un matrimonio como invitada, ¿dónde puedo arrendar un vestido de fiesta en Temuco?",
+    "location_code": 20153,
+    "language_code": "es",
+    "device": "desktop",
+    "os": "windows"
+   },
+   "result": [
+    {
+     "keyword": "Tengo un matrimonio como invitada, ¿dónde puedo arrendar un vestido de fiesta en Temuco?",
+     "location_code": 20153,
+     "language_code": "es",
+     "model": "3.5 Flash-Lite",
+     "datetime": "2026-11-04 12:58:02 +00:00",
+     "markdown": "En Temuco cuentas con muy buenas alternativas especializadas en el arriendo de vestidos de fiesta, gala y matrimonio.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Dos de las opciones más recomendadas y conocidas en la ciudad son:\n\n### 1. Ammo Store[ammo.cl](https://ammo.cl/)\n* **Qué ofrecen:** Tienen una colección muy variada de vestidos importados enfocados en matrimonios, graduaciones y galas.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Manejan tallas desde la XS hasta la XL y los arriendos suelen incluir periodos de 4 u 8 días (con la lavandería y mantenimiento ya incluidos en el servicio).[twinsdresses.cl](https://twinsdresses.cl/#:~:text=Twins%20Dresses%20%E2%80%93%20La%20mejor%20tienda%20de,PARA%20ARRENDAR.%20*%20Twins%20es%20para%20TODAS.) \n* **Ubicación:** Se encuentran en el **Paseo Los Suizos (Av. Alemania 0425, local 207)**, un sector muy accesible y céntrico de la ciudad.[ammo.cl](https://ammo.cl/)\n\n### 2. El Armario de la Karo\n* **Qué ofrecen:** Es una tienda muy popular en Temuco con una amplia gama de diseños exclusivos para eventos importantes.[www.armariodelakaro.cl](https://www.armariodelakaro.cl/#:~:text=Vestido%20de%20Fiesta%20en%20Temuco%20Modelo%20Catalina.,de%20Fiesta%20en%20Temuco%3A%20Modelo%20%C3%81mbar.%20%24279.900.) Destacan mucho por entregar una asesoría de imagen súper personalizada (te ayudan a vitrinear según tu tipo de cuerpo, tono de piel y el tipo de matrimonio), además de ofrecer accesorios para complementar todo el *outfit* en un mismo lugar.[www.armariodelakaro.cl](https://www.armariodelakaro.cl/#:~:text=hace%204%20meses.%20Todo%20impecable%2C%20los%20vestidos,la%20compra.%20Yesika%20R.%20hace%204%20meses.)\n\n---\n\n**Consejos útiles antes de ir:**\n* **Revisa redes sociales o web:** Muchas de estas tiendas actualizan constantemente su stock real en Instagram o en sus sitio webs (como *ammo.cl*), por lo que puedes vitrinear modelos antes de asistir.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF)\n* **Anticipación:** Si el matrimonio es en temporada alta (primavera-verano), te sugiero vitrinear y reservar con algunas semanas de anticipación para asegurarte los modelos y tallas que más te gusten.\n\n<FollowUp label=\"¿Quieres saber qué tipo de vestido o largo es más adecuado según la hora y el código de vestimenta del matrimonio?\" query=\"¿Cómo elegir el vestido de fiesta ideal según el código de vestimenta y la hora de un matrimonio?\"/>",
+     "sources": [
+      {
+       "type": "gemini_source",
+       "title": "Arriendo de Vestidos en Temuco - Ammo Store",
+       "snippet": null,
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Arriendo de Vestidos en Temuco - Ammo Store"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Arrendar o Comprar el Vestido: Cuándo Conviene Cada Uno",
+       "snippet": null,
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/guia/arrendar-o-comprar-vestido-de-fiesta/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Arrendar o Comprar el Vestido: Cuándo Conviene Cada Uno"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "Vestidos de Fiesta en Temuco - Arriendo y Venta ; Contacto. Paseo Los \nSuizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a Viernes: 14:00 \n– 19:00 hrs.",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Arriendo Vestidos De Novia En Temuco | MercadoLibre",
+       "snippet": null,
+       "domain": "listado.mercadolibre.cl",
+       "url": "https://listado.mercadolibre.cl/arriendo-vestidos-de-novia-en-temuco",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://listado.mercadolibre.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "listado.mercadolibre.cl",
+       "publication_date": null,
+       "markdown": "Arriendo Vestidos De Novia En Temuco | MercadoLibre"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+       "snippet": null,
+       "domain": "www.armariodelakaro.cl",
+       "url": "https://www.armariodelakaro.cl/",
+       "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://www.armariodelakaro.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "www.armariodelakaro.cl",
+       "publication_date": null,
+       "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta",
+       "snippet": null,
+       "domain": "twinsdresses.cl",
+       "url": "https://twinsdresses.cl/",
+       "thumbnail": "https://t2.gstatic.com/faviconV2?url=https://twinsdresses.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+       "source_name": "twinsdresses.cl",
+       "publication_date": null,
+       "markdown": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta",
+       "snippet": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta y Outfit. \nINICIO. BLOG INVITADA IDEAL. * TENEMOS TODAS LAS TALLASdesde XS a la XXXL. \nLA MEJOR ...",
+       "domain": "twinsdresses.cl",
+       "url": "https://twinsdresses.cl/#:~:text=Twins%20Dresses%20%E2%80%93%20La%20mejor%20tienda%20de,PARA%20ARRENDAR.%20*%20Twins%20es%20para%20TODAS.",
+       "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQ2k71vnbXkcnfMl7hEK-LaC4bVwBBIBUZ5J8fuY44ghLW1Mua-9zFc479_a2A0cQgwT9HrnTbaqoDiQYRF3iX0YjV2onGZQWPrYg",
+       "source_name": "twinsdresses.cl",
+       "publication_date": null,
+       "markdown": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "Vestidos de Fiesta en Temuco - Arriendo y Venta ; Contacto. Paseo Los \nSuizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a Viernes: 14:00 \n– 19:00 hrs.",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+       "snippet": "Vestido de Fiesta en Temuco Modelo Catalina. $279.900. Add to \nwishlistSeleccionar opciones Este producto tiene múltiples variantes. Las \nopciones se pueden elegi...",
+       "domain": "www.armariodelakaro.cl",
+       "url": "https://www.armariodelakaro.cl/#:~:text=Vestido%20de%20Fiesta%20en%20Temuco%20Modelo%20Catalina.,de%20Fiesta%20en%20Temuco%3A%20Modelo%20%C3%81mbar.%20%24279.900.",
+       "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQFPx0BfAeZUYI_QW175bFTY_evtnUHHzXOCWGjPXLbtfwzSSRJXPz1WgrH8j59G1MVdMjq6eqw-PpclHrhSWbHWNVDZR9R9n5nuNUvcGJGUlU",
+       "source_name": "www.armariodelakaro.cl",
+       "publication_date": null,
+       "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+       "snippet": " hace 4 meses. Todo impecable, los vestidos de muy buena calidad y la \natención es sumamente personalizada, te guían en el proceso y ayudan a \nelegir lo mejor par...",
+       "domain": "www.armariodelakaro.cl",
+       "url": "https://www.armariodelakaro.cl/#:~:text=hace%204%20meses.%20Todo%20impecable%2C%20los%20vestidos,la%20compra.%20Yesika%20R.%20hace%204%20meses.",
+       "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQFPx0BfAeZUYI_QW175bFTY_evtnUHHzXOCWGjPXLbtfwzSSRJXPz1WgrH8j59G1MVdMjq6eqw-PpclHrhSWbHWNVDZR9R9n5nuNUvcGJGUlU",
+       "source_name": "www.armariodelakaro.cl",
+       "publication_date": null,
+       "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+      },
+      {
+       "type": "gemini_source",
+       "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+       "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+       "domain": "ammo.cl",
+       "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+       "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+       "source_name": "ammo.cl",
+       "publication_date": null,
+       "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+      }
+     ],
+     "se_results_count": 0,
+     "item_types": [
+      "gemini_text"
+     ],
+     "items_count": 1,
+     "items": [
+      {
+       "type": "gemini_text",
+       "rank_group": 1,
+       "rank_absolute": 1,
+       "markdown": "En Temuco cuentas con muy buenas alternativas especializadas en el arriendo de vestidos de fiesta, gala y matrimonio.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Dos de las opciones más recomendadas y conocidas en la ciudad son:\n\n### 1. Ammo Store[ammo.cl](https://ammo.cl/)\n* **Qué ofrecen:** Tienen una colección muy variada de vestidos importados enfocados en matrimonios, graduaciones y galas.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF) Manejan tallas desde la XS hasta la XL y los arriendos suelen incluir periodos de 4 u 8 días (con la lavandería y mantenimiento ya incluidos en el servicio).[twinsdresses.cl](https://twinsdresses.cl/#:~:text=Twins%20Dresses%20%E2%80%93%20La%20mejor%20tienda%20de,PARA%20ARRENDAR.%20*%20Twins%20es%20para%20TODAS.) \n* **Ubicación:** Se encuentran en el **Paseo Los Suizos (Av. Alemania 0425, local 207)**, un sector muy accesible y céntrico de la ciudad.[ammo.cl](https://ammo.cl/)\n\n### 2. El Armario de la Karo\n* **Qué ofrecen:** Es una tienda muy popular en Temuco con una amplia gama de diseños exclusivos para eventos importantes.[www.armariodelakaro.cl](https://www.armariodelakaro.cl/#:~:text=Vestido%20de%20Fiesta%20en%20Temuco%20Modelo%20Catalina.,de%20Fiesta%20en%20Temuco%3A%20Modelo%20%C3%81mbar.%20%24279.900.) Destacan mucho por entregar una asesoría de imagen súper personalizada (te ayudan a vitrinear según tu tipo de cuerpo, tono de piel y el tipo de matrimonio), además de ofrecer accesorios para complementar todo el *outfit* en un mismo lugar.[www.armariodelakaro.cl](https://www.armariodelakaro.cl/#:~:text=hace%204%20meses.%20Todo%20impecable%2C%20los%20vestidos,la%20compra.%20Yesika%20R.%20hace%204%20meses.)\n\n---\n\n**Consejos útiles antes de ir:**\n* **Revisa redes sociales o web:** Muchas de estas tiendas actualizan constantemente su stock real en Instagram o en sus sitio webs (como *ammo.cl*), por lo que puedes vitrinear modelos antes de asistir.[ammo.cl](https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF)\n* **Anticipación:** Si el matrimonio es en temporada alta (primavera-verano), te sugiero vitrinear y reservar con algunas semanas de anticipación para asegurarte los modelos y tallas que más te gusten.\n\n<FollowUp label=\"¿Quieres saber qué tipo de vestido o largo es más adecuado según la hora y el código de vestimenta del matrimonio?\" query=\"¿Cómo elegir el vestido de fiesta ideal según el código de vestimenta y la hora de un matrimonio?\"/>",
+       "original_text": "En Temuco cuentas con muy buenas alternativas especializadas en el arriendo de vestidos de fiesta, gala y matrimonio. Dos de las opciones más recomendadas y conocidas en la ciudad son:\n\n### 1. Ammo Store\n* **Qué ofrecen:** Tienen una colección muy variada de vestidos importados enfocados en matrimonios, graduaciones y galas. Manejan tallas desde la XS hasta la XL y los arriendos suelen incluir periodos de 4 u 8 días (con la lavandería y mantenimiento ya incluidos en el servicio). \n* **Ubicación:** Se encuentran en el **Paseo Los Suizos (Av. Alemania 0425, local 207)**, un sector muy accesible y céntrico de la ciudad.\n\n### 2. El Armario de la Karo\n* **Qué ofrecen:** Es una tienda muy popular en Temuco con una amplia gama de diseños exclusivos para eventos importantes. Destacan mucho por entregar una asesoría de imagen súper personalizada (te ayudan a vitrinear según tu tipo de cuerpo, tono de piel y el tipo de matrimonio), además de ofrecer accesorios para complementar todo el *outfit* en un mismo lugar.\n\n---\n\n**Consejos útiles antes de ir:**\n* **Revisa redes sociales o web:** Muchas de estas tiendas actualizan constantemente su stock real en Instagram o en sus sitio webs (como *ammo.cl*), por lo que puedes vitrinear modelos antes de asistir.\n* **Anticipación:** Si el matrimonio es en temporada alta (primavera-verano), te sugiero vitrinear y reservar con algunas semanas de anticipación para asegurarte los modelos y tallas que más te gusten.\n\n<FollowUp label=\"¿Quieres saber qué tipo de vestido o largo es más adecuado según la hora y el código de vestimenta del matrimonio?\" query=\"¿Cómo elegir el vestido de fiesta ideal según el código de vestimenta y la hora de un matrimonio?\"/>",
+       "sources": [
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "Vestidos de Fiesta en Temuco - Arriendo y Venta ; Contacto. Paseo Los \nSuizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a Viernes: 14:00 \n– 19:00 hrs.",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/",
+         "thumbnail": "https://t1.gstatic.com/faviconV2?url=https://ammo.cl/&client=BARD&type=FAVICON&size=256&fallback_opts=TYPE,SIZE,URL",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta",
+         "snippet": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta y Outfit. \nINICIO. BLOG INVITADA IDEAL. * TENEMOS TODAS LAS TALLASdesde XS a la XXXL. \nLA MEJOR ...",
+         "domain": "twinsdresses.cl",
+         "url": "https://twinsdresses.cl/#:~:text=Twins%20Dresses%20%E2%80%93%20La%20mejor%20tienda%20de,PARA%20ARRENDAR.%20*%20Twins%20es%20para%20TODAS.",
+         "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQ2k71vnbXkcnfMl7hEK-LaC4bVwBBIBUZ5J8fuY44ghLW1Mua-9zFc479_a2A0cQgwT9HrnTbaqoDiQYRF3iX0YjV2onGZQWPrYg",
+         "source_name": "twinsdresses.cl",
+         "publication_date": null,
+         "markdown": "Twins Dresses – La mejor tienda de Arriendo de Vestidos de Fiesta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "Vestidos de Fiesta en Temuco - Arriendo y Venta ; Contacto. Paseo Los \nSuizos, Av. Alemania 0425 Local 207. Temuco, Chile. Lunes a Viernes: 14:00 \n– 19:00 hrs.",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+         "snippet": "Vestido de Fiesta en Temuco Modelo Catalina. $279.900. Add to \nwishlistSeleccionar opciones Este producto tiene múltiples variantes. Las \nopciones se pueden elegi...",
+         "domain": "www.armariodelakaro.cl",
+         "url": "https://www.armariodelakaro.cl/#:~:text=Vestido%20de%20Fiesta%20en%20Temuco%20Modelo%20Catalina.,de%20Fiesta%20en%20Temuco%3A%20Modelo%20%C3%81mbar.%20%24279.900.",
+         "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQFPx0BfAeZUYI_QW175bFTY_evtnUHHzXOCWGjPXLbtfwzSSRJXPz1WgrH8j59G1MVdMjq6eqw-PpclHrhSWbHWNVDZR9R9n5nuNUvcGJGUlU",
+         "source_name": "www.armariodelakaro.cl",
+         "publication_date": null,
+         "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños",
+         "snippet": " hace 4 meses. Todo impecable, los vestidos de muy buena calidad y la \natención es sumamente personalizada, te guían en el proceso y ayudan a \nelegir lo mejor par...",
+         "domain": "www.armariodelakaro.cl",
+         "url": "https://www.armariodelakaro.cl/#:~:text=hace%204%20meses.%20Todo%20impecable%2C%20los%20vestidos,la%20compra.%20Yesika%20R.%20hace%204%20meses.",
+         "thumbnail": "https://encrypted-tbn2.gstatic.com/favicon-tbn?q=tbn%3AANd9GcQFPx0BfAeZUYI_QW175bFTY_evtnUHHzXOCWGjPXLbtfwzSSRJXPz1WgrH8j59G1MVdMjq6eqw-PpclHrhSWbHWNVDZR9R9n5nuNUvcGJGUlU",
+         "source_name": "www.armariodelakaro.cl",
+         "publication_date": null,
+         "markdown": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños"
+        },
+        {
+         "type": "gemini_source",
+         "title": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta",
+         "snippet": "En Ammo Store encontrarás vestidos de gala, fiesta y matrimonio, \ncuidadosamente seleccionados para que brilles en cada ocasión especial. \nSíguenos en Instagram. ...",
+         "domain": "ammo.cl",
+         "url": "https://ammo.cl/#:~:text=En%20Ammo%20Store%20encontrar%C3%A1s%20vestidos%20de%20gala%2C,en%20manga%20larga%20nuestro%20ama.%20*%20%C2%BF",
+         "thumbnail": "https://encrypted-tbn0.gstatic.com/favicon-tbn?q=tbn%3AANd9GcTRQcgvEvtNKLfCKmDRAWlVppYyKQ9qmfksQXwFGocqCZbufkuUz_qIG2pF0Q2oFk0mDS-tXifZ8D1Co8GaqFIouic",
+         "source_name": "ammo.cl",
+         "publication_date": null,
+         "markdown": "Ammo Store: Vestidos de Fiesta en Temuco – Arriendo y Venta"
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

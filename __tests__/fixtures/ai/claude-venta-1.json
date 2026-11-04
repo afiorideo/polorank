@@ -1,0 +1,399 @@
+{
+ "version": "0.1.20261103",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "12.2416 sec.",
+ "cost": 0.04991,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "11041258-2362-0612-0000-69d82b6262fb",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "12.2341 sec.",
+   "cost": 0.04991,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "ai_optimization",
+    "claude",
+    "llm_responses",
+    "live"
+   ],
+   "data": {
+    "api": "ai_optimization",
+    "function": "llm_responses",
+    "se": "claude",
+    "user_prompt": "¿Qué tiendas en Temuco venden vestidos de fiesta bonitos y de buena calidad?",
+    "model_name": "claude-sonnet-5-5",
+    "web_search": true,
+    "web_search_country_iso_code": "CL",
+    "web_search_city": "Temuco"
+   },
+   "result": [
+    {
+     "model_name": "claude-sonnet-5-5",
+     "input_tokens": 12900,
+     "output_tokens": 1351,
+     "reasoning_tokens": 0,
+     "web_search": true,
+     "money_spent": 0.04931,
+     "datetime": "2026-11-04 12:58:35 +00:00",
+     "items": [
+      {
+       "type": "message",
+       "sections": [
+        {
+         "type": "text",
+         "text": "Voy a buscar información actualizada sobre tiendas de vestidos de fiesta en Temuco.",
+         "annotations": null
+        }
+       ]
+      },
+      {
+       "type": "message",
+       "sections": [
+        {
+         "type": "text",
+         "text": "Estas son las tiendas de vestidos de fiesta en Temuco que encontré:\n\n**1. Armario de la Karo**\n- Se presenta como tienda especialista en vestidos de fiesta y gala. ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "Su catálogo tiene más de 1.800 modelos.",
+         "annotations": [
+          {
+           "title": "Vestidos de Fiesta en Temuco",
+           "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "Está en el Centro Comercial Sevilla (Av. Pablo Neruda 02050) y también vende online.",
+         "annotations": [
+          {
+           "title": "Vestidos de Fiesta en Temuco",
+           "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "Dice tener más de 1.000 reseñas en Google y asesoría personal.",
+         "annotations": [
+          {
+           "title": "Vestidos de Fiesta en Temuco",
+           "url": "https://www.armariodelakaro.cl/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- Tiene vestidos para matrimonio, graduación y mamá de novio o novia, y ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "vestidos nuevos y seminuevos.",
+         "annotations": [
+          {
+           "title": "Vestidos de Fiesta en Temuco",
+           "url": "https://www.armariodelakaro.cl/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- Los precios de los modelos que vi van aproximadamente ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "entre $249.900 y $284.900.",
+         "annotations": [
+          {
+           "title": "Vestidos de Fiesta en Temuco",
+           "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "También vende accesorios como aros, collares, carteras y zapatos.",
+         "annotations": [
+          {
+           "title": "Armario De La Karo Temuco",
+           "url": "https://www.facebook.com/armariodelakaro/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n\n**2. Ammô Store**\n- ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "Ofrece arriendo y venta de vestidos de fiesta y accesorios en Av. Alemania 0425, local 207.",
+         "annotations": [
+          {
+           "title": "Ammo",
+           "url": "https://www.instagram.com/ammostorechile/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "El horario que publican es lunes a viernes de 14:00 a 19:00 y sábados de 12:00 a 17:00.",
+         "annotations": [
+          {
+           "title": "Ammo",
+           "url": "https://www.instagram.com/ammostorechile/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "Vende modelos importados desde $30.000 en el outlet hasta $165.000, en tallas XS a XL.",
+         "annotations": [
+          {
+           "title": "Venta de Vestidos de Fiesta en Temuco",
+           "url": "https://ammo.cl/venta-de-vestidos-en-temuco/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "Atienden sin cita previa.",
+         "annotations": [
+          {
+           "title": "Arriendo de Vestidos en Temuco",
+           "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n- Si no quieres comprar, ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "tienen vestidos en arriendo por 4 u 8 días.",
+         "annotations": [
+          {
+           "title": "Arriendo de Vestidos en Temuco",
+           "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n\n**3. Otras opciones (por redes sociales)**\n- **Blanka Atelier**: ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "está en España 270 y hace envíos a todo Chile.",
+         "annotations": [
+          {
+           "title": "Tiendas De Vestidos En Temuco Chile",
+           "url": "https://www.tiktok.com/discover/tiendas-de-vestidos-en-temuco-chile",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": " También aparece con diseño personalizado y vestidos de novia.\n- **Alta Noche Vestidos**: ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "tiene un showroom en Los Pablos, Temuco",
+         "annotations": [
+          {
+           "title": "Tiendas De Vestidos En Temuco Chile",
+           "url": "https://www.tiktok.com/discover/tiendas-de-vestidos-en-temuco-chile",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": " (Instagram: altanoche.vestidos).\n- **Nua Moda**: ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "publica vestidos de fiesta de la marca Azazie",
+         "annotations": [
+          {
+           "title": "Tiendas De Vestidos En Temuco Chile",
+           "url": "https://www.tiktok.com/discover/tiendas-de-vestidos-en-temuco-chile",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": " (Instagram: @nuamoda.cl).\n- **María Jo**: ",
+         "annotations": null
+        },
+        {
+         "type": "text",
+         "text": "vende vestidos de fiesta, ropa casual y accesorios, en un espacio para emprendedores.",
+         "annotations": [
+          {
+           "title": "María Jo",
+           "url": "https://www.facebook.com/ropamariajo.cl/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        },
+        {
+         "type": "text",
+         "text": "\n\n**Recomendaciones**\n- **Presupuesto ajustado:** Ammô tiene precios más bajos y un outlet. Armario de la Karo tiene precios más altos y mucho más stock.\n- **Diseño a medida o más exclusivo:** Blanka Atelier o Alta Noche.\n- **Antes de ir:** revisa Instagram o Google Maps para confirmar horarios, stock y reseñas recientes, porque parte de la información viene de redes sociales y puede haber cambiado.\n\nSi me dices para qué evento es (matrimonio, graduación, gala), tu talla y tu presupuesto, puedo ayudarte a afinar la elección.",
+         "annotations": null
+        }
+       ]
+      }
+     ],
+     "fan_out_queries": [
+      "tiendas vestidos de fiesta Temuco",
+      "vestidos de fiesta Temuco boutique venta"
+     ],
+     "search_results": [
+      {
+       "title": "Tiendas De Vestidos En Temuco Chile",
+       "url": "https://www.tiktok.com/discover/tiendas-de-vestidos-en-temuco-chile",
+       "date": "2026-05-11 12:58:35 +00:00",
+       "snippet": null
+      },
+      {
+       "title": "Armario De La Karo Temuco",
+       "url": "https://www.facebook.com/armariodelakaro/",
+       "date": null,
+       "snippet": null
+      },
+      {
+       "title": "Ammo",
+       "url": "https://www.instagram.com/ammostorechile/",
+       "date": null,
+       "snippet": null
+      },
+      {
+       "title": "María Jo",
+       "url": "https://www.facebook.com/ropamariajo.cl/",
+       "date": null,
+       "snippet": null
+      },
+      {
+       "title": "Vestidos de Fiesta en Temuco",
+       "url": "https://www.armariodelakaro.cl/product-category/vestidos-de-fiesta/",
+       "date": null,
+       "snippet": null
+      },
+      {
+       "title": "Venta de Vestidos de Fiesta en Temuco",
+       "url": "https://ammo.cl/venta-de-vestidos-en-temuco/",
+       "date": "2026-09-15 12:58:35 +00:00",
+       "snippet": null
+      },
+      {
+       "title": "Arriendo de Vestidos en Temuco",
+       "url": "https://ammo.cl/arriendo-de-vestidos-en-temuco/",
+       "date": "2026-09-15 12:58:35 +00:00",
+       "snippet": null
+      },
+      {
+       "title": "Vestidos de Fiesta en Temuco",
+       "url": "https://ammo.cl/",
+       "date": "2026-09-16 12:58:35 +00:00",
+       "snippet": null
+      },
+      {
+       "title": "Vestidos de Fiesta en Temuco",
+       "url": "https://www.armariodelakaro.cl/",
+       "date": "2026-07-02 12:58:35 +00:00",
+       "snippet": null
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

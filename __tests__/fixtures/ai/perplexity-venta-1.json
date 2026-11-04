@@ -1,0 +1,191 @@
+{
+ "version": "0.1.20261103",
+ "status_code": 20000,
+ "status_message": "Ok.",
+ "time": "3.8221 sec.",
+ "cost": 0.006028,
+ "tasks_count": 1,
+ "tasks_error": 0,
+ "tasks": [
+  {
+   "id": "11041258-2362-0612-0000-ca0852fc2923",
+   "status_code": 20000,
+   "status_message": "Ok.",
+   "time": "3.8144 sec.",
+   "cost": 0.006028,
+   "result_count": 1,
+   "path": [
+    "v3",
+    "ai_optimization",
+    "perplexity",
+    "llm_responses",
+    "live"
+   ],
+   "data": {
+    "api": "ai_optimization",
+    "function": "llm_responses",
+    "se": "perplexity",
+    "user_prompt": "¿Qué tiendas en Temuco venden vestidos de fiesta bonitos y de buena calidad?",
+    "model_name": "sonar",
+    "web_search_country_iso_code": "CL"
+   },
+   "result": [
+    {
+     "model_name": "sonar",
+     "input_tokens": 28,
+     "output_tokens": 400,
+     "reasoning_tokens": 0,
+     "web_search": true,
+     "money_spent": 0.005428,
+     "datetime": "2026-11-04 12:58:40 +00:00",
+     "items": [
+      {
+       "type": "message",
+       "sections": [
+        {
+         "type": "text",
+         "text": "En Temuco, estas tiendas parecen ser buenas opciones para encontrar vestidos de fiesta bonitos y de buena calidad:\n\n- **Armario de la Karo**: especializada en vestidos de fiesta y gala, con más de 1.800 modelos, distintas tallas, accesorios y asesoría personalizada. Está en **Av. Pablo Neruda 02050, Centro Comercial Sevilla, local 113**.[1]\n- **Di Trevi**: ofrece vestidos de fiesta y accesorios, con énfasis en asesoría para elegir un conjunto cómodo y elegante.[5]\n- **Lady Lorenz**: aparece registrada en Temuco dentro de la categoría de trajes de fiesta, en **Calle Torremolinos 410, local 123**.[3]\n- **Yaskari Novias y Fiestas**: tienda orientada a vestidos de novia y de fiesta, ubicada en **Manuel Montt 497**.[3]\n- **Divina Novias**: ofrece vestidos formales y de novia en **Pasaje Neculmán 0548**.[3]\n- **Eleganza Vestidos**: cuenta con vestidos de fiesta para invitadas y madrinas, además de accesorios y pruebas con reserva previa.[8]\n- **Falabella Temuco**: alternativa para comparar precios y marcas como Basement, The-Are, Mossimo y Strike; hay opciones desde aproximadamente $15.000 hasta más de $200.000, según el modelo.[6][7]\n\n**Recomendación:** para mayor variedad y atención especializada, comenzaría por **Armario de la Karo** y **Di Trevi**. Si buscas un vestido más exclusivo o necesitas ajustes, conviene consultar primero por disponibilidad y reservar una hora.",
+         "annotations": [
+          {
+           "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños ...",
+           "url": "https://www.armariodelakaro.cl/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "The 10 Best shops in Temuco (2026 ranked) - evendo.com",
+           "url": "https://evendo.com/locations/chile/temuco/best-shops",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "Vestidos novia en Temuco (IX Región - Araucanía)",
+           "url": "https://www.citiservi.cl/rubro/vestidos-novia-en-temuco",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "Moda en Temuco | Catálogos y Descuentos | Tiendeo",
+           "url": "https://www.tiendeo.cl/temuco/ropa-zapatos-y-accesorios",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "Fiesta | Di Trevi",
+           "url": "https://www.ditrevi.cl/fiesta",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "Ropa de Fiesta 👗✨ | Falabella Chile",
+           "url": "https://www.falabella.com/falabella-cl/category/CATG36072/Ropa-de-Fiesta",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "Vestidos de Fiesta 👗✨ | Falabella Chile",
+           "url": "https://www.falabella.com/falabella-cl/category/CATG36075/Vestidos-de-Fiesta",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "Eleganza Vestidos - Consulta disponibilidad y precios",
+           "url": "https://www.matrimonios.cl/tiendas-de-novia/eleganza-vestidos--e171216",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "VESTIDO FIESTA",
+           "url": "https://www.ecovestir.cl/en/vestido-fiesta",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          },
+          {
+           "title": "Vestido de Fiesta",
+           "url": "http://vestidodefiesta.cl/",
+           "start_index": null,
+           "end_index": null,
+           "text": null
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "fan_out_queries": null,
+     "search_results": [
+      {
+       "title": "Armario de la Karo: Vestidos de Fiesta en Temuco | Diseños ...",
+       "url": "https://www.armariodelakaro.cl/",
+       "date": "2026-08-25 00:00:00 +00:00",
+       "snippet": "# Vestidos de Fiesta y Gala En Temuco\n### La Mejor Selección de Vestidos de Fiesta y Gala en la región de la Araucanía para tus momentos inolvidables.\nEn Armario de la Karo Ofrecemos una colección exclusiva de vestidos de fiesta en Temuco.\nEncuentra tu vestido de gala ideal, diseños para licenciatur..."
+      },
+      {
+       "title": "The 10 Best shops in Temuco (2026 ranked) - evendo.com",
+       "url": "https://evendo.com/locations/chile/temuco/best-shops",
+       "date": "2026-10-14 00:00:00 +00:00",
+       "snippet": "# Best Shops in Temuco\n## The 10 best Shops in Temuco\nParis in Temuco, Araucanía, is a vibrant shopping destination offering a diverse array of home goods, clothing, and children's furniture, perfect for tourists seeking unique finds and local experiences.\n...\n- Todofiesta\nDiscover Todofiesta, a vib..."
+      },
+      {
+       "title": "Vestidos novia en Temuco (IX Región - Araucanía)",
+       "url": "https://www.citiservi.cl/rubro/vestidos-novia-en-temuco",
+       "date": "2026-09-12 00:00:00 +00:00",
+       "snippet": "##### 1. Lady Lorenz\nCategoría: **Trajes De Fiesta**\nCategoría: **Vestidos De Novia**\nCalle Torremolinos, 410 - Local 123\n4780000, **Temuco** (IX Región - Araucanía)\n##### 2. Yaskari Confecciones\nCategoría: **Uniformes Escolares**\nCategoría: **Vestidos De Novia**\nCalle Manuel Montt, 497\n4780000, **T..."
+      },
+      {
+       "title": "Moda en Temuco | Catálogos y Descuentos | Tiendeo",
+       "url": "https://www.tiendeo.cl/temuco/ropa-zapatos-y-accesorios",
+       "date": "2026-11-02 00:00:00 +00:00",
+       "snippet": "# Moda en Temuco - Catálogos, Descuentos y Ofertas\n- Tiendeo en Temuco»\n- Ofertas de Ropa, Zapatos y Accesorios en Temuco\nPublicidad- Nuevo\n#### Family Shop\n### Ofertas especiales atractivas para todos\nVence el 14-11Temuco\n- #### Maui and Sons\n### Promociones\nVence el 13-11Temuco\n- #### Ferouch\n### ..."
+      },
+      {
+       "title": "Fiesta | Di Trevi",
+       "url": "https://www.ditrevi.cl/fiesta",
+       "date": "2026-03-14 00:00:00 +00:00",
+       "snippet": "# Fiesta\nLo más importante al elegir un vestido de fiesta es encontrar aquel que te haga sentir hermosa, cómoda y segura.\nEn DiTrevi sabemos lo importante que es lucir espectacular en cualquier evento especial.\nPor eso, ofrecemos una amplia variedad de vestidos de fiesta y accesorios para complement..."
+      },
+      {
+       "title": "Ropa de Fiesta 👗✨ | Falabella Chile",
+       "url": "https://www.falabella.com/falabella-cl/category/CATG36072/Ropa-de-Fiesta",
+       "date": "2026-09-25 00:00:00 +00:00",
+       "snippet": "Ropa de Fiesta 👗✨ | Falabella Chile\n...\nMango\nScalpers\nBrownie\nMossimo\nMarina Mia\nCaer En Gracia\nThe-Are\nBasement\nIo\nRupha\nSingolare\nLa Mura\nSybilla\n...\n# Ropa de Fiesta\n- ## Categoría\nVestidos de fiesta\nVestidos de novia\n...\n**BASEMENT**\n**Vestido Halter Estampado Mujer x Paula Mekis** **Por Falabe..."
+      },
+      {
+       "title": "Vestidos de Fiesta 👗✨ | Falabella Chile",
+       "url": "https://www.falabella.com/falabella-cl/category/CATG36075/Vestidos-de-Fiesta",
+       "date": "2026-11-03 00:00:00 +00:00",
+       "snippet": "Vestidos de Fiesta 👗✨ | Falabella Chile\n...\n# Vestidos de Fiesta\n**BASEMENT**\n**Vestido Un Hombro Estampado Mujer x Paula Mekis** **Por Falabella**\n1. $ 51.990\n-31%\n2. $ 74.990\nEnvío\nPlus\n...\n**THE-ARE**\n**Vestido Estampado Espalda Abierta Mujer The Are** **Por Falabella**\n1. $ 199.990\n...\n**STRIKE*..."
+      },
+      {
+       "title": "Eleganza Vestidos - Consulta disponibilidad y precios",
+       "url": "https://www.matrimonios.cl/tiendas-de-novia/eleganza-vestidos--e171216",
+       "date": "2025-10-21 00:00:00 +00:00",
+       "snippet": "¿En busca de de ese vestido de novia que les haga escapar una lágrima de la emoción?\nDiseños exclusivos y de alta calidad es lo que encontrarán en el extenso, elegante y hermoso catálogo de Eleganza Vestidos.\nEsta tienda, especializada en satisfacer los gustos de las novias más exigentes, cuenta con..."
+      },
+      {
+       "title": "VESTIDO FIESTA",
+       "url": "https://www.ecovestir.cl/en/vestido-fiesta",
+       "date": "2026-10-07 00:00:00 +00:00",
+       "snippet": "- VESTIDO FIESTA\n# VESTIDO FIESTA\n## Vestido de Fiesta Negro Pedro del Hierro | Talla 40 | Elegancia en Encaje y Pedrería\n$59.990\n## Vestido Corto de Lentejuelas Rosado Sandro Ferrone Talla 40\n...\n## Vestido Mujer Elasticado Fiesta Negro Zara Trafaluc Talla S\n...\n## VESTIDO NEGRO CONTROMEDIA TALLA 4..."
+      },
+      {
+       "title": "Vestido de Fiesta",
+       "url": "http://vestidodefiesta.cl/",
+       "date": "2025-11-15 00:00:00 +00:00",
+       "snippet": "Vestido de Fiesta exclusive women's clothing Cortos Brilla con estilo y comodidad.\nExplora nuestra variedad de vestidos cortos, ideales para cócteles, graduaciones o cualquier fiesta donde quieras moverte libremente.\nEncuentra el diseño perfecto que combine diversión y sofisticación en un solo look...."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
