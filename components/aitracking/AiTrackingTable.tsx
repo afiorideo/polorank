@@ -115,7 +115,8 @@ const AiTrackingTable = ({ rows, domain, isLoading }: AiTrackingTableProps) => {
             escribe tu marca; la etiqueta de la cita no cuenta, tiene que estar en la redacción.
             Los períodos se cuentan en <strong>semanas</strong>: <code>3/4</code>
             significa que te citó 3 de las 4 semanas en que hubo resumen, y muestran <code>—</code> hasta que haya
-            mediciones de esa antigüedad. Las semanas con página <strong>no confiable</strong> no cuentan. <strong>N/A</strong> no es que no aparezcas: es que Google no respondió
+            mediciones de esa antigüedad. Las semanas con página <strong>no confiable</strong> no cuentan.
+            <strong> N/A</strong> no es que no aparezcas: es que Google no respondió
             con IA en esa búsqueda.
          </p>
          {selected && <AiDetailPanel row={selected} domain={domain} closePanel={() => setSelected(null)} />}

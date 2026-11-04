@@ -90,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          const lastWithAi = [...usable].reverse().find((d) => d.ai_cited !== -1);
          const latest = lastWithAi || usable[usable.length - 1];
          // hay filas pero ninguna utilizable: es "no medido", no "no hubo resumen"
-         const notMeasured = !latest && days.length > 0;
+         const missing = days.length > 0 ? AI_NOT_MEASURED : -1;
          const trusted = days.length === 0 || days[days.length - 1].serp_trust !== 0;
          const lp = [...usable].reverse()
             .map((d) => parseJson<{ present?: boolean, position?: number }>(d.local_pack, {}))
@@ -107,8 +107,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             keyword: k.get('keyword') as string,
             country: k.get('country') as string,
             volume: (k.get('volume') as number) || 0,
-            cited: latest ? latest.ai_cited : (notMeasured ? AI_NOT_MEASURED : -1),
-            mentioned: latest ? latest.ai_mentioned : (notMeasured ? AI_NOT_MEASURED : -1),
+            cited: latest ? latest.ai_cited : missing,
+            mentioned: latest ? latest.ai_mentioned : missing,
             position: mine ? mine.position : 0,
             citedUrl: mine ? mine.url : '',
             references,
