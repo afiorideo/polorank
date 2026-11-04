@@ -32,10 +32,14 @@ describe('gotoCredentials', () => {
       expect(gotoCredentials({ scraper_type: 'serper', scaping_api: 'serper-key' })).toBe(CREDS);
       delete process.env.DATAFORSEO_GOTO_CREDENTIALS;
    });
-   it('con otro proveedor usa ai_dataforseo_credentials antes que la variable de entorno', () => {
+   it('con otro proveedor la variable de entorno gana sobre ai_dataforseo_credentials', () => {
       process.env.DATAFORSEO_GOTO_CREDENTIALS = 'env@x.cl:e';
-      expect(gotoCredentials({ scraper_type: 'serper', scaping_api: 'k', ai_dataforseo_credentials: CREDS } as any)).toBe(CREDS);
+      expect(gotoCredentials({ scraper_type: 'serper', scaping_api: 'k', ai_dataforseo_credentials: CREDS } as any)).toBe('env@x.cl:e');
       delete process.env.DATAFORSEO_GOTO_CREDENTIALS;
+   });
+   it('con otro proveedor usa ai_dataforseo_credentials solo si la variable de entorno está vacía', () => {
+      delete process.env.DATAFORSEO_GOTO_CREDENTIALS;
+      expect(gotoCredentials({ scraper_type: 'serper', scaping_api: 'k', ai_dataforseo_credentials: CREDS } as any)).toBe(CREDS);
    });
 });
 

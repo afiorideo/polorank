@@ -17,10 +17,13 @@ export const GOTO_TIMEOUT_MS = 90000;
 const GOTO_RE = /^https?:\/\/(www\.)?google\.[a-z.]+\/goto\?/i;
 export const isGotoUrl = (url?: string): boolean => GOTO_RE.test(url || '');
 
-/** Credenciales `login:password` para el convertidor. */
+/**
+ * Credenciales `login:password` para el convertidor. La variable de entorno (probada en producción) va antes que
+ * las credenciales de IA: una credencial de IA mala no puede romper el seguimiento diario.
+ */
 export const gotoCredentials = (settings: Pick<SettingsType, 'scraper_type' | 'scaping_api' | 'ai_dataforseo_credentials'>): string => {
    if (settings.scraper_type === 'dataforseo' && settings.scaping_api) { return settings.scaping_api; }
-   return settings.ai_dataforseo_credentials || process.env.DATAFORSEO_GOTO_CREDENTIALS || '';
+   return process.env.DATAFORSEO_GOTO_CREDENTIALS || settings.ai_dataforseo_credentials || '';
 };
 
 /** Quita `srsltid` (rastreo de Google Shopping) para que la URL se compare y se muestre limpia. */
