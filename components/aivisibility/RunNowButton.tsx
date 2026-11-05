@@ -19,11 +19,19 @@ export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmP
       onSuccess: (out) => { if (!skippedMessage(out.status)) { closeModal(); } },
    });
    const skipped = run.data ? skippedMessage(run.data.status) : null;
+   // 0 consultas: el dominio no está encendido para medir o no tiene prompts activos
+   const nothing = estimate.data ? estimate.data.estimate <= 0 : false;
    return (
       <Modal closeModal={run.isLoading ? () => {} : closeModal} title="Actualizar ahora" verticalCenter>
          {estimate.isLoading && <p className="text-sm text-gray-500">Calculando costo…</p>}
          {estimate.isError && <p className="text-sm text-red-700">No se pudo calcular el costo.</p>}
-         {estimate.data && <p className="text-sm">Esto cuesta ~{usd(estimate.data.estimate)}. ¿Actualizar ahora?</p>}
+         {estimate.data && !nothing && <p className="text-sm">Esto cuesta ~{usd(estimate.data.estimate)}. ¿Actualizar ahora?</p>}
+         {nothing && (
+            <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded p-2">
+               No hay nada que consultar: este dominio no está encendido para medir (⚙ Prompts y competidores → «Medir este dominio»)
+               o no tiene prompts activos.
+            </p>
+         )}
          {skipped && <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded p-2 mt-3">{skipped}</p>}
          <div className="flex justify-end gap-2 mt-4 text-sm">
             <button
@@ -34,7 +42,7 @@ export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmP
             </button>
             <button
             className="px-3 py-1.5 bg-blue-700 text-white rounded disabled:opacity-50"
-            disabled={!estimate.data || run.isLoading}
+            disabled={!estimate.data || nothing || run.isLoading}
             onClick={confirm}>
                {run.isLoading ? 'Iniciando…' : 'Actualizar'}
             </button>

@@ -54,4 +54,17 @@ describe('RunConfirm', () => {
       await waitFor(() => expect(toast).toHaveBeenCalledWith('Ya hay una actualización en curso para este alcance', { icon: '⚠️' }));
       expect(close).not.toHaveBeenCalled();
    });
+
+   it('costo 0: explica que no hay nada que consultar y no deja confirmar', async () => {
+      const calls: string[] = [];
+      jest.spyOn(global, 'fetch').mockImplementation((_url, init) => {
+         calls.push((init as RequestInit)?.method || 'GET');
+         return json({ estimate: 0 });
+      });
+      render(wrap(<RunConfirm domain='maderasfresard.com' scope={{ scope: 'domain', domain: 'maderasfresard.com' }} closeModal={jest.fn()} />));
+      await screen.findByText(/No hay nada que consultar/);
+      expect(screen.queryByText(/Esto cuesta/)).toBeNull();
+      expect(screen.getByText('Actualizar')).toBeDisabled();
+      expect(calls).toEqual(['GET']);
+   });
 });
