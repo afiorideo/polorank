@@ -53,7 +53,7 @@ const PromptEditor = ({ domain, row, readOnly = false, onDone }: PromptRowProps)
             value={tags}
             onChange={(e) => setTags(e.target.value)} />
             <button
-            className="px-2 py-1 text-xs bg-blue-600 text-white rounded disabled:opacity-50"
+            className="px-2 py-1 text-xs bg-blue-700 text-white rounded disabled:opacity-50"
             disabled={busy || !text.trim() || !dirty}
             onClick={submit}>
                {row ? 'Guardar' : 'Crear'}
@@ -61,13 +61,13 @@ const PromptEditor = ({ domain, row, readOnly = false, onDone }: PromptRowProps)
             {row
                ? (
                   <button
-                  className="px-2 py-1 text-xs bg-white border rounded text-red-700 disabled:opacity-50"
+                  className="px-2 py-1 text-xs bg-surface border rounded text-red-700 disabled:opacity-50"
                   disabled={busy}
                   onClick={() => del.mutate(row.ID)}>
                      Eliminar
                   </button>
                )
-               : <button className="px-2 py-1 text-xs bg-white border rounded" disabled={busy} onClick={onDone}>Cancelar</button>}
+               : <button className="px-2 py-1 text-xs bg-surface border rounded" disabled={busy} onClick={onDone}>Cancelar</button>}
          </div>
       </li>
    );
@@ -151,12 +151,12 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
                {canEditPrompts && adding && !full && <PromptEditor domain={domain} onDone={() => setAdding(false)} />}
             </ul>
             <button
-            className="px-2 py-1 text-xs bg-white border rounded disabled:opacity-50 mb-1"
+            className="px-2 py-1 text-xs bg-surface border rounded disabled:opacity-50 mb-1"
             disabled={!canEditPrompts || full || adding}
             onClick={() => setAdding(true)}>
                + Agregar prompt
             </button>
-            {full && <span className="ml-2 text-xs text-amber-800">Máximo {max} prompts</span>}
+            {full && <span className="ml-2 text-xs text-amber-700">Máximo {max} prompts</span>}
 
             {canEditSettings && (
                <>
@@ -190,14 +190,14 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
                         value={c.variants}
                         onChange={(e) => updateCompetitor(i, { variants: e.target.value })} />
                         <button
-                        className="px-2 text-xs bg-white border rounded"
+                        className="px-2 text-xs bg-surface border rounded"
                         onClick={() => setCompetitors((l) => l.filter((_, j) => j !== i))}>
                            Quitar
                         </button>
                      </div>
                   ))}
                   <button
-                  className="px-2 py-1 text-xs bg-white border rounded"
+                  className="px-2 py-1 text-xs bg-surface border rounded"
                   onClick={() => setCompetitors((l) => [...l, { name: '', variants: '' }])}>
                      + Agregar competidor
                   </button>
@@ -234,10 +234,10 @@ const AiConfigModal = ({ domain, maxPrompts, detectedCompetitors = [], closeModa
             )}
          </div>
          <div className="flex justify-end gap-2 mt-4 text-sm">
-            <button className="px-3 py-1.5 bg-white border rounded" onClick={closeModal}>{canEditSettings ? 'Cancelar' : 'Cerrar'}</button>
+            <button className="px-3 py-1.5 bg-surface border rounded" onClick={closeModal}>{canEditSettings ? 'Cancelar' : 'Cerrar'}</button>
             {canEditSettings && (
                <button
-               className="px-3 py-1.5 bg-blue-600 text-white rounded disabled:opacity-50"
+               className="px-3 py-1.5 bg-blue-700 text-white rounded disabled:opacity-50"
                disabled={!settings || saveConfig.isLoading || brandList.length === 0}
                onClick={submit}>
                   {saveConfig.isLoading ? 'Guardando…' : 'Guardar configuración'}

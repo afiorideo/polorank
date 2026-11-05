@@ -19,7 +19,7 @@ const CompetitorsTable = ({ data, domain }: { data: AiVisibilityData, domain: st
             <tr className="border-t bg-blue-50 font-semibold">
                <td className="text-left py-1.5 px-2">{domain} (tú)</td><td>{totals.mentioned}</td>
                {ENGINE_ORDER.map((e) => <td key={e}>{byEngine[e].mentioned}</td>)}
-               <td className="px-2"><div className="h-2 bg-blue-600 rounded" style={{ width: bar(totals.mentioned, totals.answers) }} /></td>
+               <td className="px-2"><div className="h-2 bg-blue-700 rounded" style={{ width: bar(totals.mentioned, totals.answers) }} /></td>
             </tr>
             {competitors.slice(0, 8).map((c) => (
                <tr key={c.name} className="border-t">

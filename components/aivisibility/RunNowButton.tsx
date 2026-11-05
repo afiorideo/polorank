@@ -24,16 +24,16 @@ export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmP
          {estimate.isLoading && <p className="text-sm text-gray-500">Calculando costo…</p>}
          {estimate.isError && <p className="text-sm text-red-700">No se pudo calcular el costo.</p>}
          {estimate.data && <p className="text-sm">Esto cuesta ~{usd(estimate.data.estimate)}. ¿Actualizar ahora?</p>}
-         {skipped && <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded p-2 mt-3">{skipped}</p>}
+         {skipped && <p className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded p-2 mt-3">{skipped}</p>}
          <div className="flex justify-end gap-2 mt-4 text-sm">
             <button
-            className="px-3 py-1.5 bg-white border rounded disabled:opacity-50"
+            className="px-3 py-1.5 bg-surface border rounded disabled:opacity-50"
             disabled={run.isLoading}
             onClick={closeModal}>
                Cancelar
             </button>
             <button
-            className="px-3 py-1.5 bg-blue-600 text-white rounded disabled:opacity-50"
+            className="px-3 py-1.5 bg-blue-700 text-white rounded disabled:opacity-50"
             disabled={!estimate.data || run.isLoading}
             onClick={confirm}>
                {run.isLoading ? 'Iniciando…' : 'Actualizar'}
@@ -49,7 +49,7 @@ const RunNowButton = ({ domain, canRun }: { domain: string, canRun: boolean }) =
    if (!canRun) { return null; }
    return (
       <>
-         <button className="px-3 py-1.5 bg-blue-600 text-white rounded text-sm" onClick={() => setOpen(true)}>↻ Actualizar ahora</button>
+         <button className="px-3 py-1.5 bg-blue-700 text-white rounded text-sm" onClick={() => setOpen(true)}>↻ Actualizar ahora</button>
          {open && <RunConfirm domain={domain} scope={{ scope: 'domain', domain }} closeModal={() => setOpen(false)} />}
       </>
    );

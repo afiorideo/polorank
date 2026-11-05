@@ -13,7 +13,7 @@ const SourcesGrid = ({ data, domain }: { data: AiVisibilityData, domain: string 
                <b>{ENGINE_LABEL[e]}</b><br />
                {list.length === 0 && <span className="text-gray-400">Sin fuentes</span>}
                {list.slice(0, 5).map((s) => `${s.domain} (${s.count})`).join(' · ')}
-               {missing && <>{list.length > 0 ? ' · ' : ''}<span className="text-red-600">{domain} (0)</span></>}
+               {missing && <>{list.length > 0 ? ' · ' : ''}<span className="text-red-700">{domain} (0)</span></>}
             </div>
          );
       })}

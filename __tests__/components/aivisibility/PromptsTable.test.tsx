@@ -16,8 +16,8 @@ describe('PromptsTable', () => {
       render(<PromptsTable prompts={prompts} activeTag='' onRun={() => {}} />);
       expect(screen.getAllByText('3/3 · #1')).toHaveLength(2);
       expect(screen.getByText('0/3')).toHaveClass('text-red-700');
-      expect(screen.getByText('2/3 · #2')).toHaveClass('text-yellow-800');
-      expect(screen.getAllByText('3/3 · #1')[0]).toHaveClass('text-green-700');
+      expect(screen.getByText('2/3 · #2')).toHaveClass('text-amber-700');
+      expect(screen.getAllByText('3/3 · #1')[0]).toHaveClass('text-green-600');
       expect(screen.getByText(/Armario de la Karo \(6\)/)).toBeInTheDocument();
    });
 

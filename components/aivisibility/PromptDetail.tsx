@@ -44,10 +44,10 @@ const PromptDetail = ({ domain, prompt }: { domain: string, prompt: PromptRow })
             const fanOut = Array.from(new Set(rows.flatMap((r) => parse<string[]>(r.fan_out, [])))).slice(0, 2);
             const ok = cell.mentioned > 0;
             return (
-               <div key={e} className={`bg-white border rounded p-3 ${ok ? '' : 'border-red-200'}`}>
+               <div key={e} className={`bg-surface border rounded p-3 ${ok ? '' : 'border-red-200'}`}>
                   <div className="flex justify-between mb-1">
                      <b>{ENGINE_LABEL[e]}</b>
-                     <span className={ok ? 'text-green-700' : 'text-red-700'}>
+                     <span className={ok ? 'text-green-600' : 'text-red-700'}>
                         {ok ? `Te nombra ${cellLabel(cell)}${cell.cited ? ' · te cita' : ''}` : `No te nombra (0/${cell.total})`}
                      </span>
                   </div>

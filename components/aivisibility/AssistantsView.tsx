@@ -33,9 +33,9 @@ const AssistantsView = ({ domain }: { domain: string }) => {
    if (isError || !data) { return <div className="p-5 text-sm text-red-700">No se pudo cargar la visibilidad en IAs.</div>; }
 
    return (
-      <div className="bg-white border border-gray-300 rounded p-5">
+      <div className="bg-surface border border-gray-300 rounded p-5">
          {data.lastRun?.status === 'skipped_budget' && (
-            <div className="bg-amber-50 border border-amber-200 text-amber-900 text-sm rounded px-3 py-2 mb-4">
+            <div className="bg-amber-50 border border-amber-200 text-amber-700 text-sm rounded px-3 py-2 mb-4">
                Se alcanzó el tope mensual ({usd(data.monthSpend)} de {usd(data.budget)}). La corrida se pausó.
             </div>
          )}
@@ -46,7 +46,7 @@ const AssistantsView = ({ domain }: { domain: string }) => {
             </div>
             <div className="flex items-center gap-2">
                {canEditPrompts && (
-                  <button className="px-3 py-1.5 bg-white border rounded text-sm" onClick={() => setConfigOpen(true)}>
+                  <button className="px-3 py-1.5 bg-surface border rounded text-sm" onClick={() => setConfigOpen(true)}>
                      ⚙ Prompts y competidores
                   </button>
                )}

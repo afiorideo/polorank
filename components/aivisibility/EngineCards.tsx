@@ -5,7 +5,7 @@ import { ENGINE_ORDER, ENGINE_LABEL } from './engines';
 const chipClass = (withMention: number, prompts: number) => {
    if (prompts === 0) { return 'bg-gray-100 text-gray-500'; }
    if (withMention === 0) { return 'bg-red-100 text-red-700'; }
-   return withMention === prompts ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-800';
+   return withMention === prompts ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-700';
 };
 
 const EngineCards = ({ byEngine }: { byEngine: AiVisibilityData['byEngine'] }) => (

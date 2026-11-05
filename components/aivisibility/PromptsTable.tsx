@@ -18,7 +18,7 @@ export const cellLabel = (c: EngineCell) => `${c.mentioned}/${c.total}${c.bestPo
 export const cellClass = (c: EngineCell) => {
    if (c.total === 0) { return 'text-gray-400'; }
    if (c.mentioned === 0) { return 'bg-red-100 text-red-700'; }
-   return c.bestPosition === 1 ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-800';
+   return c.bestPosition === 1 ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-700';
 };
 
 const CellChip = ({ cell }: { cell: EngineCell }) => (
@@ -30,7 +30,7 @@ const CellChip = ({ cell }: { cell: EngineCell }) => (
 const Delta = ({ value }: { value: number | null }) => {
    if (value === null) { return <span className="text-gray-400">—</span>; }
    if (value === 0) { return <span className="text-gray-500">=</span>; }
-   return <span className={value > 0 ? 'text-green-700' : 'text-red-700'}>{value > 0 ? `+${value}` : value}</span>;
+   return <span className={value > 0 ? 'text-green-600' : 'text-red-700'}>{value > 0 ? `+${value}` : value}</span>;
 };
 
 const PromptsTable = ({ prompts, activeTag, onRun, onTagChange, canRun = true, renderDetail }: Props) => {
@@ -47,7 +47,7 @@ const PromptsTable = ({ prompts, activeTag, onRun, onTagChange, canRun = true, r
                {['', ...tags].map((t) => (
                   <button
                   key={t || 'todas'}
-                  className={`text-[11px] px-2 py-px rounded-full ${activeTag === t ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
+                  className={`text-[11px] px-2 py-px rounded-full ${activeTag === t ? 'bg-blue-700 text-white' : 'bg-gray-100'}`}
                   onClick={() => onTagChange(t)}>
                      {t || 'todas'}
                   </button>

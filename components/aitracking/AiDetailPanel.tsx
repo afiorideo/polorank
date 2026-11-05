@@ -80,7 +80,7 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                         return (
                            <li
                            key={`${r.position}-${r.domain}`}
-                           className={`flex items-baseline gap-3 px-3 py-2 rounded ${esMio ? 'bg-emerald-50' : ''}`}>
+                           className={`flex items-baseline gap-3 px-3 py-2 rounded ${esMio ? 'bg-emerald-100' : ''}`}>
                               <span className='text-xs text-gray-400 tabular-nums w-4'>{r.position}</span>
                               <span className={`flex-1 min-w-0 ${esMio ? 'font-semibold text-emerald-700' : 'text-gray-600'}`}>
                                  {r.source || r.domain}
@@ -119,7 +119,7 @@ const AiDetailPanel = ({ row, domain, closePanel }: AiDetailPanelProps) => {
                   )}
 
                   {row.cited === 0 && (
-                     <p className='mt-4 px-3 py-2 rounded bg-rose-50 text-rose-700 text-xs'>
+                     <p className='mt-4 px-3 py-2 rounded bg-rose-100 text-rose-700 text-xs'>
                         {domain} no aparece entre las fuentes
                         {row.mentioned === 1
                            ? ', pero el texto sí nombra tu marca: Google te conoce y manda el clic a otro.'
