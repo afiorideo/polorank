@@ -79,6 +79,7 @@ export function useRunAiNow(domain: string | undefined) {
          } as Record<string, string>)[out.status] || 'Actualización lista.';
          toast(text, { icon: out.status === 'partial' ? '⚠️' : '✔️' });
          queryClient.invalidateQueries(['aiVisibility', domain]);
+         queryClient.invalidateQueries(['aiTracking', domain]);
       },
       // 409 (ya hay una en curso) y 429 (espera) llegan acá con el mensaje del servidor
       onError: (error: Error) => { toast(error.message, { icon: '⚠️' }); },

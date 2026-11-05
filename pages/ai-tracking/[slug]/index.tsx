@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -19,6 +19,7 @@ import AiTrackingTable from '../../../components/aitracking/AiTrackingTable';
 import { useFetchAiTracking } from '../../../services/aiTracking';
 import { useFetchSettings } from '../../../services/settings';
 import AssistantsView from '../../../components/aivisibility/AssistantsView';
+import RunNowButton from '../../../components/aivisibility/RunNowButton';
 import Footer from '../../../components/common/Footer';
 
 const AiTrackingPage: NextPage = () => {
@@ -41,7 +42,14 @@ const AiTrackingPage: NextPage = () => {
       return active;
    }, [router.query.slug, domainsData]);
 
-   const { data: aiData, isLoading: aiLoading } = useFetchAiTracking(activDomain?.domain);
+   // tras "Actualizar Google IA" la corrida sigue en segundo plano: refrescar la tabla cada 20 s durante 5 minutos
+   const [watching, setWatching] = useState(false);
+   useEffect(() => {
+      if (!watching) { return undefined; }
+      const t = setTimeout(() => setWatching(false), 5 * 60 * 1000);
+      return () => clearTimeout(t);
+   }, [watching]);
+   const { data: aiData, isLoading: aiLoading } = useFetchAiTracking(activDomain?.domain, watching ? 20000 : false);
 
    return (
       <div className="Domain ">
@@ -73,6 +81,7 @@ const AiTrackingPage: NextPage = () => {
                }
                {activDomain && (
                   <div className='mt-5'>
+                     <div className='flex flex-wrap items-start justify-between gap-2'>
                      <div className='inline-flex rounded border overflow-hidden text-sm mb-4'>
                         <button
                         className={`px-4 py-1.5 ${view === 'assistants' ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-500'}`}
@@ -84,6 +93,16 @@ const AiTrackingPage: NextPage = () => {
                         onClick={() => setView('google')}>
                            Google IA <span className='text-gray-400 font-normal'>(palabras clave)</span>
                         </button>
+                     </div>
+                     {view === 'google' && (
+                        <RunNowButton
+                        domain={activDomain.domain}
+                        canRun={auth.isSuperadmin}
+                        scope={{ scope: 'google', domain: activDomain.domain }}
+                        label='↻ Actualizar Google IA'
+                        onStarted={() => setWatching(true)}
+                        />
+                     )}
                      </div>
                      {view === 'assistants'
                         ? <AssistantsView domain={activDomain.domain} />

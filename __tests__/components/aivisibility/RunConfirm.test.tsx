@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import toast from 'react-hot-toast';
-import { RunConfirm } from '../../../components/aivisibility/RunNowButton';
+import RunNowButton, { RunConfirm } from '../../../components/aivisibility/RunNowButton';
 
 jest.mock('react-hot-toast', () => jest.fn());
 
@@ -66,5 +66,22 @@ describe('RunConfirm', () => {
       expect(screen.queryByText(/Esto cuesta/)).toBeNull();
       expect(screen.getByText('Actualizar')).toBeDisabled();
       expect(calls).toEqual(['GET']);
+   });
+
+   it('botón de Google IA: pide el costo y lanza la corrida solo de palabras clave del dominio', async () => {
+      const urls: string[] = [];
+      jest.spyOn(global, 'fetch').mockImplementation((url, init) => {
+         urls.push(`${(init as RequestInit)?.method || 'GET'} ${String(url)}`);
+         return (init as RequestInit)?.method === 'POST' ? json({ runId: 3, status: 'pending', estimate: 0.022 }) : json({ estimate: 0.022 });
+      });
+      const started = jest.fn();
+      render(wrap(<RunNowButton domain='ammo.cl' canRun scope={{ scope: 'google', domain: 'ammo.cl' }}
+         label='↻ Actualizar Google IA' onStarted={started} />));
+      fireEvent.click(screen.getByText('↻ Actualizar Google IA'));
+      await screen.findByText(/Esto cuesta ~US\$0,022\./);
+      fireEvent.click(screen.getByText('Actualizar'));
+      await waitFor(() => expect(started).toHaveBeenCalled());
+      expect(urls[0]).toMatch(/^GET .*\/api\/ai-visibility\/run\?scope=google&domain=ammo\.cl$/);
+      expect(urls[1]).toMatch(/^POST .*scope=google&domain=ammo\.cl$/);
    });
 });

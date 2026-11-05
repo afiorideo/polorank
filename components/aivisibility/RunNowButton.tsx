@@ -5,9 +5,9 @@ import { AiRunScope, skippedMessage, useAiRunEstimate, useRunAiNow } from '../..
 const usd = (n: number) => `US$${n < 0.1 ? n.toFixed(3) : n.toFixed(2)}`.replace('.', ',');
 
 /** Modal de confirmación con el costo estimado (sin window.confirm). */
-type ConfirmProps = { domain: string, scope: AiRunScope, closeModal: () => void };
+type ConfirmProps = { domain: string, scope: AiRunScope, closeModal: () => void, onStarted?: () => void };
 
-export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmProps) => {
+export const RunConfirm = ({ domain, scope: initialScope, closeModal, onStarted }: ConfirmProps) => {
    const [scope] = useState(initialScope);
    const estimate = useAiRunEstimate();
    const run = useRunAiNow(domain);
@@ -16,7 +16,7 @@ export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmP
 
    // el servidor responde al instante ('pending'): se cierra y el aviso lo da el toast
    const confirm = () => run.mutate(scope, {
-      onSuccess: (out) => { if (!skippedMessage(out.status)) { closeModal(); } },
+      onSuccess: (out) => { if (!skippedMessage(out.status)) { onStarted?.(); closeModal(); } },
    });
    const skipped = run.data ? skippedMessage(run.data.status) : null;
    // 0 consultas: el dominio no está encendido para medir o no tiene prompts activos
@@ -51,14 +51,15 @@ export const RunConfirm = ({ domain, scope: initialScope, closeModal }: ConfirmP
    );
 };
 
-/** Botón de la cabecera. Solo lo ve el superadmin (el servidor también lo exige). */
-const RunNowButton = ({ domain, canRun }: { domain: string, canRun: boolean }) => {
+/** Botón de la cabecera. Solo lo ve el superadmin (el servidor también lo exige). Por defecto, todo el dominio (Asistentes IA). */
+type ButtonProps = { domain: string, canRun: boolean, scope?: AiRunScope, label?: string, onStarted?: () => void };
+const RunNowButton = ({ domain, canRun, scope, label = '↻ Actualizar ahora', onStarted }: ButtonProps) => {
    const [open, setOpen] = useState(false);
    if (!canRun) { return null; }
    return (
       <>
-         <button className="px-3 py-1.5 bg-blue-700 text-white rounded text-sm" onClick={() => setOpen(true)}>↻ Actualizar ahora</button>
-         {open && <RunConfirm domain={domain} scope={{ scope: 'domain', domain }} closeModal={() => setOpen(false)} />}
+         <button className="px-3 py-1.5 bg-blue-700 text-white rounded text-sm" onClick={() => setOpen(true)}>{label}</button>
+         {open && <RunConfirm domain={domain} scope={scope || { scope: 'domain', domain }} closeModal={() => setOpen(false)} onStarted={onStarted} />}
       </>
    );
 };

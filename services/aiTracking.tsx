@@ -28,12 +28,13 @@ export type AiTrackingRow = {
 };
 
 /** Citas en el resumen con IA de Google para todas las keywords de un dominio. */
-export function useFetchAiTracking(domain: string | undefined) {
+/** refetchInterval: mientras corre una actualización manual de Google IA, se vuelve a pedir cada N ms (false = no). */
+export function useFetchAiTracking(domain: string | undefined, refetchInterval: number | false = false) {
    return useQuery(['aiTracking', domain], async () => {
       const res = await fetch(`${window.location.origin}/api/ai-tracking?domain=${encodeURIComponent(domain || '')}`);
       if (res.status >= 400) { throw new Error('No se pudo cargar la información de IA'); }
       return res.json() as Promise<{ rows: AiTrackingRow[] }>;
-   }, { enabled: !!domain });
+   }, { enabled: !!domain, refetchInterval });
 }
 
 export default useFetchAiTracking;
