@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+import type { GoogleIaMeasure } from '../utils/aiVisibility/googleStatus';
 
 export type CitationRatio = { cited: number, days: number, measured: number, withAi: number } | null;
 
@@ -33,7 +34,7 @@ export function useFetchAiTracking(domain: string | undefined, refetchInterval: 
    return useQuery(['aiTracking', domain], async () => {
       const res = await fetch(`${window.location.origin}/api/ai-tracking?domain=${encodeURIComponent(domain || '')}`);
       if (res.status >= 400) { throw new Error('No se pudo cargar la información de IA'); }
-      return res.json() as Promise<{ rows: AiTrackingRow[] }>;
+      return res.json() as Promise<{ rows: AiTrackingRow[], measure: GoogleIaMeasure | null, inProgress: boolean }>;
    }, { enabled: !!domain, refetchInterval });
 }
 

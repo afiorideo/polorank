@@ -3,7 +3,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 // import { useQuery } from 'react-query';
-// import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { CSSTransition } from 'react-transition-group';
 import { guardPage } from '../../../utils/auth/pageGuard';
 import { useAuthUser } from '../../../services/auth';
@@ -20,6 +20,7 @@ import { useFetchAiTracking } from '../../../services/aiTracking';
 import { useFetchSettings } from '../../../services/settings';
 import AssistantsView from '../../../components/aivisibility/AssistantsView';
 import RunNowButton from '../../../components/aivisibility/RunNowButton';
+import GoogleIaStatus from '../../../components/aitracking/GoogleIaStatus';
 import Footer from '../../../components/common/Footer';
 
 const AiTrackingPage: NextPage = () => {
@@ -42,14 +43,22 @@ const AiTrackingPage: NextPage = () => {
       return active;
    }, [router.query.slug, domainsData]);
 
-   // tras "Actualizar Google IA" la corrida sigue en segundo plano: refrescar la tabla cada 20 s durante 5 minutos
-   const [watching, setWatching] = useState(false);
+   // tras "Actualizar Google IA" la corrida sigue en segundo plano: refrescar la tabla cada 20 s (máx. 5 min) hasta que
+   // cambie la última medición. Se guarda la fecha de la medición previa ('' si no había), no la hora del navegador.
+   const [startedAt, setStartedAt] = useState<string | null>(null);
    useEffect(() => {
-      if (!watching) { return undefined; }
-      const t = setTimeout(() => setWatching(false), 5 * 60 * 1000);
+      if (startedAt === null) { return undefined; }
+      const t = setTimeout(() => setStartedAt(null), 5 * 60 * 1000);
       return () => clearTimeout(t);
-   }, [watching]);
-   const { data: aiData, isLoading: aiLoading } = useFetchAiTracking(activDomain?.domain, watching ? 20000 : false);
+   }, [startedAt]);
+   const { data: aiData, isLoading: aiLoading } = useFetchAiTracking(activDomain?.domain, startedAt !== null ? 20000 : false);
+   useEffect(() => {
+      const m = aiData?.measure;
+      if (startedAt !== null && m && m.at !== startedAt) {
+         toast(`Google IA actualizada: ${m.keywords} palabras clave, ${m.untrusted} con página no confiable`, { icon: '✔️' });
+         setStartedAt(null);
+      }
+   }, [aiData, startedAt]);
 
    return (
       <div className="Domain ">
@@ -100,13 +109,16 @@ const AiTrackingPage: NextPage = () => {
                         canRun={auth.isSuperadmin}
                         scope={{ scope: 'google', domain: activDomain.domain }}
                         label='↻ Actualizar Google IA'
-                        onStarted={() => setWatching(true)}
+                        onStarted={() => setStartedAt(aiData?.measure?.at || '')}
                         />
                      )}
                      </div>
                      {view === 'assistants'
                         ? <AssistantsView domain={activDomain.domain} />
-                        : <AiTrackingTable rows={aiData?.rows || []} domain={activDomain.domain} isLoading={aiLoading} />}
+                        : <>
+                           <GoogleIaStatus measure={aiData?.measure || null} inProgress={!!aiData?.inProgress} />
+                           <AiTrackingTable rows={aiData?.rows || []} domain={activDomain.domain} isLoading={aiLoading} />
+                        </>}
                   </div>
                )}
             </div>

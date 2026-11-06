@@ -3,6 +3,9 @@ import { Op } from 'sequelize';
 import db from '../../database/database';
 import Keyword from '../../database/models/keyword';
 import KeywordDaily from '../../database/models/keywordDaily';
+import AiRun from '../../database/models/aiRun';
+import ApiUsage from '../../database/models/apiUsage';
+import { pickGoogleRuns, GoogleIaMeasure, GoogleRunRow } from '../../utils/aiVisibility/googleStatus';
 import { authenticate } from '../../utils/verifyUser';
 import { canAccessDomain } from '../../utils/auth/guards';
 import { citationPeriodsWeeks, parseKey, brandOf, mentionState, lastSerpTrusted, AI_NOT_MEASURED } from '../../utils/aiTracking';
@@ -37,6 +40,33 @@ export type AiTrackingRow = {
 };
 
 const norm = (d: string): string => (d || '').replace(/^https?:\/\//, '').replace(/^www\./i, '').replace(/\/.*$/, '').toLowerCase();
+
+/** Misma clave de día que usa googleIa.ts al guardar (hora del servidor). */
+const dateKey = (d: Date): string => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+/** Última medición de Google IA del dominio (manual o semanal) y si hay una en curso. */
+const googleStatus = async (domain: string, keywordIDs: number[]): Promise<{ measure: GoogleIaMeasure | null, inProgress: boolean }> => {
+   const found = await AiRun.findAll({ where: { scope: { [Op.in]: [`google:${domain}`, 'all'] } }, order: [['ID', 'DESC']], limit: 10 });
+   const runs = found.map((r) => r.get({ plain: true }) as GoogleRunRow);
+   const { inProgress } = pickGoogleRuns(runs);
+   // la primera terminada que de verdad midió este dominio (una semanal con el dominio apagado no cuenta)
+   for (const run of runs.filter((r) => r.status === 'done' || r.status === 'partial')) {
+      const end = new Date(new Date(run.finished_at || run.started_at).getTime() + 60000).toJSON();
+      // eslint-disable-next-line no-await-in-loop
+      // palabras clave distintas: cada página alterada se reintenta y deja otra fila de consumo
+      const keywords = await ApiUsage.count({
+         where: { scraper: 'ai:google', domain, created_at: { [Op.between]: [run.started_at, end] } }, distinct: true, col: 'keyword_id',
+      });
+      if (keywords > 0) {
+         // eslint-disable-next-line no-await-in-loop
+         const untrusted = keywordIDs.length ? await KeywordDaily.count({
+            where: { keyword_id: { [Op.in]: keywordIDs }, date: dateKey(new Date(run.finished_at || run.started_at)), serp_trust: 0 },
+         }) : 0;
+         return { measure: { at: run.finished_at || run.started_at, keywords, untrusted }, inProgress };
+      }
+   }
+   return { measure: null, inProgress };
+};
 
 const parseJson = <T, >(raw: unknown, fallback: T): T => {
    try { return JSON.parse((raw as string) || '') as T; } catch { return fallback; }
@@ -121,7 +151,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          };
       });
 
-      return res.status(200).json({ rows });
+      const google = await googleStatus(domain, keywords.map((k) => k.ID));
+      return res.status(200).json({ rows, ...google });
    } catch (error) {
       console.log('[ERROR] Leyendo Tracking IA', error);
       return res.status(400).json({ error: 'No se pudo leer la información de IA.' });
