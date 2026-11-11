@@ -45,6 +45,9 @@ const parseAiMode = (r: any): ParsedAnswer => {
    };
 };
 
+/** Gemini y AI Mode solo aceptan "pt-BR" (no "pt"): con "pt" rechazan la tarea y luego dan 40401. Lista oficial consultada 2026-11-10. */
+const googleLang = (code: string): string => (code === 'pt' ? 'pt-BR' : code);
+
 type EngineDef = {
    live: string, post?: string, get?: (id: string) => string,
    task: (prompt: string, t: AiTarget) => Record<string, unknown>, parse: (result: any) => ParsedAnswer,
@@ -62,14 +65,14 @@ export const ENGINE_DEF: Record<Engine, EngineDef> = {
       live: '/ai_optimization/gemini/llm_scraper/live/advanced',
       post: '/ai_optimization/gemini/llm_scraper/task_post',
       get: (id) => `/ai_optimization/gemini/llm_scraper/task_get/advanced/${id}`,
-      task: (q, t) => ({ keyword: q, location_code: t.gemini_location_code, language_code: t.language_code }),
+      task: (q, t) => ({ keyword: q, location_code: t.gemini_location_code, language_code: googleLang(t.language_code) }),
       parse: parseScraper,
    },
    ai_mode: {
       live: '/serp/google/ai_mode/live/advanced',
       post: '/serp/google/ai_mode/task_post',
       get: (id) => `/serp/google/ai_mode/task_get/advanced/${id}`,
-      task: (q, t) => ({ keyword: q, location_code: t.location_code, language_code: t.language_code, device: 'mobile' }),
+      task: (q, t) => ({ keyword: q, location_code: t.location_code, language_code: googleLang(t.language_code), device: 'mobile' }),
       parse: parseAiMode,
    },
    perplexity: {

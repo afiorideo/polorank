@@ -33,4 +33,11 @@ describe('parsers por motor (respuestas reales del piloto)', () => {
       expect(ENGINE_DEF.gemini.task('hola', t)).toEqual({ keyword: 'hola', location_code: 20153, language_code: 'es' });
       expect(ENGINE_DEF.perplexity.task('hola', t)).toEqual({ user_prompt: 'hola', model_name: 'sonar', web_search_country_iso_code: 'CL' });
    });
+   it('portugués: Gemini y AI Mode solo aceptan pt-BR; ChatGPT sigue con pt (corrida 2026-11-09, 40401)', () => {
+      const t = { location_code: 2076, gemini_location_code: 2076, language_code: 'pt', country_iso: 'BR' };
+      expect(ENGINE_DEF.gemini.task('olá', t)).toMatchObject({ language_code: 'pt-BR' });
+      expect(ENGINE_DEF.ai_mode.task('olá', t)).toMatchObject({ language_code: 'pt-BR' });
+      expect(ENGINE_DEF.chatgpt.task('olá', t)).toMatchObject({ language_code: 'pt' });
+      expect(ENGINE_DEF.ai_mode.task('hola', { ...t, language_code: 'es' })).toMatchObject({ language_code: 'es' });
+   });
 });
