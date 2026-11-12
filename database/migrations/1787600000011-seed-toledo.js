@@ -1,5 +1,5 @@
 // PoloRank migration POLO-2026-11-12-01: alta de toledo.uy (cliente de Emignia en Uruguay), pedida por Fabián el 2026-11-12.
-// Dominio + 9 palabras clave (una por página, Uruguay, celular, con URL objetivo) + Visibilidad IA (Uruguay,
+// Dominio + 9 palabras clave (una por página, Uruguay, escritorio, con URL objetivo) + Visibilidad IA (Uruguay,
 // Gemini en Montevideo) con 5 prompts. Idempotente: no duplica nada si ya existe.
 const DOMAIN = 'toledo.uy';
 const KEYWORDS = [
@@ -57,10 +57,10 @@ module.exports = {
       }
       for (const [keyword, target, tag] of KEYWORDS) {
          // eslint-disable-next-line no-await-in-loop
-         const [ex] = await q(EXISTS_SQL, [DOMAIN, keyword, 'mobile', 'UY']);
+         const [ex] = await q(EXISTS_SQL, [DOMAIN, keyword, 'desktop', 'UY']);
          if (!ex.length) {
             // eslint-disable-next-line no-await-in-loop
-            await q(KEYWORD_SQL, [keyword, 'mobile', 'UY', '', DOMAIN, now, now, '{}', '', JSON.stringify([tag]), target]);
+            await q(KEYWORD_SQL, [keyword, 'desktop', 'UY', '', DOMAIN, now, now, '{}', '', JSON.stringify([tag]), target]);
          }
       }
       const [[{ n }]] = await q('SELECT COUNT(*) AS n FROM ai_prompt WHERE domain = ?', [DOMAIN]);
