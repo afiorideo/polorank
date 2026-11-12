@@ -8,6 +8,7 @@ import type { AiCompetitor } from '../../utils/aiVisibility/config';
 const COUNTRIES = [
    { label: 'Chile', location_code: 2152, language_code: 'es', country_iso: 'CL' },
    { label: 'Brasil', location_code: 2076, language_code: 'pt', country_iso: 'BR' },
+   { label: 'Uruguay', location_code: 2858, language_code: 'es', country_iso: 'UY' },
 ];
 const DEFAULT_MAX_PROMPTS = 5;
 const inputCls = 'w-full border rounded px-2 py-1 text-sm';
